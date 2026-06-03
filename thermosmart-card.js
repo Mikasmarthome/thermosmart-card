@@ -2,11 +2,10 @@
  * ThermoSmart Lovelace Card v0.0.3b
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '0.0.3b';
+const CARD_VERSION = '0.0.4b1';
 
 const MODES = [
   { preset: 'Auto',     icon: 'mdi:home-thermometer-outline' },
-  { preset: 'Boost',    icon: 'mdi:rocket-launch'            },
   { preset: 'Komfort',  icon: 'mdi:sun-thermometer-outline'  },
   { preset: 'Eco',      icon: 'mdi:leaf'                     },
   { preset: 'Nacht',    icon: 'mdi:weather-night'            },
