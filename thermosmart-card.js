@@ -13,7 +13,7 @@
  *   max_temp: 30
  */
 
-const CARD_VERSION = '1.0.0';
+const CARD_VERSION = '0.0.1b1';
 
 const MODES = [
   { preset: 'Auto',     label: 'Auto',    icon: 'mdi:home-thermometer-outline' },
