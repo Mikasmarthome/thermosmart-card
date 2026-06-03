@@ -1,12 +1,14 @@
 /**
- * ThermoSmart Lovelace Card v0.0.2b1
+ * ThermoSmart Lovelace Card v0.0.3b
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '0.0.2b1';
+const CARD_VERSION = '0.0.3b';
 
 const MODES = [
   { preset: 'Auto',     icon: 'mdi:home-thermometer-outline' },
+  { preset: 'Boost',    icon: 'mdi:rocket-launch'            },
   { preset: 'Komfort',  icon: 'mdi:sun-thermometer-outline'  },
+  { preset: 'Eco',      icon: 'mdi:leaf'                     },
   { preset: 'Nacht',    icon: 'mdi:weather-night'            },
   { preset: 'Abwesend', icon: 'mdi:walk'                     },
   { preset: 'Urlaub',   icon: 'mdi:airplane'                 },
@@ -385,13 +387,13 @@ class ThermosmartCard extends HTMLElement {
       .ctrl-val { font-size: 1.5em; font-weight: 300; color: #fff; min-width: 58px; text-align: center; }
 
       /* Modes */
-      .modes { display: flex; gap: 6px; margin-bottom: 10px; }
+      .modes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
       .mode-btn {
-        flex: 1; height: 38px; border: none; border-radius: 10px; cursor: pointer;
+        flex: 1; min-width: 36px; height: 34px; border: none; border-radius: 9px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
         background: #272727; color: #444;
         transition: background 0.15s, color 0.15s;
-        --mdc-icon-size: 20px;
+        --mdc-icon-size: 18px;
       }
       .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); }
       .mode-btn:hover:not(.active) { background: #333; color: #888; }
@@ -470,7 +472,7 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: 'thermosmart-card',
   name: 'ThermoSmart Card',
-  description: 'Dashboard card for the ThermoSmart heating integration',
+  description: 'KI-gestützte Heizungskarte für ThermoSmart – Boost, Eco, Diagnose & mehr',
   preview: true,
   documentationURL: 'https://github.com/Mikasmarthome/thermosmart-card',
 });
