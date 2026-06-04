@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.1
+ * ThermoSmart Lovelace Card v1.0.0-beta.2
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.1';
+const CARD_VERSION = '1.0.0-beta.2';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -161,34 +161,51 @@ const STATE_COLORS = {
 
 // ── Config-Editor ─────────────────────────────────────────────────────────────
 
+const EDITOR_SCHEMA = [
+  { name: 'entity',   required: true, selector: { entity: { domain: 'climate' } } },
+  { name: 'name',     selector: { text: {} } },
+  { name: 'compact',  selector: { boolean: {} } },
+  { name: 'min_temp', selector: { number: { min: 5,  max: 20, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
+  { name: 'max_temp', selector: { number: { min: 20, max: 35, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
+];
+
 class ThermosmartCardEditor extends HTMLElement {
-  constructor() { super(); this._config = {}; this._hass = null; }
+  constructor() {
+    super();
+    this._config = {};
+    this._hass   = null;
+    this._form   = null;
+  }
 
-  setConfig(config) { this._config = config; this._render(); }
-  set hass(hass)    { this._hass = hass; this._render(); }
+  setConfig(config) { this._config = config; this._update(); }
+  set hass(hass)    { this._hass = hass; this._update(); }
 
-  _render() {
+  // ha-form is created once and reused — recreating it on every hass update
+  // (which fires on every HA state change) would destroy input focus mid-typing.
+  _update() {
     if (!this._hass) return;
-    const schema = [
-      { name: 'entity',   required: true, selector: { entity: { domain: 'climate' } } },
-      { name: 'name',     selector: { text: {} } },
-      { name: 'compact',  selector: { boolean: {} } },
-      { name: 'min_temp', selector: { number: { min: 5,  max: 20, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
-      { name: 'max_temp', selector: { number: { min: 20, max: 35, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
-    ];
-    const form = document.createElement('ha-form');
-    form.hass         = this._hass;
-    form.data         = this._config;
-    form.schema       = schema;
-    form.computeLabel = (s) => tr(this._hass, `label_${s.name}`);
-    form.addEventListener('value-changed', (ev) => {
-      this._config = ev.detail.value;
-      this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: this._config } }));
-    });
-    this.replaceChildren(form);
+
+    if (!this._form) {
+      const form = document.createElement('ha-form');
+      form.schema       = EDITOR_SCHEMA;
+      form.computeLabel = (s) => tr(this._hass, `label_${s.name}`);
+      form.addEventListener('value-changed', (ev) => {
+        ev.stopPropagation();
+        this._config = ev.detail.value;
+        this.dispatchEvent(new CustomEvent('config-changed', {
+          detail: { config: this._config }, bubbles: true, composed: true,
+        }));
+      });
+      this._form = form;
+      this.replaceChildren(form);
+    }
+
+    this._form.hass = this._hass;
+    this._form.data = this._config;
   }
 }
-customElements.define('thermosmart-card-editor', ThermosmartCardEditor);
+if (!customElements.get('thermosmart-card-editor'))
+  customElements.define('thermosmart-card-editor', ThermosmartCardEditor);
 
 // ── Main Card ─────────────────────────────────────────────────────────────────
 
@@ -828,16 +845,19 @@ class ThermosmartCard extends HTMLElement {
   }
 }
 
-customElements.define('thermosmart-card', ThermosmartCard);
+if (!customElements.get('thermosmart-card'))
+  customElements.define('thermosmart-card', ThermosmartCard);
 
 window.customCards = window.customCards || [];
-window.customCards.push({
-  type: 'thermosmart-card',
-  name: 'ThermoSmart Card',
-  description: 'KI-gestützte Heizungskarte für ThermoSmart – Drag-Ring, i18n, Diagnose & mehr',
-  preview: true,
-  documentationURL: 'https://github.com/Mikasmarthome/thermosmart-card',
-});
+if (!window.customCards.some(c => c.type === 'thermosmart-card')) {
+  window.customCards.push({
+    type: 'thermosmart-card',
+    name: 'ThermoSmart Card',
+    description: 'KI-gestützte Heizungskarte für ThermoSmart – Drag-Ring, i18n, Diagnose & mehr',
+    preview: true,
+    documentationURL: 'https://github.com/Mikasmarthome/thermosmart-card',
+  });
+}
 
 console.info(
   `%c THERMOSMART-CARD %c v${CARD_VERSION} `,
