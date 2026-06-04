@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.6
+ * ThermoSmart Lovelace Card v1.0.0-beta.7
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.6';
+const CARD_VERSION = '1.0.0-beta.7';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -340,6 +340,7 @@ class ThermosmartCard extends HTMLElement {
     this._historyData     = null;
     this._historyFetching = false;
     this._lastHistoryFetch = 0;
+    this._sparklineCache  = null;
     this._minTemp = 15;
     this._maxTemp = 30;
   }
@@ -357,15 +358,17 @@ class ThermosmartCard extends HTMLElement {
   set hass(hass) {
     const prev = this._hass;
     this._hass = hass;
+    if (this._isDragging) return;
     if (prev && this._config?.entity) {
       const wasUnavailable = prev.states[this._config.entity]?.state === 'unavailable';
       const isAvailable    = hass.states[this._config.entity]?.state !== 'unavailable';
       if (wasUnavailable && isAvailable) this._lastHistoryFetch = 0;
     }
-    if (!this._isDragging) {
-      this._fetchHistory();
-      this._render();
-    }
+    const entityChanged = !prev ||
+      prev.states[this._config?.entity] !== hass.states[this._config?.entity];
+    if (!entityChanged) return;
+    this._fetchHistory();
+    this._render();
   }
 
   getCardSize() { return this._config.compact ? 2 : 8; }
@@ -627,8 +630,17 @@ class ThermosmartCard extends HTMLElement {
   // ── Sparkline chart ───────────────────────────────────────────────────────
 
   _buildSparkline(d) {
+    if (this._historyFetching && !this._historyData) {
+      return `<div class="spark-wrap spark-loading"><div class="spark-spinner"></div></div>`;
+    }
+
     const data = this._historyData;
     if (!data || data.length < 3) return '';
+
+    if (this._sparklineCache?.dataRef === this._historyData &&
+        this._sparklineCache?.color === d.col.main) {
+      return this._sparklineCache.html;
+    }
 
     const W = 260, H = 72;
     const PL = 34, PR = 6, PT = 6, PB = 16;
@@ -695,7 +707,7 @@ class ThermosmartCard extends HTMLElement {
         <text x="${x + 15}" y="3" font-size="8" fill="#aaa">${item.label}</text>`;
     }).join('');
 
-    return `
+    const result = `
       <div class="spark-wrap">
         <svg viewBox="0 0 ${W} ${H + 14}" style="width:100%;display:block;overflow:visible">
           ${gridLines}
@@ -707,6 +719,9 @@ class ThermosmartCard extends HTMLElement {
           <g transform="translate(${PL}, ${H + 9})">${legendSvg}</g>
         </svg>
       </div>`;
+
+    this._sparklineCache = { dataRef: this._historyData, color: d.col.main, html: result };
+    return result;
   }
 
   // ── Layout ───────────────────────────────────────────────────────────────
@@ -752,6 +767,11 @@ class ThermosmartCard extends HTMLElement {
 
   _renderCompact(d) {
     const pct = Math.min(100, Math.max(0, d.confidence)).toFixed(0);
+    const alert = d.heatingFailure
+      ? { cls: 'failure', icon: 'mdi:alert',                key: 'heating_failure' }
+      : d.windowOpen
+      ? { cls: 'window',  icon: 'mdi:window-open-variant',  key: 'window_open'     }
+      : null;
     return `
       <ha-card class="dark">
         <div class="cmp-row">
@@ -770,6 +790,10 @@ class ThermosmartCard extends HTMLElement {
             <span class="cmp-tgt">${d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
           </div>
         </div>
+        ${alert ? `<div class="banner ${alert.cls} cmp-banner">
+          <ha-icon icon="${alert.icon}" style="--mdc-icon-size:12px"></ha-icon>
+          ${tr(this._hass, alert.key)}
+        </div>` : ''}
         <div class="conf-bg" style="height:3px">
           <div class="conf-fill" style="width:${pct}%;background:${d.col.main}"></div>
         </div>
@@ -861,6 +885,16 @@ class ThermosmartCard extends HTMLElement {
 
       /* Sparkline */
       .spark-wrap { margin-top: 10px; padding-top: 8px; border-top: 1px solid #272727; }
+      .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
+      .spark-spinner {
+        width: 20px; height: 20px; border-radius: 50%;
+        border: 2px solid #333; border-top-color: #666;
+        animation: ts-spin 0.8s linear infinite;
+      }
+      @keyframes ts-spin { to { transform: rotate(360deg); } }
+
+      /* Compact banner */
+      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 0 5px; border-radius: 6px; }
 
       /* Compact */
       .cmp-row  { display: flex; align-items: center; gap: 10px; padding-bottom: 7px; }
