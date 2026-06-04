@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.4
+ * ThermoSmart Lovelace Card v1.0.0-beta.6
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.4';
+const CARD_VERSION = '1.0.0-beta.6';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -28,6 +28,10 @@ const I18N = {
     label_min_temp: 'Skalenminimum (°C)',
     label_max_temp: 'Skalenmaximum (°C)',
     label_low_battery_threshold: 'Schwellenwert Batteriewarnung (%)',
+    label_chart_hours: 'Diagramm-Zeitfenster (Stunden)',
+    window_open:      'Fenster offen',
+    heating_failure:  'Heizungsausfall erkannt',
+    summer_mode:      'Sommermodus – Heizung deaktiviert',
   },
   en: {
     heating: 'Heating', idle: 'Idle', off: 'Off',
@@ -50,6 +54,10 @@ const I18N = {
     label_min_temp: 'Scale minimum (°C)',
     label_max_temp: 'Scale maximum (°C)',
     label_low_battery_threshold: 'Low battery threshold (%)',
+    label_chart_hours: 'Chart time window (hours)',
+    window_open:      'Window open',
+    heating_failure:  'Heating failure detected',
+    summer_mode:      'Summer mode – heating disabled',
   },
   fr: {
     heating: 'Chauffe', idle: 'Temp atteinte', off: 'Éteint',
@@ -72,6 +80,10 @@ const I18N = {
     label_min_temp: "Minimum de l'échelle (°C)",
     label_max_temp: "Maximum de l'échelle (°C)",
     label_low_battery_threshold: 'Seuil batterie faible (%)',
+    label_chart_hours: 'Fenêtre temporelle du graphique (heures)',
+    window_open:      'Fenêtre ouverte',
+    heating_failure:  'Défaillance du chauffage',
+    summer_mode:      'Mode été – chauffage désactivé',
   },
   nl: {
     heating: 'Verwarmt', idle: 'Temp bereikt', off: 'Uit',
@@ -94,28 +106,10 @@ const I18N = {
     label_min_temp: 'Schaalminimum (°C)',
     label_max_temp: 'Schaalmaximum (°C)',
     label_low_battery_threshold: 'Drempel batterij bijna leeg (%)',
-  },
-  es: {
-    heating: 'Calentando', idle: 'Temp alcanzada', off: 'Apagado',
-    obs: 'Observación',
-    confident: 'Fiable', learning: 'Aprendiendo', collecting: 'Recopilando datos',
-    target: 'Objetivo',
-    battery_low: 'Batería baja',
-    not_found: 'Entidad no encontrada',
-    chart_ist: 'Real', chart_soll: 'Objetivo', chart_aussen: 'Exterior',
-    label_entity:   'Entidad ThermoSmart',
-    label_name:     'Nombre (opcional)',
-    label_section_display:   'Visualización',
-    label_section_scale:     'Escala de temperatura',
-    label_section_warnings:  'Advertencias',
-    label_compact:  'Diseño compacto',
-    label_disable_humidity: 'Ocultar humedad',
-    label_disable_chart:    'Ocultar gráfico',
-    label_disable_modes:    'Ocultar botones de modo',
-    label_disable_chips:    'Ocultar chips de info',
-    label_min_temp: 'Mínimo de escala (°C)',
-    label_max_temp: 'Máximo de escala (°C)',
-    label_low_battery_threshold: 'Umbral de batería baja (%)',
+    label_chart_hours: 'Grafiek tijdvenster (uren)',
+    window_open:      'Raam open',
+    heating_failure:  'Verwarmingsstoring gedetecteerd',
+    summer_mode:      'Zomermodus – verwarming uitgeschakeld',
   },
   it: {
     heating: 'Riscaldamento', idle: 'Temp raggiunta', off: 'Spento',
@@ -138,6 +132,10 @@ const I18N = {
     label_min_temp: 'Minimo scala (°C)',
     label_max_temp: 'Massimo scala (°C)',
     label_low_battery_threshold: 'Soglia batteria scarica (%)',
+    label_chart_hours: 'Finestra temporale grafico (ore)',
+    window_open:      'Finestra aperta',
+    heating_failure:  'Guasto riscaldamento rilevato',
+    summer_mode:      'Modalità estiva – riscaldamento disattivato',
   },
   pl: {
     heating: 'Grzeje', idle: 'Temp osiągnięta', off: 'Wyłączony',
@@ -160,6 +158,10 @@ const I18N = {
     label_min_temp: 'Minimum skali (°C)',
     label_max_temp: 'Maksimum skali (°C)',
     label_low_battery_threshold: 'Próg niskiej baterii (%)',
+    label_chart_hours: 'Okno czasowe wykresu (godziny)',
+    window_open:      'Okno otwarte',
+    heating_failure:  'Wykryto awarię ogrzewania',
+    summer_mode:      'Tryb letni – ogrzewanie wyłączone',
   },
   sv: {
     heating: 'Värmer', idle: 'Temp nådd', off: 'Av',
@@ -182,6 +184,10 @@ const I18N = {
     label_min_temp: 'Skalminimum (°C)',
     label_max_temp: 'Skalmaximum (°C)',
     label_low_battery_threshold: 'Tröskel för lågt batteri (%)',
+    label_chart_hours: 'Diagrammets tidsfönster (timmar)',
+    window_open:      'Fönster öppet',
+    heating_failure:  'Uppvärmningsfel detekterat',
+    summer_mode:      'Sommarläge – uppvärmning inaktiverad',
   },
 };
 
@@ -257,6 +263,7 @@ const EDITOR_SCHEMA = [
         { name: 'disable_chips',     selector: { boolean: {} } },
         { name: 'disable_chart',     selector: { boolean: {} } },
       ]},
+      { name: 'chart_hours', selector: { number: { min: 1, max: 24, step: 1, mode: 'box', unit_of_measurement: 'h' } } },
     ],
   },
   {
@@ -333,6 +340,8 @@ class ThermosmartCard extends HTMLElement {
     this._historyData     = null;
     this._historyFetching = false;
     this._lastHistoryFetch = 0;
+    this._minTemp = 15;
+    this._maxTemp = 30;
   }
 
   static getStubConfig()    { return { entity: 'climate.thermosmart_zone' }; }
@@ -341,11 +350,18 @@ class ThermosmartCard extends HTMLElement {
   setConfig(config) {
     if (!config.entity) throw new Error('ThermoSmart Card: "entity" fehlt.');
     this._config = config;
+    this._lastHistoryFetch = 0;
     this._render();
   }
 
   set hass(hass) {
+    const prev = this._hass;
     this._hass = hass;
+    if (prev && this._config?.entity) {
+      const wasUnavailable = prev.states[this._config.entity]?.state === 'unavailable';
+      const isAvailable    = hass.states[this._config.entity]?.state !== 'unavailable';
+      if (wasUnavailable && isAvailable) this._lastHistoryFetch = 0;
+    }
     if (!this._isDragging) {
       this._fetchHistory();
       this._render();
@@ -369,7 +385,8 @@ class ThermosmartCard extends HTMLElement {
     if (Date.now() - this._lastHistoryFetch < 5 * 60 * 1000) return;
 
     this._historyFetching = true;
-    const start = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
+    const hours = this._config.chart_hours ?? 6;
+    const start = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
 
     this._hass.callApi(
       'GET',
@@ -388,7 +405,7 @@ class ThermosmartCard extends HTMLElement {
           t,
           curr:    parseFloat(a.current_temperature),
           tgt:     parseFloat(a.temperature),
-          outdoor: parseFloat(a.außentemperatur),
+          outdoor: parseFloat(a.outdoor_temperature),
         };
       }).filter(p => !isNaN(p.curr));
 
@@ -413,7 +430,7 @@ class ThermosmartCard extends HTMLElement {
       return isNaN(n) ? fb : n;
     };
 
-    const isObs      = a.beobachtungsmodus === true;
+    const isObs      = a.observation_mode === true;
     const hvacAction = a.hvac_action || 'off';
 
     let stateKey = 'off';
@@ -436,16 +453,24 @@ class ThermosmartCard extends HTMLElement {
       isObs,
       stateKey,
       col:         STATE_COLORS[stateKey],
-      outdoorTemp: num(a.außentemperatur),
-      weatherOff:  num(a.wetterkorrektur),
-      confidence:  num(a.vorhersage_konfidenz, 0),
-      preheat:     num(a.vorheizzeit, 0),
+      outdoorTemp: num(a.outdoor_temperature),
+      weatherOff:  num(a.weather_correction),
+      confidence:  num(a.learning_confidence, 0),
+      preheat:     num(a.preheat_time, 0),
       trvSetpoint: num(a.trv_setpoint),
       boostDelta:  num(a.boost_delta, 0),
-      boostFactor: num(a.boost_faktor, 1.0),
-      suppression: num(a.vorhersage_unterdrückung, 0),
-      humidity:    num(a.current_humidity),
-      battery:     num(a.battery_level ?? a.battery ?? a.batterie),
+      boostFactor: num(a.boost_factor, 1.0),
+      suppression: num(a.forecast_suppression, 0),
+      humidity:       num(a.current_humidity),
+      battery:        num(a.battery_level ?? a.battery ?? a.batterie),
+      windowOpen:     a.window_open === true,
+      heatingFailure: a.heating_failure === true,
+      summerMode:     a.summer_mode === true,
+      overrideActive: a.override_active === true,
+      overrideTemp:   num(a.override_temp),
+      preheatActive:  a.preheat_active === true,
+      entityMinTemp:  a.min_temp ?? 15,
+      entityMaxTemp:  a.max_temp ?? 30,
     };
   }
 
@@ -459,8 +484,8 @@ class ThermosmartCard extends HTMLElement {
   // ── SVG Ring ─────────────────────────────────────────────────────────────
 
   _buildRing(d) {
-    const MIN_T = this._config.min_temp ?? 15;
-    const MAX_T = this._config.max_temp ?? 30;
+    const MIN_T = this._minTemp;
+    const MAX_T = this._maxTemp;
     const frac  = t => Math.max(0, Math.min(1, (t - MIN_T) / (MAX_T - MIN_T)));
 
     const arcInactive = d.isObs || d.hvacMode === 'off';
@@ -530,6 +555,24 @@ class ThermosmartCard extends HTMLElement {
 
   _buildBanners(d) {
     let html = '';
+    if (d.heatingFailure) {
+      html += `<div class="banner failure">
+        <ha-icon icon="mdi:alert" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'heating_failure')}
+      </div>`;
+    }
+    if (d.windowOpen) {
+      html += `<div class="banner window">
+        <ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'window_open')}
+      </div>`;
+    }
+    if (d.summerMode) {
+      html += `<div class="banner summer">
+        <ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'summer_mode')}
+      </div>`;
+    }
     const thr = this._config.low_battery_threshold ?? 15;
     if (d.battery != null && d.battery <= thr) {
       html += `<div class="banner battery">
@@ -559,7 +602,9 @@ class ThermosmartCard extends HTMLElement {
     if (d.suppression > 0)
       c.push(`<span class="chip info">🌤️ −${d.suppression.toFixed(0)}%</span>`);
     if (d.preheat > 0)
-      c.push(`<span class="chip warn">⏱ ${d.preheat.toFixed(0)} min</span>`);
+      c.push(`<span class="chip ${d.preheatActive ? 'pos' : 'warn'}">${d.preheatActive ? '🔥' : '⏱'} ${d.preheat.toFixed(0)} min</span>`);
+    if (d.overrideActive && d.overrideTemp != null)
+      c.push(`<span class="chip info">✋ ${d.overrideTemp.toFixed(1)}°</span>`);
     return c.length ? `<div class="chips">${c.join('')}</div>` : '';
   }
 
@@ -769,6 +814,9 @@ class ThermosmartCard extends HTMLElement {
         display: flex; align-items: center; gap: 6px;
         border-radius: 8px; font-size: 0.78em; padding: 5px 10px; margin-bottom: 8px;
       }
+      .banner.failure { background: #e8573f33; border: 1px solid #e8573f88; color: #ff6b6b; }
+      .banner.window  { background: #4fc3f722; border: 1px solid #4fc3f755; color: #81d4fa; }
+      .banner.summer  { background: #ff980022; border: 1px solid #ff980055; color: #ffb74d; }
       .banner.battery { background: #e8573f22; border: 1px solid #e8573f55; color: #ff9580; }
 
       /* Controls */
@@ -840,6 +888,9 @@ class ThermosmartCard extends HTMLElement {
       return;
     }
 
+    this._minTemp = this._config.min_temp ?? d.entityMinTemp;
+    this._maxTemp = this._config.max_temp ?? d.entityMaxTemp;
+
     const body = this._config.compact ? this._renderCompact(d) : this._renderNormal(d);
     this.shadowRoot.innerHTML = this._css() + body;
 
@@ -886,8 +937,8 @@ class ThermosmartCard extends HTMLElement {
     const svg = this.shadowRoot.querySelector('.ring-svg');
     if (!svg) return;
 
-    const MIN_T = this._config.min_temp ?? 15;
-    const MAX_T = this._config.max_temp ?? 30;
+    const MIN_T = this._minTemp;
+    const MAX_T = this._maxTemp;
 
     const getAngle = (clientX, clientY) => {
       const rect = svg.getBoundingClientRect();
@@ -972,8 +1023,8 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _updateDragUI(temp) {
-    const MIN_T = this._config.min_temp ?? 15;
-    const MAX_T = this._config.max_temp ?? 30;
+    const MIN_T = this._minTemp;
+    const MAX_T = this._maxTemp;
     const frac  = Math.max(0, Math.min(1, (temp - MIN_T) / (MAX_T - MIN_T)));
     const p     = polarToXY(CX, CY, R, AF + frac * AS);
     const sh    = this.shadowRoot;
