@@ -307,7 +307,7 @@ class ThermosmartCard extends HTMLElement {
           <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
           <button class="ctrl-btn" data-action="inc"><ha-icon icon="mdi:plus"></ha-icon></button>
           <button class="ctrl-btn sm" data-action="schedule"><ha-icon icon="mdi:calendar-clock"></ha-icon></button>
-          <button class="ctrl-btn sm${d.hvacMode === 'off' ? ' pwr-off' : ''}" data-action="power">
+          <button class="ctrl-btn sm${d.isObs ? ' pwr-off' : ''}" data-action="power">
             <ha-icon icon="mdi:power"></ha-icon>
           </button>
         </div>
@@ -457,7 +457,7 @@ class ThermosmartCard extends HTMLElement {
           this._hass.callService('climate', 'set_temperature', { entity_id: d.entityId, temperature: t });
         } else if (act === 'power') {
           this._hass.callService('climate', 'set_hvac_mode', {
-            entity_id: d.entityId, hvac_mode: d.hvacMode === 'off' ? 'heat' : 'off',
+            entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off',
           });
         }
       })
