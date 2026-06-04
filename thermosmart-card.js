@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.2
+ * ThermoSmart Lovelace Card v1.0.0-beta.3
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.2';
+const CARD_VERSION = '1.0.0-beta.3';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -13,12 +13,18 @@ const I18N = {
     confident: 'Zuverlässig', learning: 'Lernend', collecting: 'Sammle Daten',
     target: 'Ziel',
     window_banner: 'Fenster offen – Heizung pausiert',
+    battery_low: 'Batterie schwach',
     not_found: 'Entity nicht gefunden',
     label_entity:   'ThermoSmart Climate-Entity',
     label_name:     'Anzeigename (optional)',
     label_compact:  'Kompaktes 2-Zeilen Layout',
     label_min_temp: 'Skalenminimum (°C)',
     label_max_temp: 'Skalenmaximum (°C)',
+    label_disable_humidity: 'Luftfeuchtigkeit ausblenden',
+    label_disable_chart:    'Verlaufsdiagramm ausblenden',
+    label_disable_modes:    'Modus-Buttons ausblenden',
+    label_disable_chips:    'Info-Chips ausblenden',
+    label_low_battery_threshold: 'Schwellenwert Batteriewarnung (%)',
   },
   en: {
     heating: 'Heating', idle: 'Idle', off: 'Off',
@@ -26,12 +32,18 @@ const I18N = {
     confident: 'Reliable', learning: 'Learning', collecting: 'Collecting data',
     target: 'Target',
     window_banner: 'Window open – Heating paused',
+    battery_low: 'Low battery',
     not_found: 'Entity not found',
     label_entity:   'ThermoSmart Climate Entity',
     label_name:     'Display name (optional)',
     label_compact:  'Compact 2-line layout',
     label_min_temp: 'Scale minimum (°C)',
     label_max_temp: 'Scale maximum (°C)',
+    label_disable_humidity: 'Hide humidity',
+    label_disable_chart:    'Hide history chart',
+    label_disable_modes:    'Hide mode buttons',
+    label_disable_chips:    'Hide info chips',
+    label_low_battery_threshold: 'Low battery threshold (%)',
   },
   fr: {
     heating: 'Chauffe', idle: 'Temp atteinte', off: 'Éteint',
@@ -39,12 +51,18 @@ const I18N = {
     confident: 'Fiable', learning: 'Apprentissage', collecting: 'Collecte de données',
     target: 'Cible',
     window_banner: 'Fenêtre ouverte – Chauffage en pause',
+    battery_low: 'Batterie faible',
     not_found: 'Entité introuvable',
     label_entity:   'Entité ThermoSmart',
     label_name:     "Nom d'affichage (optionnel)",
     label_compact:  'Disposition compacte',
     label_min_temp: "Minimum de l'échelle (°C)",
     label_max_temp: "Maximum de l'échelle (°C)",
+    label_disable_humidity: "Masquer l'humidité",
+    label_disable_chart:    "Masquer le graphique d'historique",
+    label_disable_modes:    'Masquer les boutons de mode',
+    label_disable_chips:    'Masquer les puces info',
+    label_low_battery_threshold: 'Seuil batterie faible (%)',
   },
   nl: {
     heating: 'Verwarmt', idle: 'Temp bereikt', off: 'Uit',
@@ -52,12 +70,18 @@ const I18N = {
     confident: 'Betrouwbaar', learning: 'Lerend', collecting: 'Data verzamelen',
     target: 'Doel',
     window_banner: 'Raam open – Verwarming gepauzeerd',
+    battery_low: 'Batterij bijna leeg',
     not_found: 'Entiteit niet gevonden',
     label_entity:   'ThermoSmart klimaatentiteit',
     label_name:     'Weergavenaam (optioneel)',
     label_compact:  'Compacte 2-regelweergave',
     label_min_temp: 'Schaalminimum (°C)',
     label_max_temp: 'Schaalmaximum (°C)',
+    label_disable_humidity: 'Luchtvochtigheid verbergen',
+    label_disable_chart:    'Geschiedenisgrafiek verbergen',
+    label_disable_modes:    'Modusknoppen verbergen',
+    label_disable_chips:    'Info-chips verbergen',
+    label_low_battery_threshold: 'Drempel batterij bijna leeg (%)',
   },
   es: {
     heating: 'Calentando', idle: 'Temp alcanzada', off: 'Apagado',
@@ -65,12 +89,18 @@ const I18N = {
     confident: 'Fiable', learning: 'Aprendiendo', collecting: 'Recopilando datos',
     target: 'Objetivo',
     window_banner: 'Ventana abierta – Calefacción pausada',
+    battery_low: 'Batería baja',
     not_found: 'Entidad no encontrada',
     label_entity:   'Entidad ThermoSmart',
     label_name:     'Nombre (opcional)',
     label_compact:  'Diseño compacto',
     label_min_temp: 'Mínimo de escala (°C)',
     label_max_temp: 'Máximo de escala (°C)',
+    label_disable_humidity: 'Ocultar humedad',
+    label_disable_chart:    'Ocultar gráfico de historial',
+    label_disable_modes:    'Ocultar botones de modo',
+    label_disable_chips:    'Ocultar chips de info',
+    label_low_battery_threshold: 'Umbral de batería baja (%)',
   },
   it: {
     heating: 'Riscaldamento', idle: 'Temp raggiunta', off: 'Spento',
@@ -78,12 +108,18 @@ const I18N = {
     confident: 'Affidabile', learning: 'Apprendimento', collecting: 'Raccolta dati',
     target: 'Obiettivo',
     window_banner: 'Finestra aperta – Riscaldamento in pausa',
+    battery_low: 'Batteria scarica',
     not_found: 'Entità non trovata',
     label_entity:   'Entità ThermoSmart',
     label_name:     'Nome (opzionale)',
     label_compact:  'Layout compatto',
     label_min_temp: 'Minimo scala (°C)',
     label_max_temp: 'Massimo scala (°C)',
+    label_disable_humidity: "Nascondi umidità",
+    label_disable_chart:    'Nascondi grafico storico',
+    label_disable_modes:    'Nascondi pulsanti modalità',
+    label_disable_chips:    'Nascondi chip info',
+    label_low_battery_threshold: 'Soglia batteria scarica (%)',
   },
   pl: {
     heating: 'Grzeje', idle: 'Temp osiągnięta', off: 'Wyłączony',
@@ -91,12 +127,18 @@ const I18N = {
     confident: 'Niezawodny', learning: 'Uczenie się', collecting: 'Zbieranie danych',
     target: 'Cel',
     window_banner: 'Okno otwarte – Ogrzewanie wstrzymane',
+    battery_low: 'Niski poziom baterii',
     not_found: 'Encja nie znaleziona',
     label_entity:   'Encja ThermoSmart',
     label_name:     'Nazwa wyświetlania (opcjonalna)',
     label_compact:  'Układ kompaktowy',
     label_min_temp: 'Minimum skali (°C)',
     label_max_temp: 'Maksimum skali (°C)',
+    label_disable_humidity: 'Ukryj wilgotność',
+    label_disable_chart:    'Ukryj wykres historii',
+    label_disable_modes:    'Ukryj przyciski trybu',
+    label_disable_chips:    'Ukryj chipy info',
+    label_low_battery_threshold: 'Próg niskiej baterii (%)',
   },
   sv: {
     heating: 'Värmer', idle: 'Temp nådd', off: 'Av',
@@ -104,12 +146,18 @@ const I18N = {
     confident: 'Tillförlitlig', learning: 'Lärande', collecting: 'Samlar data',
     target: 'Mål',
     window_banner: 'Fönster öppet – Värme pausad',
+    battery_low: 'Lågt batteri',
     not_found: 'Entitet hittades inte',
     label_entity:   'ThermoSmart klimatenhet',
     label_name:     'Visningsnamn (valfritt)',
     label_compact:  'Kompakt 2-radsvy',
     label_min_temp: 'Skalminimum (°C)',
     label_max_temp: 'Skalmaximum (°C)',
+    label_disable_humidity: 'Dölj luftfuktighet',
+    label_disable_chart:    'Dölj historikdiagram',
+    label_disable_modes:    'Dölj lägesknappar',
+    label_disable_chips:    'Dölj info-chips',
+    label_low_battery_threshold: 'Tröskel för lågt batteri (%)',
   },
 };
 
@@ -167,6 +215,12 @@ const EDITOR_SCHEMA = [
   { name: 'compact',  selector: { boolean: {} } },
   { name: 'min_temp', selector: { number: { min: 5,  max: 20, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
   { name: 'max_temp', selector: { number: { min: 20, max: 35, step: 1, mode: 'box', unit_of_measurement: '°C' } } },
+  { name: 'disable_humidity', selector: { boolean: {} } },
+  { name: 'disable_chart',    selector: { boolean: {} } },
+  { name: 'disable_modes',    selector: { boolean: {} } },
+  { name: 'disable_chips',    selector: { boolean: {} } },
+  { name: 'low_battery_threshold',
+    selector: { number: { min: 0, max: 100, step: 1, mode: 'box', unit_of_measurement: '%' } } },
 ];
 
 class ThermosmartCardEditor extends HTMLElement {
@@ -245,6 +299,7 @@ class ThermosmartCard extends HTMLElement {
   // ── History ───────────────────────────────────────────────────────────────
 
   _fetchHistory() {
+    if (this._config.disable_chart || this._config.compact) return;
     if (!this._hass?.callApi || this._historyFetching) return;
     if (Date.now() - this._lastHistoryFetch < 5 * 60 * 1000) return;
 
@@ -328,6 +383,8 @@ class ThermosmartCard extends HTMLElement {
       boostDelta:  num(a.boost_delta, 0),
       boostFactor: num(a.boost_faktor, 1.0),
       suppression: num(a.vorhersage_unterdrückung, 0),
+      humidity:    num(a.current_humidity),
+      battery:     num(a.battery_level ?? a.battery ?? a.batterie),
     };
   }
 
@@ -411,12 +468,22 @@ class ThermosmartCard extends HTMLElement {
       </div>`;
   }
 
-  _buildWindowBanner(d) {
-    if (!d.windowOpen) return '';
-    return `<div class="window-banner">
-      <ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon>
-      ${tr(this._hass, 'window_banner')}
-    </div>`;
+  _buildBanners(d) {
+    let html = '';
+    if (d.windowOpen) {
+      html += `<div class="banner window">
+        <ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'window_banner')}
+      </div>`;
+    }
+    const thr = this._config.low_battery_threshold ?? 15;
+    if (d.battery != null && d.battery <= thr) {
+      html += `<div class="banner battery">
+        <ha-icon icon="mdi:battery-alert-variant-outline" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'battery_low')} · ${d.battery.toFixed(0)}%
+      </div>`;
+    }
+    return html;
   }
 
   _buildModes(d) {
@@ -431,6 +498,8 @@ class ThermosmartCard extends HTMLElement {
 
   _buildChips(d) {
     const c = [];
+    if (d.humidity != null && !this._config.disable_humidity)
+      c.push(`<span class="chip">💧 ${d.humidity.toFixed(0)}%</span>`);
     if (d.weatherOff != null && Math.abs(d.weatherOff) >= 0.1)
       c.push(`<span class="chip ${d.weatherOff > 0 ? 'pos' : 'neg'}">💨 ${d.weatherOff > 0 ? '+' : ''}${d.weatherOff.toFixed(1)}°</span>`);
     if (d.boostDelta > 0.05 && d.trvSetpoint != null)
@@ -481,17 +550,17 @@ class ThermosmartCard extends HTMLElement {
     return `
       <div class="spark-wrap">
         <svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;overflow:visible">
-          ${tgtPath  ? `<path d="${tgtPath}"  fill="none" stroke="#363636" stroke-width="1.2" stroke-dasharray="4 3"/>` : ''}
-          ${currPath ? `<path d="${currPath}" fill="none" stroke="${d.col.main}" stroke-width="1.8"
+          ${tgtPath  ? `<path d="${tgtPath}"  fill="none" stroke="#5a5a5a" stroke-width="1.2" stroke-dasharray="4 3"/>` : ''}
+          ${currPath ? `<path d="${currPath}" fill="none" stroke="${d.col.main}" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           <text x="${PL - 4}" y="${ty(maxT)}" dominant-baseline="middle"
-            text-anchor="end" font-size="8" fill="#3a3a3a">${maxT.toFixed(1)}°</text>
+            text-anchor="end" font-size="8" fill="#888">${maxT.toFixed(1)}°</text>
           <text x="${PL - 4}" y="${ty(minT)}" dominant-baseline="middle"
-            text-anchor="end" font-size="8" fill="#3a3a3a">${minT.toFixed(1)}°</text>
-          <text x="${PL}" y="${H - 1}" text-anchor="start" font-size="8" fill="#2e2e2e">
+            text-anchor="end" font-size="8" fill="#888">${minT.toFixed(1)}°</text>
+          <text x="${PL}" y="${H - 1}" text-anchor="start" font-size="8" fill="#777">
             ${fmt(pts[0].t)}
           </text>
-          <text x="${W - PR}" y="${H - 1}" text-anchor="end" font-size="8" fill="#2e2e2e">
+          <text x="${W - PR}" y="${H - 1}" text-anchor="end" font-size="8" fill="#777">
             ${fmt(pts[pts.length - 1].t)}
           </text>
         </svg>
@@ -521,7 +590,10 @@ class ThermosmartCard extends HTMLElement {
       <ha-card class="dark">
         <div class="hdr">
           <span class="hdr-name">${d.name}</span>
-          ${d.outdoorTemp != null ? `<span class="hdr-out">🌡️ ${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
+          <span class="hdr-readouts">
+            ${d.humidity != null && !this._config.disable_humidity ? `<span class="hdr-out">💧 ${d.humidity.toFixed(0)}%</span>` : ''}
+            ${d.outdoorTemp != null ? `<span class="hdr-out">🌡️ ${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
+          </span>
         </div>
 
         <div class="ring-wrap">
@@ -529,7 +601,7 @@ class ThermosmartCard extends HTMLElement {
           ${this._buildTempOverlay(d)}
         </div>
 
-        ${this._buildWindowBanner(d)}
+        ${this._buildBanners(d)}
 
         <div class="ctrl-row">
           <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
@@ -543,10 +615,10 @@ class ThermosmartCard extends HTMLElement {
           </button>
         </div>
 
-        ${this._buildModes(d)}
-        ${this._buildChips(d)}
+        ${this._config.disable_modes ? '' : this._buildModes(d)}
+        ${this._config.disable_chips ? '' : this._buildChips(d)}
         ${this._buildConf(d)}
-        ${this._buildSparkline(d)}
+        ${this._config.disable_chart ? '' : this._buildSparkline(d)}
       </ha-card>`;
   }
 
@@ -560,7 +632,7 @@ class ThermosmartCard extends HTMLElement {
           </div>
           <div class="cmp-info">
             <div class="cmp-name">${d.name}</div>
-            <div class="cmp-sub">${this._statusLabel(d)}${d.outdoorTemp != null ? ' · ' + d.outdoorTemp.toFixed(1) + '°C' : ''}</div>
+            <div class="cmp-sub">${this._statusLabel(d)}${d.humidity != null && !this._config.disable_humidity ? ' · 💧' + d.humidity.toFixed(0) + '%' : ''}${d.outdoorTemp != null ? ' · ' + d.outdoorTemp.toFixed(1) + '°C' : ''}</div>
           </div>
           <div class="cmp-temps">
             <span class="cmp-curr">${d.currentTemp != null ? d.currentTemp.toFixed(1) + '°' : '--'}</span>
@@ -584,9 +656,10 @@ class ThermosmartCard extends HTMLElement {
       }
 
       /* Header */
-      .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-      .hdr-name { font-size: 1em; font-weight: 500; color: #ccc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .hdr-out  { font-size: 0.75em; color: #777; background: #2a2a2a; padding: 2px 8px; border-radius: 9px; flex-shrink: 0; margin-left: 8px; }
+      .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; gap: 8px; }
+      .hdr-name { font-size: 1em; font-weight: 500; color: #e0e0e0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .hdr-readouts { display: flex; gap: 6px; flex-shrink: 0; }
+      .hdr-out  { font-size: 0.75em; color: #b0b0b0; background: #2f2f2f; padding: 2px 8px; border-radius: 9px; white-space: nowrap; }
 
       /* Ring + Overlay */
       .ring-wrap { position: relative; display: flex; justify-content: center; margin-bottom: 2px; }
@@ -605,14 +678,15 @@ class ThermosmartCard extends HTMLElement {
       .ov-int    { font-size: 3.2em; font-weight: 200; color: #fff; letter-spacing: -0.02em; }
       .ov-frac   { font-size: 1.3em; font-weight: 300; color: #ddd; vertical-align: top; display: inline-block; margin-top: 0.42em; }
       .ov-unit   { font-size: 0.72em; }
-      .ov-target { font-size: 0.77em; color: #666; margin-top: 4px; }
+      .ov-target { font-size: 0.77em; color: #8f8f8f; margin-top: 4px; }
 
-      /* Window banner */
-      .window-banner {
+      /* Banners */
+      .banner {
         display: flex; align-items: center; gap: 6px;
-        background: #1565c022; border: 1px solid #2196f344; border-radius: 8px;
-        color: #64b5f6; font-size: 0.78em; padding: 5px 10px; margin-bottom: 8px;
+        border-radius: 8px; font-size: 0.78em; padding: 5px 10px; margin-bottom: 8px;
       }
+      .banner.window  { background: #1565c022; border: 1px solid #2196f344; color: #74bdfb; }
+      .banner.battery { background: #e8573f22; border: 1px solid #e8573f55; color: #ff9580; }
 
       /* Controls */
       .ctrl-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 2px 0 10px; }
@@ -632,23 +706,23 @@ class ThermosmartCard extends HTMLElement {
       .mode-btn {
         flex: 1; min-width: 36px; height: 34px; border: none; border-radius: 9px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        background: #272727; color: #444;
+        background: #2a2a2a; color: #909090;
         transition: background 0.15s, color 0.15s;
         --mdc-icon-size: 18px;
       }
-      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); }
-      .mode-btn:hover:not(.active) { background: #333; color: #888; }
+      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 22%, transparent); color: var(--mt); }
+      .mode-btn:hover:not(.active) { background: #363636; color: #c0c0c0; }
 
       /* Chips */
       .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
-      .chip { padding: 3px 9px; border-radius: 9px; font-size: 0.72em; background: #2a2a2a; color: #666; }
+      .chip { padding: 3px 9px; border-radius: 9px; font-size: 0.72em; background: #2f2f2f; color: #b0b0b0; }
       .chip.pos  { color: #81c784; }
       .chip.neg  { color: #e57373; }
       .chip.warn { color: #ffb74d; }
       .chip.info { color: #64b5f6; }
 
       /* Confidence */
-      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: #444; }
+      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: #9a9a9a; }
       .conf-lbl { flex-shrink: 0; }
       .conf-bg  { flex: 1; height: 4px; border-radius: 2px; background: #2a2a2a; overflow: hidden; }
       .conf-fill { height: 100%; border-radius: 2px; transition: width 0.6s; }
@@ -665,11 +739,11 @@ class ThermosmartCard extends HTMLElement {
       .cmp-row  { display: flex; align-items: center; gap: 10px; padding-bottom: 7px; }
       .cmp-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
       .cmp-info { flex: 1; min-width: 0; }
-      .cmp-name { font-size: 0.9em; font-weight: 500; color: #ddd; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .cmp-sub  { font-size: 0.72em; color: #555; }
+      .cmp-name { font-size: 0.9em; font-weight: 500; color: #e0e0e0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .cmp-sub  { font-size: 0.72em; color: #9a9a9a; }
       .cmp-temps { flex-shrink: 0; text-align: right; }
       .cmp-curr { font-size: 1.1em; font-weight: 300; color: #fff; }
-      .cmp-tgt  { font-size: 0.74em; color: #555; margin-left: 4px; }
+      .cmp-tgt  { font-size: 0.74em; color: #8f8f8f; margin-left: 4px; }
     </style>`;
   }
 

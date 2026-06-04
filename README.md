@@ -10,8 +10,11 @@ Custom Lovelace card for the [ThermoSmart](https://github.com/Mikasmarthome/Ther
 - **6 heating modes** – Auto / Komfort / Eco / Nacht / Abwesend / Urlaub switchable in one tap
 - **Status indicator** – Heizt / Hält Temp / Aus / Beobachtung
 - **Window banner** – prominent warning bar when heating is paused due to open window
+- **Humidity readout** – shows `current_humidity` in the header and as a chip (if available)
+- **Low-battery banner** – warning when the TRV battery drops below a configurable threshold
 - **Info chips** – weather correction, TRV boost, forecast suppression, preheat timer
 - **Learning confidence bar** – shows how well ThermoSmart knows your home
+- **Display toggles** – hide humidity, history chart, mode buttons or info chips per card
 - **Compact layout** – optional 2-line version for dashboards with many zones
 - **8 languages** – DE, EN, FR, NL, ES, IT, PL, SV (auto-detected from HA user language)
 - **HACS compatible**
@@ -49,10 +52,15 @@ entity: climate.thermosmart_living_room
 ```yaml
 type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
-name: Wohnzimmer          # optional – overrides entity friendly name
-compact: false            # true = compact 2-line layout
-min_temp: 15              # temperature ring scale minimum (default: 15)
-max_temp: 30              # temperature ring scale maximum (default: 30)
+name: Wohnzimmer              # optional – overrides entity friendly name
+compact: false               # true = compact 2-line layout
+min_temp: 15                 # temperature ring scale minimum (default: 15)
+max_temp: 30                 # temperature ring scale maximum (default: 30)
+disable_humidity: false      # hide the humidity readout
+disable_chart: false         # hide the 3-hour history sparkline
+disable_modes: false         # hide the preset/mode buttons
+disable_chips: false         # hide the diagnostic info chips
+low_battery_threshold: 15    # show a low-battery banner at/below this % (default: 15)
 ```
 
 ### Compact layout
@@ -70,6 +78,8 @@ All data is taken directly from the ThermoSmart climate entity — **no addition
 | Attribute | Shown as |
 |---|---|
 | `current_temperature` | Current temp (large, center) |
+| `current_humidity` | Humidity readout (header + chip) |
+| `battery_level` / `battery` | Low-battery banner (below threshold) |
 | `temperature` | Target temp (dot on ring + arrow text) |
 | `hvac_action` | Status color & pill (Heizt / Hält / Aus) |
 | `preset_mode` | Active mode button highlighted |
