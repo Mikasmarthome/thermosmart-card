@@ -4,13 +4,16 @@ Custom Lovelace card for the [ThermoSmart](https://github.com/Mikasmarthome/Ther
 
 ## Features
 
+- **Temperature history chart** – inline SVG sparkline of the last 3 hours (current vs. target, no external dependencies, auto-refreshed every 5 min)
+- **Drag-to-set temperature** – drag directly on the arc ring to set the target temperature (mouse & touch)
 - **Temperature ring** – current vs. target temperature with visual arc
-- **5 heating modes** – Auto / Komfort / Nacht / Abwesend / Urlaub switchable in one tap
+- **6 heating modes** – Auto / Komfort / Eco / Nacht / Abwesend / Urlaub switchable in one tap
 - **Status indicator** – Heizt / Hält Temp / Aus / Beobachtung
-- **Info chips** – outdoor temperature, weather correction, TRV boost, forecast suppression
+- **Window banner** – prominent warning bar when heating is paused due to open window
+- **Info chips** – weather correction, TRV boost, forecast suppression, preheat timer
 - **Learning confidence bar** – shows how well ThermoSmart knows your home
 - **Compact layout** – optional 2-line version for dashboards with many zones
-- **Observation mode banner** – clear warning when active control is disabled
+- **8 languages** – DE, EN, FR, NL, ES, IT, PL, SV (auto-detected from HA user language)
 - **HACS compatible**
 
 ## Installation
