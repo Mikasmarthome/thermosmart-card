@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.1-beta.10
+ * ThermoSmart Lovelace Card v1.0.1-beta.11
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.10';
+const CARD_VERSION = '1.0.1-beta.11';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -27,6 +27,11 @@ const I18N = {
     label_disable_chart:    'Verlaufsdiagramm ausblenden',
     label_disable_modes:    'Modus-Buttons ausblenden',
     label_disable_chips:    'Info-Chips ausblenden',
+    label_section_chips:         'Info-Chips konfigurieren',
+    label_hide_chip_weather:     'Wetterkorrektur ausblenden',
+    label_hide_chip_boost:       'TRV-Boost ausblenden',
+    label_hide_chip_suppression: 'Vorhersage-Unterdrückung ausblenden',
+    label_hide_chip_preheat:     'Vorheizzeit ausblenden',
     label_min_temp: 'Skalenminimum (°C)',
     label_max_temp: 'Skalenmaximum (°C)',
     label_low_battery_threshold: 'Schwellenwert Batteriewarnung (%)',
@@ -57,6 +62,11 @@ const I18N = {
     label_disable_chart:    'Hide history chart',
     label_disable_modes:    'Hide mode buttons',
     label_disable_chips:    'Hide info chips',
+    label_section_chips:         'Configure info chips',
+    label_hide_chip_weather:     'Hide weather correction',
+    label_hide_chip_boost:       'Hide TRV boost',
+    label_hide_chip_suppression: 'Hide forecast suppression',
+    label_hide_chip_preheat:     'Hide preheat time',
     label_min_temp: 'Scale minimum (°C)',
     label_max_temp: 'Scale maximum (°C)',
     label_low_battery_threshold: 'Low battery threshold (%)',
@@ -87,6 +97,11 @@ const I18N = {
     label_disable_chart:    "Masquer le graphique",
     label_disable_modes:    'Masquer les boutons de mode',
     label_disable_chips:    'Masquer les puces info',
+    label_section_chips:         'Configurer les puces info',
+    label_hide_chip_weather:     'Masquer la correction météo',
+    label_hide_chip_boost:       'Masquer le boost TRV',
+    label_hide_chip_suppression: 'Masquer la suppression des prévisions',
+    label_hide_chip_preheat:     'Masquer le préchauffage',
     label_min_temp: "Minimum de l'échelle (°C)",
     label_max_temp: "Maximum de l'échelle (°C)",
     label_low_battery_threshold: 'Seuil batterie faible (%)',
@@ -117,6 +132,11 @@ const I18N = {
     label_disable_chart:    'Grafiek verbergen',
     label_disable_modes:    'Modusknoppen verbergen',
     label_disable_chips:    'Info-chips verbergen',
+    label_section_chips:         'Info-chips configureren',
+    label_hide_chip_weather:     'Weercorrectie verbergen',
+    label_hide_chip_boost:       'TRV-boost verbergen',
+    label_hide_chip_suppression: 'Voorspellingsonderdrukking verbergen',
+    label_hide_chip_preheat:     'Voorverwarmingstijd verbergen',
     label_min_temp: 'Schaalminimum (°C)',
     label_max_temp: 'Schaalmaximum (°C)',
     label_low_battery_threshold: 'Drempel batterij bijna leeg (%)',
@@ -147,6 +167,11 @@ const I18N = {
     label_disable_chart:    'Nascondi grafico',
     label_disable_modes:    'Nascondi pulsanti modalità',
     label_disable_chips:    'Nascondi chip info',
+    label_section_chips:         'Configura chip info',
+    label_hide_chip_weather:     'Nascondi correzione meteo',
+    label_hide_chip_boost:       'Nascondi boost TRV',
+    label_hide_chip_suppression: 'Nascondi soppressione previsioni',
+    label_hide_chip_preheat:     'Nascondi tempo di preriscaldamento',
     label_min_temp: 'Minimo scala (°C)',
     label_max_temp: 'Massimo scala (°C)',
     label_low_battery_threshold: 'Soglia batteria scarica (%)',
@@ -177,6 +202,11 @@ const I18N = {
     label_disable_chart:    'Ukryj wykres',
     label_disable_modes:    'Ukryj przyciski trybu',
     label_disable_chips:    'Ukryj chipy info',
+    label_section_chips:         'Konfiguruj chipy info',
+    label_hide_chip_weather:     'Ukryj korektę pogody',
+    label_hide_chip_boost:       'Ukryj boost TRV',
+    label_hide_chip_suppression: 'Ukryj tłumienie prognozy',
+    label_hide_chip_preheat:     'Ukryj czas podgrzewania',
     label_min_temp: 'Minimum skali (°C)',
     label_max_temp: 'Maksimum skali (°C)',
     label_low_battery_threshold: 'Próg niskiej baterii (%)',
@@ -207,6 +237,11 @@ const I18N = {
     label_disable_chart:    'Dölj historikdiagram',
     label_disable_modes:    'Dölj lägesknappar',
     label_disable_chips:    'Dölj info-chips',
+    label_section_chips:         'Konfigurera info-chips',
+    label_hide_chip_weather:     'Dölj väderkorrektion',
+    label_hide_chip_boost:       'Dölj TRV-boost',
+    label_hide_chip_suppression: 'Dölj prognossuppression',
+    label_hide_chip_preheat:     'Dölj förvärmingstid',
     label_min_temp: 'Skalminimum (°C)',
     label_max_temp: 'Skalmaximum (°C)',
     label_low_battery_threshold: 'Tröskel för lågt batteri (%)',
@@ -249,7 +284,8 @@ const CX = 140, CY = 126, R = 112, AF = 240, AS = 240;
 // ── MDI icon paths for editor sections ────────────────────────────────────────
 const MDI_EYE  = 'M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z';
 const MDI_TUNE = 'M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z';
-const MDI_ALERT= 'M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z';
+const MDI_ALERT = 'M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z';
+const MDI_FILTER= 'M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z';
 
 // ── Preset modes (must match ThermoSmart integration const.py) ─────────────────
 const MODES = [
@@ -324,6 +360,20 @@ const EDITOR_SCHEMA = [
     iconPath: MDI_ALERT,
     schema: [
       { name: 'low_battery_threshold', selector: { number: { min: 0, max: 100, step: 1, mode: 'box', unit_of_measurement: '%' } } },
+    ],
+  },
+  {
+    name: 'section_chips',
+    type: 'expandable',
+    flatten: true,
+    iconPath: MDI_FILTER,
+    schema: [
+      { type: 'grid', name: '', schema: [
+        { name: 'hide_chip_weather',     selector: { boolean: {} } },
+        { name: 'hide_chip_boost',       selector: { boolean: {} } },
+        { name: 'hide_chip_suppression', selector: { boolean: {} } },
+        { name: 'hide_chip_preheat',     selector: { boolean: {} } },
+      ]},
     ],
   },
 ];
@@ -723,16 +773,16 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _buildChips(d) {
+    const cfg = this._config;
     const c = [];
-    if (d.weatherOff != null && Math.abs(d.weatherOff) >= 0.1)
+    if (!cfg.hide_chip_weather && d.weatherOff != null && Math.abs(d.weatherOff) >= 0.1)
       c.push(`<span class="chip ${d.weatherOff > 0 ? 'pos' : 'neg'}">💨 ${d.weatherOff > 0 ? '+' : ''}${d.weatherOff.toFixed(1)}°</span>`);
-    if (d.boostDelta > 0.05 && d.trvSetpoint != null)
+    if (!cfg.hide_chip_boost && d.boostDelta > 0.05 && d.trvSetpoint != null)
       c.push(`<span class="chip warn">↑ ${d.trvSetpoint.toFixed(1)}° TRV ×${d.boostFactor.toFixed(2)}</span>`);
-    if (d.suppression > 0)
+    if (!cfg.hide_chip_suppression && d.suppression > 0)
       c.push(`<span class="chip info">🌤️ −${d.suppression.toFixed(0)}%</span>`);
-    if (d.preheat > 0)
+    if (!cfg.hide_chip_preheat && d.preheat > 0)
       c.push(`<span class="chip ${d.preheatActive ? 'pos' : 'warn'}">${d.preheatActive ? '🔥' : '⏱'} ${d.preheat.toFixed(0)} min</span>`);
-    // override chip intentionally removed
     return c.length ? `<div class="chips">${c.join('')}</div>` : '';
   }
 
