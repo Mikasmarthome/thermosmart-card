@@ -815,7 +815,7 @@ class ThermosmartCard extends HTMLElement {
       gridLines += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}"
         style="stroke:var(--divider-color,rgba(0,0,0,.1))" stroke-width="1"/>`;
       gridLines += `<text x="${PL - 3}" y="${y}" dominant-baseline="middle"
-        text-anchor="end" style="font-size:7.5px;fill:var(--secondary-text-color,#888);opacity:0.65">${t}°</text>`;
+        text-anchor="end" style="font-size:8.5px;font-weight:500;fill:var(--secondary-text-color,#888);opacity:0.8">${t}°</text>`;
     }
 
     const currPath    = makePath(p => p.curr);
@@ -848,11 +848,11 @@ class ThermosmartCard extends HTMLElement {
       <div class="spark-wrap">
         <svg viewBox="0 0 ${W} ${H + 8}" style="width:100%;display:block;overflow:visible">
           ${gridLines}
-          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          <text class="spark-t-start" x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
-          <text class="spark-t-end"   x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
+          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          <text class="spark-t-start" x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
+          <text class="spark-t-end"   x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
         </svg>
         <div class="spark-legend">${legendHtml}</div>
       </div>`;
@@ -1061,11 +1061,11 @@ class ThermosmartCard extends HTMLElement {
       .chip.info { color: #1e88e5; }
 
       /* Confidence */
-      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: var(--secondary-text-color); }
+      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.82em; color: var(--secondary-text-color); }
       .conf-lbl { flex-shrink: 0; }
       .conf-bg  { flex: 1; height: 4px; border-radius: 2px; background: var(--secondary-background-color, rgba(120,120,120,.12)); overflow: hidden; }
       .conf-fill { height: 100%; border-radius: 2px; transition: width 0.6s; }
-      .conf-pct { min-width: 26px; text-align: right; flex-shrink: 0; }
+      .conf-pct { min-width: 28px; text-align: right; flex-shrink: 0; font-weight: 500; }
 
       /* Sparkline */
       .spark-wrap { margin-top: 10px; padding: 8px 0 12px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
