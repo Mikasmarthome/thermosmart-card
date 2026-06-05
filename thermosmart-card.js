@@ -15,6 +15,7 @@ const I18N = {
     battery_low: 'Batterie schwach',
     not_found: 'Entity nicht gefunden',
     chart_ist: 'Ist', chart_soll: 'Soll', chart_aussen: 'Außen',
+    learn_active: 'Lernmodus aktiv', learn_inactive: 'Beobachtungsmodus',
     label_entity:   'ThermoSmart Climate-Entity',
     label_name:     'Anzeigename (optional)',
     label_section_display:   'Anzeige',
@@ -43,6 +44,7 @@ const I18N = {
     battery_low: 'Low battery',
     not_found: 'Entity not found',
     chart_ist: 'Actual', chart_soll: 'Target', chart_aussen: 'Outdoor',
+    learn_active: 'Learning active', learn_inactive: 'Observation mode',
     label_entity:   'ThermoSmart Climate Entity',
     label_name:     'Display name (optional)',
     label_section_display:   'Display',
@@ -71,6 +73,7 @@ const I18N = {
     battery_low: 'Batterie faible',
     not_found: 'Entité introuvable',
     chart_ist: 'Réel', chart_soll: 'Cible', chart_aussen: 'Extérieur',
+    learn_active: 'Apprentissage actif', learn_inactive: 'Mode observation',
     label_entity:   'Entité ThermoSmart',
     label_name:     "Nom d'affichage (optionnel)",
     label_section_display:   'Affichage',
@@ -99,6 +102,7 @@ const I18N = {
     battery_low: 'Batterij bijna leeg',
     not_found: 'Entiteit niet gevonden',
     chart_ist: 'Actueel', chart_soll: 'Doel', chart_aussen: 'Buiten',
+    learn_active: 'Leermodus actief', learn_inactive: 'Observatiemodus',
     label_entity:   'ThermoSmart klimaatentiteit',
     label_name:     'Weergavenaam (optioneel)',
     label_section_display:   'Weergave',
@@ -127,6 +131,7 @@ const I18N = {
     battery_low: 'Batteria scarica',
     not_found: 'Entità non trovata',
     chart_ist: 'Reale', chart_soll: 'Obiettivo', chart_aussen: 'Esterno',
+    learn_active: 'Apprendimento attivo', learn_inactive: 'Modalità osservazione',
     label_entity:   'Entità ThermoSmart',
     label_name:     'Nome (opzionale)',
     label_section_display:   'Visualizzazione',
@@ -155,6 +160,7 @@ const I18N = {
     battery_low: 'Niski poziom baterii',
     not_found: 'Encja nie znaleziona',
     chart_ist: 'Rzeczywista', chart_soll: 'Cel', chart_aussen: 'Zewnętrzna',
+    learn_active: 'Nauka aktywna', learn_inactive: 'Tryb obserwacji',
     label_entity:   'Encja ThermoSmart',
     label_name:     'Nazwa wyświetlania (opcjonalna)',
     label_section_display:   'Wyświetlanie',
@@ -183,6 +189,7 @@ const I18N = {
     battery_low: 'Lågt batteri',
     not_found: 'Entitet hittades inte',
     chart_ist: 'Aktuell', chart_soll: 'Mål', chart_aussen: 'Utomhus',
+    learn_active: 'Inlärning aktiv', learn_inactive: 'Observationsläge',
     label_entity:   'ThermoSmart klimatenhet',
     label_name:     'Visningsnamn (valfritt)',
     label_section_display:   'Visning',
@@ -230,7 +237,7 @@ function arcPath(cx, cy, r, fromDeg, sweepDeg) {
 }
 
 // ── Ring geometry constants ────────────────────────────────────────────────────
-const CX = 140, CY = 118, R = 95, AF = 240, AS = 240;
+const CX = 140, CY = 126, R = 112, AF = 240, AS = 240;
 
 // ── MDI icon paths for editor sections ────────────────────────────────────────
 const MDI_EYE  = 'M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z';
@@ -531,7 +538,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     return `
-      <svg class="ring-svg" viewBox="0 0 280 235"
+      <svg class="ring-svg" viewBox="0 0 280 250"
         style="width:100%;max-width:360px;display:block;margin:0 auto;overflow:visible;touch-action:none">
         <defs>
           <radialGradient id="grd_${d.stateKey}" cx="50%" cy="50%" r="50%">
@@ -539,7 +546,7 @@ class ThermosmartCard extends HTMLElement {
             <stop offset="100%" stop-color="${d.col.main}" stop-opacity="0"/>
           </radialGradient>
         </defs>
-        <circle cx="${CX}" cy="${CY}" r="108" fill="url(#grd_${d.stateKey})"/>
+        <circle cx="${CX}" cy="${CY}" r="126" fill="url(#grd_${d.stateKey})"/>
         <path d="${arcPath(CX, CY, R, AF, AS)}"
           fill="none" stroke="var(--secondary-background-color,rgba(120,120,120,.15))" stroke-width="18" stroke-linecap="round"/>
         <path d="${arcPath(CX, CY, R - 16, AF, AS)}"
@@ -730,11 +737,17 @@ class ThermosmartCard extends HTMLElement {
     if (outdoorPath) {
       legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_aussen'), dash: true });
     }
+    const legendSpacing = 75;
+    const legendItemW   = 58;
+    const legendTotalW  = legendItems.length === 1
+      ? legendItemW
+      : (legendItems.length - 1) * legendSpacing + legendItemW;
+    const legendStartX  = Math.max(0, (W - legendTotalW) / 2);
     const legendSvg = legendItems.map((item, i) => {
-      const x = PL + i * 75;
-      return `<line x1="${x}" y1="0" x2="${x + 12}" y2="0"
+      const x = legendStartX + i * legendSpacing;
+      return `<line x1="${x.toFixed(1)}" y1="0" x2="${(x + 12).toFixed(1)}" y2="0"
           stroke="${item.col}" stroke-width="2" ${item.dash ? 'stroke-dasharray="4 3"' : ''}/>
-        <text x="${x + 15}" y="3" style="font-size:8px;fill:var(--secondary-text-color,#888)">${item.label}</text>`;
+        <text x="${(x + 15).toFixed(1)}" y="3" style="font-size:8px;fill:var(--secondary-text-color,#888)">${item.label}</text>`;
     }).join('');
 
     const result = `
@@ -775,8 +788,9 @@ class ThermosmartCard extends HTMLElement {
         ${this._buildBanners(d)}
 
         <div class="ctrl-row">
-          <button class="ctrl-btn sm" data-action="schedule" title="Details">
-            <ha-icon icon="mdi:dots-vertical"></ha-icon>
+          <button class="ctrl-btn sm${!d.isObs ? ' learn-active' : ''}" data-action="learn"
+            title="${!d.isObs ? tr(this._hass, 'learn_active') : tr(this._hass, 'learn_inactive')}">
+            <ha-icon icon="mdi:brain"></ha-icon>
           </button>
           <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
           <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
@@ -857,21 +871,22 @@ class ThermosmartCard extends HTMLElement {
       }
       .ov-pill-slot { min-height: 26px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
       .ov-pill {
-        display: inline-flex; align-items: center; gap: 4px;
-        font-size: 0.72em; font-weight: 500; border-radius: 10px;
-        padding: 3px 8px; border: 1px solid;
+        display: inline-flex; align-items: center; gap: 3px;
+        font-size: 0.7em; font-weight: 500; border-radius: 20px;
+        padding: 4px 10px; border: 1px solid;
+        letter-spacing: 0.02em;
       }
       .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.3); }
       .ov-pill--obs     { color: #90a4ae; background: rgba(144,164,174,.12); border-color: rgba(144,164,174,.3); }
       .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);  }
       .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
-      .ov-status { font-size: 0.86em; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
+      .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 3.8em; font-weight: 300; color: var(--primary-text-color); letter-spacing: -0.03em; }
-      .ov-frac   { font-size: 1.45em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.44em; opacity: .8; }
-      .ov-unit   { font-size: 0.7em; }
-      .ov-target  { display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 0.78em; color: var(--secondary-text-color); margin-top: 4px; }
-      .ov-humidity{ display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 0.78em; color: #6fa3d6; margin-top: 3px; }
+      .ov-int    { font-size: 4.2em; font-weight: 300; color: var(--primary-text-color); letter-spacing: -0.03em; }
+      .ov-frac   { font-size: 1.5em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.46em; opacity: .85; }
+      .ov-unit   { font-size: 0.68em; font-weight: 300; }
+      .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.88em; font-weight: 500; color: var(--secondary-text-color); margin-top: 5px; --mdc-icon-size: 15px; }
+      .ov-humidity{ display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.88em; font-weight: 500; color: #6fa3d6; margin-top: 3px; --mdc-icon-size: 15px; }
 
       /* Banners */
       .banner {
@@ -887,28 +902,34 @@ class ThermosmartCard extends HTMLElement {
       /* Controls */
       .ctrl-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0 12px; }
       .ctrl-btn {
-        width: 38px; height: 38px; border-radius: 50%; border: none;
-        background: var(--secondary-background-color, rgba(120,120,120,.1));
+        width: 40px; height: 40px; border-radius: 50%; border: none;
+        background: var(--secondary-background-color, rgba(120,120,120,.08));
         color: var(--primary-text-color); cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        --mdc-icon-size: 20px; transition: background 0.15s;
+        --mdc-icon-size: 20px;
+        transition: background 0.18s, color 0.18s, transform 0.12s;
+        box-shadow: 0 1px 3px rgba(0,0,0,.08);
       }
-      .ctrl-btn:hover { background: var(--secondary-background-color, rgba(120,120,120,.18)); }
-      .ctrl-btn.sm    { width: 32px; height: 32px; --mdc-icon-size: 17px; }
-      .ctrl-btn.pwr-off { color: #e8573f; }
+      .ctrl-btn:hover  { background: var(--secondary-background-color, rgba(120,120,120,.16)); transform: scale(1.06); }
+      .ctrl-btn:active { transform: scale(0.95); }
+      .ctrl-btn.sm     { width: 34px; height: 34px; --mdc-icon-size: 17px; }
+      .ctrl-btn.pwr-off  { color: #e8573f; background: rgba(232,87,63,.08); }
+      .ctrl-btn.learn-active { color: #43a047; background: rgba(67,160,71,.1); }
       .ctrl-val { font-size: 1.6em; font-weight: 300; color: var(--primary-text-color); min-width: 62px; text-align: center; }
 
       /* Modes */
       .modes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
       .mode-btn {
-        flex: 1; min-width: 36px; height: 36px; border: none; border-radius: 9px; cursor: pointer;
+        flex: 1; min-width: 36px; height: 36px; border: none; border-radius: 10px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        background: var(--secondary-background-color, rgba(120,120,120,.1));
+        background: var(--secondary-background-color, rgba(120,120,120,.07));
         color: var(--secondary-text-color);
-        transition: background 0.15s, color 0.15s; --mdc-icon-size: 18px;
+        transition: background 0.18s, color 0.18s, transform 0.12s; --mdc-icon-size: 18px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.06);
       }
-      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 18%, transparent); color: var(--mt); }
-      .mode-btn:hover:not(.active) { background: var(--secondary-background-color, rgba(120,120,120,.18)); }
+      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); box-shadow: 0 2px 6px color-mix(in srgb, var(--mc) 25%, transparent); }
+      .mode-btn:hover:not(.active) { background: var(--secondary-background-color, rgba(120,120,120,.15)); transform: scale(1.04); }
+      .mode-btn:active  { transform: scale(0.96); }
 
       /* Chips */
       .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
@@ -989,14 +1010,14 @@ class ThermosmartCard extends HTMLElement {
         if (act === 'inc' || act === 'dec') {
           const t = Math.max(this._minTemp, Math.min(this._maxTemp, (d.targetTemp ?? 20) + (act === 'inc' ? 0.5 : -0.5)));
           setTempDebounced(t);
+        } else if (act === 'learn') {
+          this._hass.callService('climate', 'set_hvac_mode', {
+            entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off',
+          });
         } else if (act === 'power') {
           this._hass.callService('climate', 'set_hvac_mode', {
             entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off',
           });
-        } else if (act === 'schedule') {
-          this.dispatchEvent(new CustomEvent('hass-more-info', {
-            detail: { entityId: d.entityId }, bubbles: true, composed: true,
-          }));
         }
       };
       btn.addEventListener('click', h);
