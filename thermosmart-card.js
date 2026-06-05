@@ -628,10 +628,10 @@ class ThermosmartCard extends HTMLElement {
           }
         </div>
         ${d.targetTemp != null
-          ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:13px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>`
+          ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>`
           : ''}
         ${d.humidity != null && !this._config.disable_humidity
-          ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:13px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
+          ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
       </div>`;
   }
@@ -779,30 +779,26 @@ class ThermosmartCard extends HTMLElement {
     if (outdoorPath) {
       legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_aussen'), dash: true });
     }
-    const legendSpacing = 75;
-    const legendItemW   = 58;
-    const legendTotalW  = legendItems.length === 1
-      ? legendItemW
-      : (legendItems.length - 1) * legendSpacing + legendItemW;
-    const legendStartX  = Math.max(0, (W - legendTotalW) / 2);
-    const legendSvg = legendItems.map((item, i) => {
-      const x = legendStartX + i * legendSpacing;
-      return `<line x1="${x.toFixed(1)}" y1="0" x2="${(x + 12).toFixed(1)}" y2="0"
-          stroke="${item.col}" stroke-width="2" ${item.dash ? 'stroke-dasharray="4 3"' : ''}/>
-        <text x="${(x + 15).toFixed(1)}" y="3" style="font-size:8px;fill:var(--secondary-text-color,#888)">${item.label}</text>`;
-    }).join('');
+    // Legend als HTML → echte Card-Zentrierung
+    const legendHtml = legendItems.map(item => `
+      <span class="spark-legend-item">
+        <svg width="14" height="8" style="display:inline-block;vertical-align:middle;overflow:visible">
+          <line x1="0" y1="4" x2="14" y2="4" stroke="${item.col}" stroke-width="2" ${item.dash ? 'stroke-dasharray="4 3"' : ''}/>
+        </svg>
+        <span>${item.label}</span>
+      </span>`).join('');
 
     const result = `
       <div class="spark-wrap">
-        <svg viewBox="0 0 ${W} ${H + 14}" style="width:100%;display:block;overflow:visible">
+        <svg viewBox="0 0 ${W} ${H + 8}" style="width:100%;display:block;overflow:visible">
           ${gridLines}
           ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.4" stroke-dasharray="5 3"/>` : ''}
           ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.4" stroke-dasharray="3 3"/>` : ''}
           ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${d.col.main}"         stroke-width="2"   stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[0].t)}</text>
           <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[pts.length - 1].t)}</text>
-          <g transform="translate(${PL}, ${H + 9})">${legendSvg}</g>
         </svg>
+        <div class="spark-legend">${legendHtml}</div>
       </div>`;
 
     this._sparklineCache = { dataRef: this._historyData, color: d.col.main, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, html: result };
@@ -915,7 +911,7 @@ class ThermosmartCard extends HTMLElement {
       .ring-svg.dragging, .ring-svg.dragging .arc-interact { cursor: grabbing !important; }
       .arc-interact { cursor: grab; }
       .ring-overlay {
-        position: absolute; top: 50.4%; left: 50%;
+        position: absolute; top: 46%; left: 50%;
         transform: translate(-50%, -50%);
         display: flex; flex-direction: column; align-items: center;
         pointer-events: none; width: 220px;
@@ -933,11 +929,11 @@ class ThermosmartCard extends HTMLElement {
       .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 4.2em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
-      .ov-frac   { font-size: 1.5em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.46em; opacity: .85; }
-      .ov-unit   { font-size: 0.68em; font-weight: 300; }
-      .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.88em; font-weight: 500; color: var(--secondary-text-color); margin-top: 5px; --mdc-icon-size: 15px; }
-      .ov-humidity{ display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.88em; font-weight: 500; color: #6fa3d6; margin-top: 3px; --mdc-icon-size: 15px; }
+      .ov-int    { font-size: 4.8em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
+      .ov-frac   { font-size: 1.6em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.46em; opacity: .85; }
+      .ov-unit   { font-size: 0.65em; font-weight: 300; }
+      .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 1.05em; font-weight: 500; color: var(--secondary-text-color); margin-top: 6px; --mdc-icon-size: 16px; }
+      .ov-humidity{ display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 1.05em; font-weight: 500; color: #6fa3d6; margin-top: 4px; --mdc-icon-size: 16px; }
 
       /* Banners */
       .banner {
@@ -1000,7 +996,9 @@ class ThermosmartCard extends HTMLElement {
       .conf-pct { min-width: 26px; text-align: right; flex-shrink: 0; }
 
       /* Sparkline */
-      .spark-wrap { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
+      .spark-wrap { margin-top: 10px; margin-left: -14px; margin-right: -14px; padding: 8px 14px 0; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
+      .spark-legend { display: flex; justify-content: center; gap: 18px; margin-top: 6px; }
+      .spark-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72em; color: var(--secondary-text-color,#888); }
       .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
       .spark-spinner {
         width: 20px; height: 20px; border-radius: 50%;
@@ -1196,7 +1194,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     const tgtEl = sh.querySelector('.ov-target');
-    if (tgtEl) tgtEl.textContent = `→ ${temp.toFixed(1)}° ${tr(this._hass, 'target')}`;
+    if (tgtEl) tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
   }
 }
 
