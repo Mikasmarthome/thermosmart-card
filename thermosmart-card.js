@@ -1,5 +1,5 @@
 /**
- * ThermoSmart Lovelace Card v1.0.1-beta.4
+ * ThermoSmart Lovelace Card v1.0.1-beta.5
  * https://github.com/Mikasmarthome/thermosmart-card
  */
 const CARD_VERSION = '1.0.1-beta.5';
@@ -1081,7 +1081,7 @@ class ThermosmartCard extends HTMLElement {
       @keyframes ts-spin { to { transform: rotate(360deg); } }
 
       /* Compact */
-      .cmp-row  { display: flex; align-items: center; gap: 10px; padding-bottom: 7px; }
+      .cmp-row  { display: flex; align-items: center; gap: 10px; padding: 12px 14px 7px; }
       .cmp-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
       .cmp-info { flex: 1; min-width: 0; }
       .cmp-name { font-size: 0.9em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1089,7 +1089,7 @@ class ThermosmartCard extends HTMLElement {
       .cmp-temps { flex-shrink: 0; text-align: right; }
       .cmp-curr { font-size: 1.1em; font-weight: 300; color: var(--primary-text-color); }
       .cmp-tgt  { font-size: 0.74em; color: var(--secondary-text-color); margin-left: 4px; }
-      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 0 5px; border-radius: 6px; }
+      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 14px 5px; border-radius: 6px; }
     </style>`;
   }
 
@@ -1280,7 +1280,10 @@ class ThermosmartCard extends HTMLElement {
       if (fracEl) fracEl.innerHTML = `.${decPart}<span class="ov-unit">°C</span>`;
     } else {
       const tgtEl = sh.querySelector('.ov-target');
-      if (tgtEl) tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
+      if (tgtEl) {
+        tgtEl.style.visibility = '';
+        tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
+      }
     }
   }
 }
