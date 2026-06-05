@@ -12,7 +12,7 @@
 
 ## Requirements
 
-- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.5 or later
+- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.9 or later
 - Home Assistant 2024.1+
 - No build step — pure vanilla JS, no Node.js required
 
@@ -68,8 +68,8 @@ type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
 name: Living Room            # optional — overrides entity friendly name
 compact: false               # true = compact 2-line layout
-min_temp: 15                 # temperature ring scale minimum (default: 15)
-max_temp: 30                 # temperature ring scale maximum (default: 30)
+min_temp: 4                  # temperature ring scale minimum (default: 4)
+max_temp: 35                 # temperature ring scale maximum (default: 35)
 disable_humidity: false      # hide humidity readout
 disable_chart: false         # hide 3-hour history sparkline
 disable_modes: false         # hide mode buttons
