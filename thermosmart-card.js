@@ -353,15 +353,17 @@ class ThermosmartCard extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this._config          = {};
-    this._hass            = null;
-    this._isDragging      = false;
-    this._dragTemp        = null;
-    this._listeners       = [];
-    this._historyData     = null;
-    this._historyFetching = false;
+    this._config           = {};
+    this._hass             = null;
+    this._isDragging       = false;
+    this._dragTemp         = null;
+    this._optimisticTemp   = null;   // holds target after set until HA confirms
+    this._optimisticTimer  = null;
+    this._listeners        = [];
+    this._historyData      = null;
+    this._historyFetching  = false;
     this._lastHistoryFetch = 0;
-    this._sparklineCache  = null;
+    this._sparklineCache   = null;
     this._minTemp = 15;
     this._maxTemp = 30;
   }
@@ -389,11 +391,30 @@ class ThermosmartCard extends HTMLElement {
       const isAvailable    = hass.states[this._config.entity]?.state !== 'unavailable';
       if (wasUnavailable && isAvailable) this._lastHistoryFetch = 0;
     }
+    // Clear optimistic temp once HA confirms the new value
+    if (this._optimisticTemp !== null) {
+      const haTemp = hass.states[this._config?.entity]?.attributes?.temperature;
+      if (haTemp != null && Math.abs(haTemp - this._optimisticTemp) < 0.3) {
+        clearTimeout(this._optimisticTimer);
+        this._optimisticTemp  = null;
+        this._optimisticTimer = null;
+      }
+    }
     const entityChanged = !prev ||
       prev.states[this._config?.entity] !== hass.states[this._config?.entity];
     if (!entityChanged) return;
     this._fetchHistory();
     this._render();
+  }
+
+  // Keep displayed target temp optimistically after a set call until HA confirms
+  _setOptimistic(temp) {
+    this._optimisticTemp = temp;
+    clearTimeout(this._optimisticTimer);
+    this._optimisticTimer = setTimeout(() => {
+      this._optimisticTemp  = null;
+      this._optimisticTimer = null;
+    }, 30000);
   }
 
   getCardSize() { return this._config.compact ? 2 : 8; }
@@ -474,7 +495,7 @@ class ThermosmartCard extends HTMLElement {
       entityId:    this._config.entity,
       name,
       currentTemp: a.current_temperature ?? null,
-      targetTemp:  this._dragTemp ?? (a.temperature ?? null),
+      targetTemp:  this._dragTemp ?? this._optimisticTemp ?? (a.temperature ?? null),
       hvacMode:    st.state,
       hvacAction,
       preset:      a.preset_mode || 'auto',
@@ -1009,6 +1030,7 @@ class ThermosmartCard extends HTMLElement {
         const act = btn.dataset.action;
         if (act === 'inc' || act === 'dec') {
           const t = Math.max(this._minTemp, Math.min(this._maxTemp, (d.targetTemp ?? 20) + (act === 'inc' ? 0.5 : -0.5)));
+          this._setOptimistic(t);
           setTempDebounced(t);
         } else if (act === 'learn') {
           this._hass.callService('climate', 'set_hvac_mode', {
@@ -1097,6 +1119,7 @@ class ThermosmartCard extends HTMLElement {
     const onUp = () => {
       if (!dragging) return;
       dragging = false; this._isDragging = false;
+      if (lastTemp !== null) this._setOptimistic(lastTemp);
       this._dragTemp = null;
       svg.classList.remove('dragging');
     };
