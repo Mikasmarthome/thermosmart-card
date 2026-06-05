@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.1-beta.11
+ * ThermoSmart Lovelace Card v1.0.1-beta.12
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.11';
+const CARD_VERSION = '1.0.1-beta.12';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -298,19 +298,19 @@ const MODES = [
 ];
 
 const STATE_COLORS = {
-  heating: { main: '#e8573f', glow: 0.18, text: '#ff8a70' },
-  idle:    { main: '#4caf50', glow: 0.14, text: '#81c784' },
-  obs:     { main: '#ff9800', glow: 0.10, text: '#ffb74d' },
-  off:     { main: '#555555', glow: 0.04, text: '#888888' },
+  heating: { main: '#e8573f', glow: 0.24, text: '#ff8a70' },
+  idle:    { main: '#4caf50', glow: 0.20, text: '#81c784' },
+  obs:     { main: '#ff9800', glow: 0.16, text: '#ffb74d' },
+  off:     { main: '#555555', glow: 0.06, text: '#888888' },
 };
 
 const PRESET_COLORS = {
-  comfort:  { main: '#ff7043', glow: 0.16, text: '#ff8a65' },
-  eco:      { main: '#43a047', glow: 0.15, text: '#66bb6a' },
-  sleep:    { main: '#5c6bc0', glow: 0.14, text: '#7986cb' },
-  away:     { main: '#78909c', glow: 0.10, text: '#90a4ae' },
-  vacation: { main: '#7986cb', glow: 0.12, text: '#9fa8da' },
-  auto:     { main: '#f9a825', glow: 0.12, text: '#fdd835' },
+  comfort:  { main: '#ff7043', glow: 0.22, text: '#ff8a65' },
+  eco:      { main: '#43a047', glow: 0.21, text: '#66bb6a' },
+  sleep:    { main: '#5c6bc0', glow: 0.20, text: '#7986cb' },
+  away:     { main: '#78909c', glow: 0.16, text: '#90a4ae' },
+  vacation: { main: '#7986cb', glow: 0.18, text: '#9fa8da' },
+  auto:     { main: '#cc8800', glow: 0.18, text: '#f0a500' },
 };
 
 // chart line colors (fixed, independent of preset)
@@ -1098,7 +1098,7 @@ class ThermosmartCard extends HTMLElement {
         transition: color 0.18s, transform 0.14s, filter 0.18s, background 0.18s; --mdc-icon-size: 28px;
         opacity: 0.55;
       }
-      .mode-btn.active  { color: var(--mt); opacity: 1; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--mc) 70%, transparent)); }
+      .mode-btn.active  { color: var(--mt); opacity: 1; filter: drop-shadow(0 0 11px color-mix(in srgb, var(--mc) 80%, transparent)); }
       .mode-btn:hover:not(.active) { opacity: 0.8; transform: scale(1.1); background: rgba(120,120,120,.06); }
       .mode-btn:active  { transform: scale(0.92); }
 
