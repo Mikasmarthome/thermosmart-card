@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.8
+ * ThermoSmart Lovelace Card v1.0.0-beta.9
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.8';
+const CARD_VERSION = '1.0.0-beta.9';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -32,6 +32,8 @@ const I18N = {
     window_open:      'Fenster offen',
     heating_failure:  'Heizungsausfall erkannt',
     summer_mode:      'Sommermodus – Heizung deaktiviert',
+    mode_summer:      'Sommer',
+    mode_vacation:    'Urlaub',
   },
   en: {
     heating: 'Heating', idle: 'Idle', off: 'Off',
@@ -58,6 +60,8 @@ const I18N = {
     window_open:      'Window open',
     heating_failure:  'Heating failure detected',
     summer_mode:      'Summer mode – heating disabled',
+    mode_summer:      'Summer',
+    mode_vacation:    'Vacation',
   },
   fr: {
     heating: 'Chauffe', idle: 'Temp atteinte', off: 'Éteint',
@@ -84,6 +88,8 @@ const I18N = {
     window_open:      'Fenêtre ouverte',
     heating_failure:  'Défaillance du chauffage',
     summer_mode:      'Mode été – chauffage désactivé',
+    mode_summer:      'Été',
+    mode_vacation:    'Vacances',
   },
   nl: {
     heating: 'Verwarmt', idle: 'Temp bereikt', off: 'Uit',
@@ -110,6 +116,8 @@ const I18N = {
     window_open:      'Raam open',
     heating_failure:  'Verwarmingsstoring gedetecteerd',
     summer_mode:      'Zomermodus – verwarming uitgeschakeld',
+    mode_summer:      'Zomer',
+    mode_vacation:    'Vakantie',
   },
   it: {
     heating: 'Riscaldamento', idle: 'Temp raggiunta', off: 'Spento',
@@ -136,6 +144,8 @@ const I18N = {
     window_open:      'Finestra aperta',
     heating_failure:  'Guasto riscaldamento rilevato',
     summer_mode:      'Modalità estiva – riscaldamento disattivato',
+    mode_summer:      'Estate',
+    mode_vacation:    'Vacanza',
   },
   pl: {
     heating: 'Grzeje', idle: 'Temp osiągnięta', off: 'Wyłączony',
@@ -162,6 +172,8 @@ const I18N = {
     window_open:      'Okno otwarte',
     heating_failure:  'Wykryto awarię ogrzewania',
     summer_mode:      'Tryb letni – ogrzewanie wyłączone',
+    mode_summer:      'Lato',
+    mode_vacation:    'Urlop',
   },
   sv: {
     heating: 'Värmer', idle: 'Temp nådd', off: 'Av',
@@ -188,6 +200,8 @@ const I18N = {
     window_open:      'Fönster öppet',
     heating_failure:  'Uppvärmningsfel detekterat',
     summer_mode:      'Sommarläge – uppvärmning inaktiverad',
+    mode_summer:      'Sommar',
+    mode_vacation:    'Semester',
   },
 };
 
@@ -492,7 +506,7 @@ class ThermosmartCard extends HTMLElement {
     const frac  = t => Math.max(0, Math.min(1, (t - MIN_T) / (MAX_T - MIN_T)));
 
     const arcInactive = d.isObs || d.hvacMode === 'off';
-    const fillColor   = arcInactive ? '#3a3a3a' : d.col.main;
+    const fillColor   = arcInactive ? 'var(--secondary-background-color,rgba(120,120,120,.25))' : d.col.main;
 
     let fillSvg = '';
     if (d.currentTemp != null) {
@@ -515,7 +529,7 @@ class ThermosmartCard extends HTMLElement {
 
     return `
       <svg class="ring-svg" viewBox="0 0 280 235"
-        style="width:100%;max-width:290px;display:block;margin:0 auto;overflow:visible;touch-action:none">
+        style="width:100%;max-width:360px;display:block;margin:0 auto;overflow:visible;touch-action:none">
         <defs>
           <radialGradient id="grd_${d.stateKey}" cx="50%" cy="50%" r="50%">
             <stop offset="0%"   stop-color="${d.col.main}" stop-opacity="${d.col.glow}"/>
@@ -541,13 +555,17 @@ class ThermosmartCard extends HTMLElement {
     const intPart = curr != null ? Math.floor(Math.abs(curr)) * (curr < 0 ? -1 : 1) : null;
     const decPart = curr != null ? Math.round(Math.abs(curr - Math.trunc(curr)) * 10) : null;
 
-    const windowPill = d.windowOpen
-      ? `<div class="ov-window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'window_open')}</div>`
+    const contextPill = d.windowOpen
+      ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'window_open')}</div>`
+      : d.summerMode
+      ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
+      : d.preset === 'vacation'
+      ? `<div class="ov-pill ov-pill--vacation"><ha-icon icon="mdi:airplane" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_vacation')}</div>`
       : '';
 
     return `
       <div class="ring-overlay">
-        ${windowPill}
+        ${contextPill}
         <div class="ov-status" style="color:${d.col.text}">${this._statusLabel(d)}</div>
         <div class="ov-temp">
           ${intPart != null
@@ -567,12 +585,6 @@ class ThermosmartCard extends HTMLElement {
       html += `<div class="banner failure">
         <ha-icon icon="mdi:alert" style="--mdc-icon-size:14px"></ha-icon>
         ${tr(this._hass, 'heating_failure')}
-      </div>`;
-    }
-    if (d.summerMode) {
-      html += `<div class="banner summer">
-        <ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:14px"></ha-icon>
-        ${tr(this._hass, 'summer_mode')}
       </div>`;
     }
     const thr = this._config.low_battery_threshold ?? 15;
@@ -767,9 +779,13 @@ class ThermosmartCard extends HTMLElement {
   _renderCompact(d) {
     const pct = Math.min(100, Math.max(0, d.confidence)).toFixed(0);
     const alert = d.heatingFailure
-      ? { cls: 'failure', icon: 'mdi:alert',                key: 'heating_failure' }
+      ? { cls: 'failure',  icon: 'mdi:alert',               key: 'heating_failure' }
       : d.windowOpen
-      ? { cls: 'window',  icon: 'mdi:window-open-variant',  key: 'window_open'     }
+      ? { cls: 'window',   icon: 'mdi:window-open-variant', key: 'window_open'     }
+      : d.summerMode
+      ? { cls: 'summer',   icon: 'mdi:weather-sunny',       key: 'mode_summer'     }
+      : d.preset === 'vacation'
+      ? { cls: 'vacation', icon: 'mdi:airplane',            key: 'mode_vacation'   }
       : null;
     return `
       <ha-card>
@@ -820,19 +836,21 @@ class ThermosmartCard extends HTMLElement {
       .ring-overlay {
         position: absolute; top: 51%; left: 50%;
         transform: translate(-50%, -50%);
-        text-align: center; pointer-events: none; width: 185px;
+        text-align: center; pointer-events: none; width: 210px;
       }
-      .ov-window {
+      .ov-pill {
         display: inline-flex; align-items: center; gap: 4px;
-        font-size: 0.7em; font-weight: 500; color: #29b6f6;
-        background: rgba(41,182,246,.12); border: 1px solid rgba(41,182,246,.3);
-        border-radius: 10px; padding: 2px 8px; margin-bottom: 3px;
+        font-size: 0.72em; font-weight: 500; border-radius: 10px;
+        padding: 2px 9px; margin-bottom: 4px; border: 1px solid;
       }
-      .ov-status { font-size: 0.84em; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
+      .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.3); }
+      .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);  }
+      .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
+      .ov-status { font-size: 0.86em; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 3.2em; font-weight: 200; color: var(--primary-text-color); letter-spacing: -0.02em; }
-      .ov-frac   { font-size: 1.3em; font-weight: 300; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.42em; opacity: .8; }
-      .ov-unit   { font-size: 0.72em; }
+      .ov-int    { font-size: 3.8em; font-weight: 200; color: var(--primary-text-color); letter-spacing: -0.03em; }
+      .ov-frac   { font-size: 1.45em; font-weight: 300; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.44em; opacity: .8; }
+      .ov-unit   { font-size: 0.7em; }
       .ov-target { font-size: 0.78em; color: var(--secondary-text-color); margin-top: 4px; }
 
       /* Banners */
@@ -840,9 +858,11 @@ class ThermosmartCard extends HTMLElement {
         display: flex; align-items: center; gap: 6px;
         border-radius: 8px; font-size: 0.78em; padding: 5px 10px; margin-bottom: 8px;
       }
-      .banner.failure { background: rgba(232,87,63,.1);  border: 1px solid rgba(232,87,63,.35); color: #e8573f; }
-      .banner.summer  { background: rgba(255,152,0,.1);  border: 1px solid rgba(255,152,0,.35); color: #f57c00; }
-      .banner.battery { background: rgba(232,87,63,.08); border: 1px solid rgba(232,87,63,.25); color: #e8573f; }
+      .banner.failure  { background: rgba(232,87,63,.1);  border: 1px solid rgba(232,87,63,.35);  color: #e8573f; }
+      .banner.window   { background: rgba(41,182,246,.1); border: 1px solid rgba(41,182,246,.3);  color: #29b6f6; }
+      .banner.summer   { background: rgba(255,152,0,.1);  border: 1px solid rgba(255,152,0,.35);  color: #f57c00; }
+      .banner.vacation { background: rgba(121,134,203,.1);border: 1px solid rgba(121,134,203,.3); color: #7986cb; }
+      .banner.battery  { background: rgba(232,87,63,.08); border: 1px solid rgba(232,87,63,.25);  color: #e8573f; }
 
       /* Controls */
       .ctrl-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0 12px; }
