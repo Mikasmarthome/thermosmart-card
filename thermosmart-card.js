@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.9
+ * ThermoSmart Lovelace Card v1.0.1-beta.1
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.9';
+const CARD_VERSION = '1.0.1-beta.1';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -359,7 +359,11 @@ class ThermosmartCard extends HTMLElement {
     this._maxTemp = 30;
   }
 
-  static getStubConfig()    { return { entity: 'climate.thermosmart_zone' }; }
+  static async getStubConfig(hass) {
+    const found = Object.keys(hass?.states || {})
+      .find(eid => eid.startsWith('climate.thermosmart'));
+    return { entity: found || 'climate.thermosmart_zone' };
+  }
   static getConfigElement() { return document.createElement('thermosmart-card-editor'); }
 
   setConfig(config) {
@@ -402,7 +406,7 @@ class ThermosmartCard extends HTMLElement {
     if (Date.now() - this._lastHistoryFetch < 5 * 60 * 1000) return;
 
     this._historyFetching = true;
-    const hours = this._config.chart_hours ?? 6;
+    const hours = this._config.chart_hours ?? 24;
     const start = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
 
     this._hass.callApi(
@@ -478,8 +482,8 @@ class ThermosmartCard extends HTMLElement {
       boostDelta:  num(a.boost_delta, 0),
       boostFactor: num(a.boost_factor, 1.0),
       suppression: num(a.forecast_suppression, 0),
-      humidity:       num(a.current_humidity),
-      battery:        num(a.battery_level ?? a.battery ?? a.batterie),
+      humidity:         num(a.current_humidity),
+      deviceBatteries:  a.device_batteries || {},
       windowOpen:     a.window_open === true,
       heatingFailure: a.heating_failure === true,
       summerMode:     a.summer_mode === true,
@@ -588,10 +592,15 @@ class ThermosmartCard extends HTMLElement {
       </div>`;
     }
     const thr = this._config.low_battery_threshold ?? 15;
-    if (d.battery != null && d.battery <= thr) {
+    const lowDevices = Object.entries(d.deviceBatteries)
+      .filter(([, pct]) => pct <= thr)
+      .sort(([, a], [, b]) => a - b);
+    for (const [entityId, pct] of lowDevices) {
+      const name = this._hass.states[entityId]?.attributes?.friendly_name
+        || entityId.split('.').pop().replace(/_/g, ' ');
       html += `<div class="banner battery">
         <ha-icon icon="mdi:battery-alert-variant-outline" style="--mdc-icon-size:14px"></ha-icon>
-        ${tr(this._hass, 'battery_low')} · ${d.battery.toFixed(0)}%
+        ${tr(this._hass, 'battery_low')}: ${name} · ${pct}%
       </div>`;
     }
     return html;
@@ -649,7 +658,9 @@ class ThermosmartCard extends HTMLElement {
     if (!data || data.length < 3) return '';
 
     if (this._sparklineCache?.dataRef === this._historyData &&
-        this._sparklineCache?.color === d.col.main) {
+        this._sparklineCache?.color   === d.col.main &&
+        this._sparklineCache?.minTemp === this._config.min_temp &&
+        this._sparklineCache?.maxTemp === this._config.max_temp) {
       return this._sparklineCache.html;
     }
 
@@ -670,9 +681,13 @@ class ThermosmartCard extends HTMLElement {
 
     const rawMin = Math.min(...allT);
     const rawMax = Math.max(...allT);
-    // Round to nearest 5 for clean grid lines
-    const minT  = Math.floor(rawMin / 5) * 5;
-    const maxT  = Math.ceil(rawMax  / 5) * 5 || minT + 5;
+    // Config-Skala hat Vorrang; sonst auto auf nächste 5°C runden
+    const minT = this._config.min_temp != null
+      ? this._config.min_temp
+      : Math.floor(rawMin / 5) * 5;
+    const maxT = this._config.max_temp != null
+      ? this._config.max_temp
+      : (Math.ceil(rawMax / 5) * 5 || minT + 5);
     const range = maxT - minT || 1;
 
     const tx = i  => (PL + (i / (pts.length - 1)) * vW).toFixed(1);
@@ -731,7 +746,7 @@ class ThermosmartCard extends HTMLElement {
         </svg>
       </div>`;
 
-    this._sparklineCache = { dataRef: this._historyData, color: d.col.main, html: result };
+    this._sparklineCache = { dataRef: this._historyData, color: d.col.main, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, html: result };
     return result;
   }
 
@@ -943,8 +958,8 @@ class ThermosmartCard extends HTMLElement {
       return;
     }
 
-    this._minTemp = this._config.min_temp ?? d.entityMinTemp;
-    this._maxTemp = this._config.max_temp ?? d.entityMaxTemp;
+    this._minTemp = d.entityMinTemp;
+    this._maxTemp = d.entityMaxTemp;
 
     const body = this._config.compact ? this._renderCompact(d) : this._renderNormal(d);
     this.shadowRoot.innerHTML = this._css() + body;
@@ -967,7 +982,7 @@ class ThermosmartCard extends HTMLElement {
       const h = () => {
         const act = btn.dataset.action;
         if (act === 'inc' || act === 'dec') {
-          const t = Math.max(5, Math.min(30, (d.targetTemp ?? 20) + (act === 'inc' ? 0.5 : -0.5)));
+          const t = Math.max(this._minTemp, Math.min(this._maxTemp, (d.targetTemp ?? 20) + (act === 'inc' ? 0.5 : -0.5)));
           setTempDebounced(t);
         } else if (act === 'power') {
           this._hass.callService('climate', 'set_hvac_mode', {
