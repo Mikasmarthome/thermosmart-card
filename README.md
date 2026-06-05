@@ -3,7 +3,7 @@
 
 <p align="center">
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
-  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.1--beta.3-orange.svg" alt="Version"/></a>
+  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.1--beta.5-orange.svg" alt="Version"/></a>
   <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/HA-2024.1%2B-brightgreen.svg" alt="HA min"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/Mikasmarthome/thermosmart-card" alt="License"/></a>
 </p>
@@ -12,7 +12,7 @@
 
 ## Requirements
 
-- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.2 or later
+- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.5 or later
 - Home Assistant 2024.1+
 - No build step — pure vanilla JS, no Node.js required
 
@@ -23,7 +23,7 @@
 ## Features
 
 - **Temperature ring** — current vs. target with arc visualisation, drag to set (mouse & touch)
-- **3-hour history sparkline** — current vs. target, no external dependencies, auto-refreshed every 5 min
+- **History sparkline** — current / target / outdoor temp, configurable 1–24 h window, auto-refreshed every 5 min
 - **Mode buttons** — Auto / Comfort / Eco / Night / Away / Vacation
 - **Status indicator** — Heating / Maintaining / Off / Observation mode
 - **Window banner** — prominent warning when heating is paused due to open window
@@ -32,7 +32,7 @@
 - **Humidity readout** — shown in header and as chip (if available)
 - **Low-battery banner** — configurable threshold
 - **Compact layout** — optional 2-line version for dashboards with many zones
-- **8 languages** — auto-detected from HA user language (DE, EN, FR, NL, ES, IT, PL, SV)
+- **7 languages** — auto-detected from HA user language (DE, EN, FR, NL, IT, PL, SV)
 
 ---
 
@@ -74,6 +74,8 @@ disable_humidity: false      # hide humidity readout
 disable_chart: false         # hide 3-hour history sparkline
 disable_modes: false         # hide mode buttons
 disable_chips: false         # hide diagnostic info chips
+chart_hours: 24              # history chart time window in hours (1–24, default: 24)
+invert_temps: false          # swap primary/secondary temp display (target = large)
 low_battery_threshold: 15    # low-battery banner threshold in % (default: 15)
 ```
 
@@ -103,8 +105,9 @@ All data comes directly from the ThermoSmart climate entity — **no additional 
 | `forecast_suppression` | Forecast suppression chip |
 | `learning_confidence` | Confidence bar |
 | `preheat_time` | Preheat timer (below ring) |
-| `observation_mode` | Observation mode banner |
-| `battery_level` / `battery` | Low-battery banner |
+| `observation_mode` | Observation mode indicator |
+| `window_open` | Window open indicator |
+| `device_batteries` | Low-battery banner (per device) |
 
 ---
 

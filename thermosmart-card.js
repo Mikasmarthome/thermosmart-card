@@ -2,7 +2,7 @@
  * ThermoSmart Lovelace Card v1.0.1-beta.4
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.4';
+const CARD_VERSION = '1.0.1-beta.5';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -661,9 +661,9 @@ class ThermosmartCard extends HTMLElement {
     const decPart = bigTemp != null ? Math.round(Math.abs(bigTemp - Math.trunc(bigTemp)) * 10) : null;
 
     const contextPill = d.windowOpen
-      ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon></div>`
+      ? `<div class="ov-icon-badge ov-icon--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:28px"></ha-icon></div>`
       : !d.activeOn
-      ? `<div class="ov-pill ov-pill--obs${d.learnOn ? ' ov-pill--obs-learn' : ''}"><ha-icon icon="mdi:eye" style="--mdc-icon-size:14px"></ha-icon></div>`
+      ? `<div class="ov-icon-badge ov-icon--obs${d.learnOn ? ' ov-icon--obs-learn' : ''}"><ha-icon icon="mdi:eye" style="--mdc-icon-size:28px"></ha-icon></div>`
       : d.summerMode
       ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
       : d.preset === 'vacation'
@@ -681,8 +681,8 @@ class ThermosmartCard extends HTMLElement {
           }
         </div>
         ${invert
-          ? (secTemp != null ? `<div class="ov-target"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp.toFixed(1)}°</div>` : '')
-          : (d.targetTemp != null ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>` : '')}
+          ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+          : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
         ${d.humidity != null && !this._config.disable_humidity
           ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
@@ -770,7 +770,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     const W = 260, H = 72;
-    const PL = 4, PR = 2, PT = 6, PB = 16;
+    const PL = 24, PR = 2, PT = 6, PB = 16;
     const vW = W - PL - PR, vH = H - PT - PB;
 
     const step = Math.max(1, Math.ceil(data.length / 100));
@@ -814,8 +814,8 @@ class ThermosmartCard extends HTMLElement {
       const y = parseFloat(ty(t)).toFixed(1);
       gridLines += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}"
         style="stroke:var(--divider-color,rgba(0,0,0,.1))" stroke-width="1"/>`;
-      gridLines += `<text x="${PL + 2}" y="${y}" dominant-baseline="middle"
-        text-anchor="start" style="font-size:7.5px;fill:var(--secondary-text-color,#888);opacity:0.65">${t}°</text>`;
+      gridLines += `<text x="${PL - 3}" y="${y}" dominant-baseline="middle"
+        text-anchor="end" style="font-size:7.5px;fill:var(--secondary-text-color,#888);opacity:0.65">${t}°</text>`;
     }
 
     const currPath    = makePath(p => p.curr);
@@ -851,14 +851,32 @@ class ThermosmartCard extends HTMLElement {
           ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
-          <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
+          <text class="spark-t-start" x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
+          <text class="spark-t-end"   x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
         </svg>
         <div class="spark-legend">${legendHtml}</div>
       </div>`;
 
     this._sparklineCache = { dataRef: this._historyData, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, cachedAt: Date.now(), html: result };
     return result;
+  }
+
+  _startChartTimer() {
+    if (this._config.disable_chart || this._config.compact) return;
+    const hours = this._config.chart_hours ?? 24;
+    const fmt = ts => {
+      const d = new Date(ts);
+      return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    };
+    const timer = setInterval(() => {
+      const tNow   = Date.now();
+      const tStart = tNow - hours * 3600 * 1000;
+      const startEl = this.shadowRoot.querySelector('.spark-t-start');
+      const endEl   = this.shadowRoot.querySelector('.spark-t-end');
+      if (startEl) startEl.textContent = fmt(tStart);
+      if (endEl)   endEl.textContent   = fmt(tNow);
+    }, 60000);
+    this._listeners.push(() => clearInterval(timer));
   }
 
   // ── Layout ───────────────────────────────────────────────────────────────
@@ -974,12 +992,13 @@ class ThermosmartCard extends HTMLElement {
         padding: 4px 10px; border: 1px solid;
         letter-spacing: 0.02em;
       }
-      .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.35); box-shadow: 0 0 8px rgba(41,182,246,.2); }
-      .ov-pill--obs     { color: #90a4ae; background: rgba(144,164,174,.12); border-color: rgba(144,164,174,.3);  }
-      .ov-pill--obs.ov-pill--obs-learn { color: #43a047; background: rgba(67,160,71,.12); border-color: rgba(67,160,71,.4); box-shadow: 0 0 8px rgba(67,160,71,.25); animation: ts-pulse 2.5s ease-in-out infinite; }
-      @keyframes ts-pulse { 0%,100%{box-shadow:0 0 5px rgba(67,160,71,.2)} 50%{box-shadow:0 0 12px rgba(67,160,71,.45)} }
       .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);   }
       .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3); }
+      .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
+      .ov-icon--window { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
+      .ov-icon--obs    { color: #90a4ae; opacity: 0.7; }
+      .ov-icon--obs.ov-icon--obs-learn { color: #43a047; animation: ts-icon-pulse 2.5s ease-in-out infinite; }
+      @keyframes ts-icon-pulse { 0%,100%{filter:drop-shadow(0 0 3px rgba(67,160,71,.2))} 50%{filter:drop-shadow(0 0 9px rgba(67,160,71,.55))} }
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
       .ov-int    { font-size: 4.8em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
@@ -1141,6 +1160,7 @@ class ThermosmartCard extends HTMLElement {
     });
 
     if (!this._config.compact) this._setupDrag(d);
+    this._startChartTimer();
   }
 
   // ── Arc drag ──────────────────────────────────────────────────────────────
