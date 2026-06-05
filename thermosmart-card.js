@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.1-beta.5
+ * ThermoSmart Lovelace Card v1.0.1-beta.10
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.5';
+const CARD_VERSION = '1.0.1-beta.10';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -274,7 +274,7 @@ const PRESET_COLORS = {
   sleep:    { main: '#5c6bc0', glow: 0.14, text: '#7986cb' },
   away:     { main: '#78909c', glow: 0.10, text: '#90a4ae' },
   vacation: { main: '#7986cb', glow: 0.12, text: '#9fa8da' },
-  auto:     null,  // falls back to state color
+  auto:     { main: '#f9a825', glow: 0.12, text: '#fdd835' },
 };
 
 // chart line colors (fixed, independent of preset)
