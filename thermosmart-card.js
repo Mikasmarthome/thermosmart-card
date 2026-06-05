@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-beta.7
+ * ThermoSmart Lovelace Card v1.0.0-beta.8
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-beta.7';
+const CARD_VERSION = '1.0.0-beta.8';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -241,7 +241,7 @@ const STATE_COLORS = {
 };
 
 // chart line colors
-const CHART_COL_TGT    = '#ffb74d';  // orange  – Soll
+const CHART_COL_TGT    = '#2196F3';  // blue    – Soll
 const CHART_COL_OUTDOOR= '#ef5350';  // red     – Außen
 
 // ── Config-Editor ─────────────────────────────────────────────────────────────
@@ -510,7 +510,7 @@ class ThermosmartCard extends HTMLElement {
     if (d.targetTemp != null) {
       const p = polarToXY(CX, CY, R, AF + frac(d.targetTemp) * AS);
       dotSvg = `<circle class="ring-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7"
-        fill="#1c1c1e" stroke="${d.col.main}" stroke-width="2.5"/>`;
+        style="fill:var(--ha-card-background,var(--card-background-color,#fff))" stroke="${d.col.main}" stroke-width="2.5"/>`;
     }
 
     return `
@@ -524,9 +524,9 @@ class ThermosmartCard extends HTMLElement {
         </defs>
         <circle cx="${CX}" cy="${CY}" r="108" fill="url(#grd_${d.stateKey})"/>
         <path d="${arcPath(CX, CY, R, AF, AS)}"
-          fill="none" stroke="#2a2a2a" stroke-width="18" stroke-linecap="round"/>
+          fill="none" stroke="var(--secondary-background-color,rgba(120,120,120,.15))" stroke-width="18" stroke-linecap="round"/>
         <path d="${arcPath(CX, CY, R - 16, AF, AS)}"
-          fill="none" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+          fill="none" stroke="var(--divider-color,rgba(120,120,120,.12))" stroke-width="3" stroke-linecap="round"/>
         ${fillSvg}
         ${dotSvg}
         <path class="arc-interact" d="${arcPath(CX, CY, R, AF, AS)}"
@@ -541,8 +541,13 @@ class ThermosmartCard extends HTMLElement {
     const intPart = curr != null ? Math.floor(Math.abs(curr)) * (curr < 0 ? -1 : 1) : null;
     const decPart = curr != null ? Math.round(Math.abs(curr - Math.trunc(curr)) * 10) : null;
 
+    const windowPill = d.windowOpen
+      ? `<div class="ov-window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'window_open')}</div>`
+      : '';
+
     return `
       <div class="ring-overlay">
+        ${windowPill}
         <div class="ov-status" style="color:${d.col.text}">${this._statusLabel(d)}</div>
         <div class="ov-temp">
           ${intPart != null
@@ -562,12 +567,6 @@ class ThermosmartCard extends HTMLElement {
       html += `<div class="banner failure">
         <ha-icon icon="mdi:alert" style="--mdc-icon-size:14px"></ha-icon>
         ${tr(this._hass, 'heating_failure')}
-      </div>`;
-    }
-    if (d.windowOpen) {
-      html += `<div class="banner window">
-        <ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon>
-        ${tr(this._hass, 'window_open')}
       </div>`;
     }
     if (d.summerMode) {
@@ -678,9 +677,9 @@ class ThermosmartCard extends HTMLElement {
     for (let t = minT; t <= maxT; t += 5) {
       const y = parseFloat(ty(t)).toFixed(1);
       gridLines += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}"
-        stroke="#282828" stroke-width="1"/>`;
+        style="stroke:var(--divider-color,rgba(0,0,0,.1))" stroke-width="1"/>`;
       gridLines += `<text x="${PL - 4}" y="${y}" dominant-baseline="middle"
-        text-anchor="end" font-size="8" fill="#707070">${t}°</text>`;
+        text-anchor="end" style="font-size:8px;fill:var(--secondary-text-color,#888)">${t}°</text>`;
     }
 
     const currPath    = makePath(p => p.curr);
@@ -704,7 +703,7 @@ class ThermosmartCard extends HTMLElement {
       const x = PL + i * 75;
       return `<line x1="${x}" y1="0" x2="${x + 12}" y2="0"
           stroke="${item.col}" stroke-width="2" ${item.dash ? 'stroke-dasharray="4 3"' : ''}/>
-        <text x="${x + 15}" y="3" font-size="8" fill="#aaa">${item.label}</text>`;
+        <text x="${x + 15}" y="3" style="font-size:8px;fill:var(--secondary-text-color,#888)">${item.label}</text>`;
     }).join('');
 
     const result = `
@@ -714,8 +713,8 @@ class ThermosmartCard extends HTMLElement {
           ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.4" stroke-dasharray="5 3"/>` : ''}
           ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.4" stroke-dasharray="3 3"/>` : ''}
           ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${d.col.main}"         stroke-width="2"   stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          <text x="${PL}"     y="${H + 1}" text-anchor="start" font-size="8" fill="#777">${fmt(pts[0].t)}</text>
-          <text x="${W - PR}" y="${H + 1}" text-anchor="end"   font-size="8" fill="#777">${fmt(pts[pts.length - 1].t)}</text>
+          <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[0].t)}</text>
+          <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[pts.length - 1].t)}</text>
           <g transform="translate(${PL}, ${H + 9})">${legendSvg}</g>
         </svg>
       </div>`;
@@ -728,7 +727,7 @@ class ThermosmartCard extends HTMLElement {
 
   _renderNormal(d) {
     return `
-      <ha-card class="dark">
+      <ha-card>
         <div class="hdr">
           <span class="hdr-name">${d.name}</span>
           <span class="hdr-readouts">
@@ -773,7 +772,7 @@ class ThermosmartCard extends HTMLElement {
       ? { cls: 'window',  icon: 'mdi:window-open-variant',  key: 'window_open'     }
       : null;
     return `
-      <ha-card class="dark">
+      <ha-card>
         <div class="cmp-row">
           <div class="cmp-icon" style="background:${d.col.main}22;border-color:${d.col.main}66">
             <ha-icon icon="mdi:home-thermometer" style="color:${d.col.main};--mdc-icon-size:20px"></ha-icon>
@@ -805,16 +804,13 @@ class ThermosmartCard extends HTMLElement {
   _css() {
     return `<style>
       :host { display: block; }
-      ha-card.dark {
-        background: #1c1c1e; color: #fff;
-        padding: 14px 14px 12px; box-sizing: border-box;
-      }
+      ha-card { padding: 14px 14px 12px; box-sizing: border-box; }
 
       /* Header */
       .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px; }
-      .hdr-name { font-size: 1em; font-weight: 600; color: #ececec; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .hdr-name { font-size: 1em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .hdr-readouts { display: flex; gap: 6px; flex-shrink: 0; }
-      .hdr-out { font-size: 0.75em; color: #cccccc; background: #333; padding: 2px 9px; border-radius: 10px; white-space: nowrap; }
+      .hdr-out { font-size: 0.75em; color: var(--secondary-text-color); background: var(--secondary-background-color, rgba(120,120,120,.1)); padding: 2px 9px; border-radius: 10px; white-space: nowrap; }
 
       /* Ring + Overlay */
       .ring-wrap { position: relative; display: flex; justify-content: center; margin-bottom: 2px; }
@@ -824,87 +820,92 @@ class ThermosmartCard extends HTMLElement {
       .ring-overlay {
         position: absolute; top: 51%; left: 50%;
         transform: translate(-50%, -50%);
-        text-align: center; pointer-events: none; width: 175px;
+        text-align: center; pointer-events: none; width: 185px;
+      }
+      .ov-window {
+        display: inline-flex; align-items: center; gap: 4px;
+        font-size: 0.7em; font-weight: 500; color: #29b6f6;
+        background: rgba(41,182,246,.12); border: 1px solid rgba(41,182,246,.3);
+        border-radius: 10px; padding: 2px 8px; margin-bottom: 3px;
       }
       .ov-status { font-size: 0.84em; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 3.2em; font-weight: 200; color: #fff; letter-spacing: -0.02em; }
-      .ov-frac   { font-size: 1.3em; font-weight: 300; color: #e8e8e8; vertical-align: top; display: inline-block; margin-top: 0.42em; }
+      .ov-int    { font-size: 3.2em; font-weight: 200; color: var(--primary-text-color); letter-spacing: -0.02em; }
+      .ov-frac   { font-size: 1.3em; font-weight: 300; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.42em; opacity: .8; }
       .ov-unit   { font-size: 0.72em; }
-      .ov-target { font-size: 0.78em; color: #aaa; margin-top: 4px; }
+      .ov-target { font-size: 0.78em; color: var(--secondary-text-color); margin-top: 4px; }
 
       /* Banners */
       .banner {
         display: flex; align-items: center; gap: 6px;
         border-radius: 8px; font-size: 0.78em; padding: 5px 10px; margin-bottom: 8px;
       }
-      .banner.failure { background: #e8573f33; border: 1px solid #e8573f88; color: #ff6b6b; }
-      .banner.window  { background: #4fc3f722; border: 1px solid #4fc3f755; color: #81d4fa; }
-      .banner.summer  { background: #ff980022; border: 1px solid #ff980055; color: #ffb74d; }
-      .banner.battery { background: #e8573f22; border: 1px solid #e8573f55; color: #ff9580; }
+      .banner.failure { background: rgba(232,87,63,.1);  border: 1px solid rgba(232,87,63,.35); color: #e8573f; }
+      .banner.summer  { background: rgba(255,152,0,.1);  border: 1px solid rgba(255,152,0,.35); color: #f57c00; }
+      .banner.battery { background: rgba(232,87,63,.08); border: 1px solid rgba(232,87,63,.25); color: #e8573f; }
 
       /* Controls */
       .ctrl-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0 12px; }
       .ctrl-btn {
         width: 38px; height: 38px; border-radius: 50%; border: none;
-        background: #333; color: #d0d0d0; cursor: pointer;
+        background: var(--secondary-background-color, rgba(120,120,120,.1));
+        color: var(--primary-text-color); cursor: pointer;
         display: flex; align-items: center; justify-content: center;
         --mdc-icon-size: 20px; transition: background 0.15s;
       }
-      .ctrl-btn:hover { background: #444; color: #fff; }
+      .ctrl-btn:hover { background: var(--secondary-background-color, rgba(120,120,120,.18)); }
       .ctrl-btn.sm    { width: 32px; height: 32px; --mdc-icon-size: 17px; }
-      .ctrl-btn.pwr-off { color: #ff6b6b; }
-      .ctrl-val { font-size: 1.6em; font-weight: 300; color: #fff; min-width: 62px; text-align: center; }
+      .ctrl-btn.pwr-off { color: #e8573f; }
+      .ctrl-val { font-size: 1.6em; font-weight: 300; color: var(--primary-text-color); min-width: 62px; text-align: center; }
 
       /* Modes */
       .modes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
       .mode-btn {
         flex: 1; min-width: 36px; height: 36px; border: none; border-radius: 9px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        background: #2e2e2e; color: #b0b0b0;
-        transition: background 0.15s, color 0.15s;
-        --mdc-icon-size: 18px;
+        background: var(--secondary-background-color, rgba(120,120,120,.1));
+        color: var(--secondary-text-color);
+        transition: background 0.15s, color 0.15s; --mdc-icon-size: 18px;
       }
-      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 22%, transparent); color: var(--mt); }
-      .mode-btn:hover:not(.active) { background: #3a3a3a; color: #e0e0e0; }
+      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 18%, transparent); color: var(--mt); }
+      .mode-btn:hover:not(.active) { background: var(--secondary-background-color, rgba(120,120,120,.18)); }
 
       /* Chips */
       .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-      .chip { padding: 3px 10px; border-radius: 10px; font-size: 0.72em; background: #2e2e2e; color: #c0c0c0; }
-      .chip.pos  { color: #81c784; }
-      .chip.neg  { color: #e57373; }
-      .chip.warn { color: #ffb74d; }
-      .chip.info { color: #64b5f6; }
+      .chip { padding: 3px 10px; border-radius: 10px; font-size: 0.72em; background: var(--secondary-background-color, rgba(120,120,120,.1)); color: var(--secondary-text-color); }
+      .chip.pos  { color: #43a047; }
+      .chip.neg  { color: #e53935; }
+      .chip.warn { color: #f57c00; }
+      .chip.info { color: #1e88e5; }
 
       /* Confidence */
-      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: #aaa; }
+      .conf-row { display: flex; align-items: center; gap: 6px; font-size: 0.72em; color: var(--secondary-text-color); }
       .conf-lbl { flex-shrink: 0; }
-      .conf-bg  { flex: 1; height: 4px; border-radius: 2px; background: #2e2e2e; overflow: hidden; }
+      .conf-bg  { flex: 1; height: 4px; border-radius: 2px; background: var(--secondary-background-color, rgba(120,120,120,.12)); overflow: hidden; }
       .conf-fill { height: 100%; border-radius: 2px; transition: width 0.6s; }
       .conf-pct { min-width: 26px; text-align: right; flex-shrink: 0; }
 
       /* Sparkline */
-      .spark-wrap { margin-top: 10px; padding-top: 8px; border-top: 1px solid #272727; }
+      .spark-wrap { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
       .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
       .spark-spinner {
         width: 20px; height: 20px; border-radius: 50%;
-        border: 2px solid #333; border-top-color: #666;
+        border: 2px solid var(--secondary-background-color, rgba(120,120,120,.15));
+        border-top-color: var(--secondary-text-color, #888);
         animation: ts-spin 0.8s linear infinite;
       }
       @keyframes ts-spin { to { transform: rotate(360deg); } }
-
-      /* Compact banner */
-      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 0 5px; border-radius: 6px; }
 
       /* Compact */
       .cmp-row  { display: flex; align-items: center; gap: 10px; padding-bottom: 7px; }
       .cmp-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
       .cmp-info { flex: 1; min-width: 0; }
-      .cmp-name { font-size: 0.9em; font-weight: 600; color: #ececec; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .cmp-sub  { font-size: 0.72em; color: #aaa; }
+      .cmp-name { font-size: 0.9em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .cmp-sub  { font-size: 0.72em; color: var(--secondary-text-color); }
       .cmp-temps { flex-shrink: 0; text-align: right; }
-      .cmp-curr { font-size: 1.1em; font-weight: 300; color: #fff; }
-      .cmp-tgt  { font-size: 0.74em; color: #aaa; margin-left: 4px; }
+      .cmp-curr { font-size: 1.1em; font-weight: 300; color: var(--primary-text-color); }
+      .cmp-tgt  { font-size: 0.74em; color: var(--secondary-text-color); margin-left: 4px; }
+      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 0 5px; border-radius: 6px; }
     </style>`;
   }
 
@@ -916,7 +917,7 @@ class ThermosmartCard extends HTMLElement {
 
     if (!d) {
       this.shadowRoot.innerHTML = `${this._css()}
-        <ha-card class="dark" style="padding:16px;color:#e57373;font-size:.85em">
+        <ha-card style="padding:16px;color:#e8573f;font-size:.85em">
           ${tr(this._hass, 'not_found')}: <b>${this._config?.entity || '?'}</b>
         </ha-card>`;
       return;
