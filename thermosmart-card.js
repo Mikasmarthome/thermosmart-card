@@ -270,8 +270,9 @@ const PRESET_COLORS = {
   auto:     null,  // falls back to state color
 };
 
-// chart line colors
-const CHART_COL_TGT    = '#2196F3';  // blue    – Soll
+// chart line colors (fixed, independent of preset)
+const CHART_COL_IST    = '#2196F3';  // blue    – Ist
+const CHART_COL_TGT    = '#ff9800';  // orange  – Soll
 const CHART_COL_OUTDOOR= '#ef5350';  // red     – Außen
 
 // ── Config-Editor ─────────────────────────────────────────────────────────────
@@ -745,7 +746,6 @@ class ThermosmartCard extends HTMLElement {
     if (!data || data.length < 3) return '';
 
     if (this._sparklineCache?.dataRef === this._historyData &&
-        this._sparklineCache?.color   === d.col.main &&
         this._sparklineCache?.minTemp === this._config.min_temp &&
         this._sparklineCache?.maxTemp === this._config.max_temp) {
       return this._sparklineCache.html;
@@ -807,17 +807,17 @@ class ThermosmartCard extends HTMLElement {
 
     // Legend
     const legendItems = [
-      { col: d.col.main,     label: tr(this._hass, 'chart_ist'),    dash: false },
-      { col: CHART_COL_TGT,  label: tr(this._hass, 'chart_soll'),   dash: true  },
+      { col: CHART_COL_IST,    label: tr(this._hass, 'chart_ist')    },
+      { col: CHART_COL_TGT,    label: tr(this._hass, 'chart_soll')   },
     ];
     if (outdoorPath) {
-      legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_aussen'), dash: true });
+      legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_aussen') });
     }
     // Legend als HTML → echte Card-Zentrierung
     const legendHtml = legendItems.map(item => `
       <span class="spark-legend-item">
         <svg width="14" height="8" style="display:inline-block;vertical-align:middle;overflow:visible">
-          <line x1="0" y1="4" x2="14" y2="4" stroke="${item.col}" stroke-width="2" ${item.dash ? 'stroke-dasharray="4 3"' : ''}/>
+          <line x1="0" y1="4" x2="14" y2="4" stroke="${item.col}" stroke-width="2"/>
         </svg>
         <span>${item.label}</span>
       </span>`).join('');
@@ -826,16 +826,16 @@ class ThermosmartCard extends HTMLElement {
       <div class="spark-wrap">
         <svg viewBox="0 0 ${W} ${H + 8}" style="width:100%;display:block;overflow:visible">
           ${gridLines}
-          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.4" stroke-dasharray="5 3"/>` : ''}
-          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.4" stroke-dasharray="3 3"/>` : ''}
-          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${d.col.main}"         stroke-width="2"   stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[0].t)}</text>
           <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[pts.length - 1].t)}</text>
         </svg>
         <div class="spark-legend">${legendHtml}</div>
       </div>`;
 
-    this._sparklineCache = { dataRef: this._historyData, color: d.col.main, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, html: result };
+    this._sparklineCache = { dataRef: this._historyData, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, html: result };
     return result;
   }
 
@@ -991,25 +991,25 @@ class ThermosmartCard extends HTMLElement {
       .ctrl-btn:hover  { background: var(--secondary-background-color, rgba(120,120,120,.16)); transform: scale(1.06); }
       .ctrl-btn:active { transform: scale(0.95); }
       .ctrl-btn.sm     { width: 34px; height: 34px; --mdc-icon-size: 17px; }
-      .ctrl-btn.pwr-off    { color: #e8573f; background: rgba(232,87,63,.08); box-shadow: 0 0 8px rgba(232,87,63,.15); }
-      .ctrl-btn.ctrl-active{ color: #1e88e5; background: rgba(30,136,229,.1); box-shadow: 0 0 8px rgba(30,136,229,.2); }
-      .ctrl-btn.learn-active{ color: #43a047; background: rgba(67,160,71,.1); box-shadow: 0 0 8px rgba(67,160,71,.2); }
-      .ctrl-btn.learn-off  { color: var(--secondary-text-color); opacity: 0.55; }
+      .ctrl-btn.pwr-off    { color: #e8573f; background: rgba(232,87,63,.1); box-shadow: 0 0 14px rgba(232,87,63,.5), 0 0 5px rgba(232,87,63,.3); }
+      .ctrl-btn.ctrl-active{ color: #1e88e5; background: rgba(30,136,229,.12); box-shadow: 0 0 14px rgba(30,136,229,.5), 0 0 5px rgba(30,136,229,.3); }
+      .ctrl-btn.learn-active{ color: #43a047; background: rgba(67,160,71,.12); box-shadow: 0 0 14px rgba(67,160,71,.5), 0 0 5px rgba(67,160,71,.3); }
+      .ctrl-btn.learn-off  { color: var(--secondary-text-color); opacity: 0.45; }
       .ctrl-val { font-size: 1.6em; font-weight: 500; color: var(--primary-text-color); min-width: 62px; text-align: center; letter-spacing: -0.01em; }
 
       /* Modes */
-      .modes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+      .modes { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
       .mode-btn {
-        flex: 1; min-width: 36px; height: 36px; border: none; border-radius: 10px; cursor: pointer;
+        flex: 1; min-width: 44px; height: 48px; border: none; border-radius: 12px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        background: var(--secondary-background-color, rgba(120,120,120,.07));
+        background: transparent;
         color: var(--secondary-text-color);
-        transition: background 0.18s, color 0.18s, transform 0.12s; --mdc-icon-size: 18px;
-        box-shadow: 0 1px 2px rgba(0,0,0,.06);
+        transition: color 0.18s, transform 0.14s, filter 0.18s, background 0.18s; --mdc-icon-size: 28px;
+        opacity: 0.55;
       }
-      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); box-shadow: 0 2px 10px color-mix(in srgb, var(--mc) 35%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--mc) 20%, transparent); }
-      .mode-btn:hover:not(.active) { background: var(--secondary-background-color, rgba(120,120,120,.15)); transform: scale(1.04); }
-      .mode-btn:active  { transform: scale(0.96); }
+      .mode-btn.active  { color: var(--mt); opacity: 1; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--mc) 70%, transparent)); }
+      .mode-btn:hover:not(.active) { opacity: 0.8; transform: scale(1.1); background: rgba(120,120,120,.06); }
+      .mode-btn:active  { transform: scale(0.92); }
 
       /* Chips */
       .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
