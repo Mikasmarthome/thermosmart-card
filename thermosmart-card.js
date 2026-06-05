@@ -364,8 +364,11 @@ class ThermosmartCard extends HTMLElement {
     this._historyFetching  = false;
     this._lastHistoryFetch = 0;
     this._sparklineCache   = null;
-    this._minTemp = 15;
-    this._maxTemp = 30;
+    this._minTemp           = 15;
+    this._maxTemp           = 30;
+    this._learnSwitch       = null;
+    this._activeSwitch      = null;
+    this._switchesDetected  = false;
   }
 
   static async getStubConfig(hass) {
@@ -377,8 +380,11 @@ class ThermosmartCard extends HTMLElement {
 
   setConfig(config) {
     if (!config.entity) throw new Error('ThermoSmart Card: "entity" fehlt.');
-    this._config = config;
+    this._config          = config;
     this._lastHistoryFetch = 0;
+    this._switchesDetected = false;
+    this._learnSwitch      = null;
+    this._activeSwitch     = null;
     this._render();
   }
 
@@ -400,11 +406,26 @@ class ThermosmartCard extends HTMLElement {
         this._optimisticTimer = null;
       }
     }
+    if (!this._switchesDetected) this._detectSwitches();
     const entityChanged = !prev ||
       prev.states[this._config?.entity] !== hass.states[this._config?.entity];
-    if (!entityChanged) return;
+    const learnChanged  = !!(this._learnSwitch  && prev?.states[this._learnSwitch]  !== hass.states[this._learnSwitch]);
+    const activeChanged = !!(this._activeSwitch && prev?.states[this._activeSwitch] !== hass.states[this._activeSwitch]);
+    if (!entityChanged && !learnChanged && !activeChanged) return;
     this._fetchHistory();
     this._render();
+  }
+
+  _detectSwitches() {
+    if (!this._hass || !this._config?.entity) return;
+    const entity = this._config.entity;
+    if (!entity.startsWith('climate.thermosmart_')) return;
+    const zone   = entity.slice('climate.thermosmart_'.length);
+    const prefix = `switch.thermosmart_${zone}_`;
+    const ids    = Object.keys(this._hass.states);
+    this._learnSwitch  = ids.find(id => id.startsWith(prefix) && /learn|lern/i.test(id))  ?? null;
+    this._activeSwitch = ids.find(id => id.startsWith(prefix) && /active|aktiv|steuer/i.test(id)) ?? null;
+    this._switchesDetected = true;
   }
 
   // Keep displayed target temp optimistically after a set call until HA confirms
@@ -808,18 +829,26 @@ class ThermosmartCard extends HTMLElement {
 
         ${this._buildBanners(d)}
 
-        <div class="ctrl-row">
-          <button class="ctrl-btn sm${!d.isObs ? ' learn-active' : ''}" data-action="learn"
-            title="${!d.isObs ? tr(this._hass, 'learn_active') : tr(this._hass, 'learn_inactive')}">
+        ${(() => {
+          const learnOn  = this._learnSwitch
+            ? this._hass.states[this._learnSwitch]?.state  === 'on'
+            : !d.isObs;
+          const activeOn = this._activeSwitch
+            ? this._hass.states[this._activeSwitch]?.state === 'on'
+            : !d.isObs;
+          return `<div class="ctrl-row">
+          <button class="ctrl-btn sm${learnOn ? ' learn-active' : ' learn-off'}" data-action="learn"
+            title="${learnOn ? tr(this._hass, 'learn_active') : tr(this._hass, 'learn_inactive')}">
             <ha-icon icon="mdi:brain"></ha-icon>
           </button>
           <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
           <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
           <button class="ctrl-btn" data-action="inc"><ha-icon icon="mdi:plus"></ha-icon></button>
-          <button class="ctrl-btn sm${d.isObs ? ' pwr-off' : ''}" data-action="power">
+          <button class="ctrl-btn sm${activeOn ? ' ctrl-active' : ' pwr-off'}" data-action="power">
             <ha-icon icon="mdi:power"></ha-icon>
           </button>
-        </div>
+        </div>`;
+        })()}
 
         ${this._config.disable_modes ? '' : this._buildModes(d)}
         ${this._config.disable_chips ? '' : this._buildChips(d)}
@@ -886,9 +915,10 @@ class ThermosmartCard extends HTMLElement {
       .ring-svg.dragging, .ring-svg.dragging .arc-interact { cursor: grabbing !important; }
       .arc-interact { cursor: grab; }
       .ring-overlay {
-        position: absolute; top: 51%; left: 50%;
+        position: absolute; top: 50.4%; left: 50%;
         transform: translate(-50%, -50%);
-        text-align: center; pointer-events: none; width: 210px;
+        display: flex; flex-direction: column; align-items: center;
+        pointer-events: none; width: 220px;
       }
       .ov-pill-slot { min-height: 26px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
       .ov-pill {
@@ -903,7 +933,7 @@ class ThermosmartCard extends HTMLElement {
       .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 4.2em; font-weight: 300; color: var(--primary-text-color); letter-spacing: -0.03em; }
+      .ov-int    { font-size: 4.2em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
       .ov-frac   { font-size: 1.5em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.46em; opacity: .85; }
       .ov-unit   { font-size: 0.68em; font-weight: 300; }
       .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.88em; font-weight: 500; color: var(--secondary-text-color); margin-top: 5px; --mdc-icon-size: 15px; }
@@ -934,8 +964,10 @@ class ThermosmartCard extends HTMLElement {
       .ctrl-btn:hover  { background: var(--secondary-background-color, rgba(120,120,120,.16)); transform: scale(1.06); }
       .ctrl-btn:active { transform: scale(0.95); }
       .ctrl-btn.sm     { width: 34px; height: 34px; --mdc-icon-size: 17px; }
-      .ctrl-btn.pwr-off  { color: #e8573f; background: rgba(232,87,63,.08); }
-      .ctrl-btn.learn-active { color: #43a047; background: rgba(67,160,71,.1); }
+      .ctrl-btn.pwr-off    { color: #e8573f; background: rgba(232,87,63,.08); }
+      .ctrl-btn.ctrl-active{ color: #1e88e5; background: rgba(30,136,229,.1); }
+      .ctrl-btn.learn-active{ color: #43a047; background: rgba(67,160,71,.1); }
+      .ctrl-btn.learn-off  { color: var(--secondary-text-color); opacity: 0.6; }
       .ctrl-val { font-size: 1.6em; font-weight: 300; color: var(--primary-text-color); min-width: 62px; text-align: center; }
 
       /* Modes */
@@ -1033,13 +1065,19 @@ class ThermosmartCard extends HTMLElement {
           this._setOptimistic(t);
           setTempDebounced(t);
         } else if (act === 'learn') {
-          this._hass.callService('climate', 'set_hvac_mode', {
-            entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off',
-          });
+          if (this._learnSwitch) {
+            const on = this._hass.states[this._learnSwitch]?.state === 'on';
+            this._hass.callService('switch', on ? 'turn_off' : 'turn_on', { entity_id: this._learnSwitch });
+          } else {
+            this._hass.callService('climate', 'set_hvac_mode', { entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off' });
+          }
         } else if (act === 'power') {
-          this._hass.callService('climate', 'set_hvac_mode', {
-            entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off',
-          });
+          if (this._activeSwitch) {
+            const on = this._hass.states[this._activeSwitch]?.state === 'on';
+            this._hass.callService('switch', on ? 'turn_off' : 'turn_on', { entity_id: this._activeSwitch });
+          } else {
+            this._hass.callService('climate', 'set_hvac_mode', { entity_id: d.entityId, hvac_mode: d.isObs ? 'heat' : 'off' });
+          }
         }
       };
       btn.addEventListener('click', h);
