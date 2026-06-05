@@ -848,9 +848,9 @@ class ThermosmartCard extends HTMLElement {
       <div class="spark-wrap">
         <svg viewBox="0 0 ${W} ${H + 8}" style="width:100%;display:block;overflow:visible">
           ${gridLines}
-          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           <text class="spark-t-start" x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
           <text class="spark-t-end"   x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
         </svg>
@@ -1070,7 +1070,7 @@ class ThermosmartCard extends HTMLElement {
       /* Sparkline */
       .spark-wrap { margin-top: 10px; padding: 8px 0 12px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
       .spark-legend { display: flex; justify-content: center; gap: 18px; padding: 5px 14px 0; }
-      .spark-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72em; color: var(--secondary-text-color,#888); }
+      .spark-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.82em; font-weight: 500; color: var(--secondary-text-color,#888); }
       .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
       .spark-spinner {
         width: 20px; height: 20px; border-radius: 50%;
