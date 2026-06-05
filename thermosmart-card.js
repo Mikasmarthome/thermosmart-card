@@ -747,12 +747,13 @@ class ThermosmartCard extends HTMLElement {
 
     if (this._sparklineCache?.dataRef === this._historyData &&
         this._sparklineCache?.minTemp === this._config.min_temp &&
-        this._sparklineCache?.maxTemp === this._config.max_temp) {
+        this._sparklineCache?.maxTemp === this._config.max_temp &&
+        Date.now() - (this._sparklineCache?.cachedAt ?? 0) < 60000) {
       return this._sparklineCache.html;
     }
 
     const W = 260, H = 72;
-    const PL = 34, PR = 6, PT = 6, PB = 16;
+    const PL = 4, PR = 2, PT = 6, PB = 16;
     const vW = W - PL - PR, vH = H - PT - PB;
 
     const step = Math.max(1, Math.ceil(data.length / 100));
@@ -768,7 +769,6 @@ class ThermosmartCard extends HTMLElement {
 
     const rawMin = Math.min(...allT);
     const rawMax = Math.max(...allT);
-    // Config-Skala hat Vorrang; sonst auto auf nächste 5°C runden
     const minT = this._config.min_temp != null
       ? this._config.min_temp
       : Math.floor(rawMin / 5) * 5;
@@ -777,23 +777,28 @@ class ThermosmartCard extends HTMLElement {
       : (Math.ceil(rawMax / 5) * 5 || minT + 5);
     const range = maxT - minT || 1;
 
-    const tx = i  => (PL + (i / (pts.length - 1)) * vW).toFixed(1);
+    // Time-based X axis: right = now, left = now - chart_hours
+    const tNow   = Date.now();
+    const tStart = tNow - (this._config.chart_hours ?? 24) * 3600 * 1000;
+    const tRange = tNow - tStart;
+
+    const tx = p  => (PL + Math.max(0, Math.min(1, (p.t - tStart) / tRange)) * vW).toFixed(1);
     const ty = tv => (PT + vH - ((tv - minT) / range) * vH).toFixed(1);
 
-    const makePath = (get) => pts.reduce((acc, p, i) => {
+    const makePath = (get) => pts.reduce((acc, p) => {
       const v = get(p);
       if (isNaN(v)) return acc;
-      return acc + (acc === '' ? `M${tx(i)} ${ty(v)}` : ` L${tx(i)} ${ty(v)}`);
+      return acc + (acc === '' ? `M${tx(p)} ${ty(v)}` : ` L${tx(p)} ${ty(v)}`);
     }, '');
 
-    // Grid lines at every 5°C
+    // Grid lines – Y-axis labels float inside chart (left-aligned, low opacity)
     let gridLines = '';
     for (let t = minT; t <= maxT; t += 5) {
       const y = parseFloat(ty(t)).toFixed(1);
       gridLines += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}"
         style="stroke:var(--divider-color,rgba(0,0,0,.1))" stroke-width="1"/>`;
-      gridLines += `<text x="${PL - 4}" y="${y}" dominant-baseline="middle"
-        text-anchor="end" style="font-size:8px;fill:var(--secondary-text-color,#888)">${t}°</text>`;
+      gridLines += `<text x="${PL + 2}" y="${y}" dominant-baseline="middle"
+        text-anchor="start" style="font-size:7.5px;fill:var(--secondary-text-color,#888);opacity:0.65">${t}°</text>`;
     }
 
     const currPath    = makePath(p => p.curr);
@@ -829,13 +834,13 @@ class ThermosmartCard extends HTMLElement {
           ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[0].t)}</text>
-          <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(pts[pts.length - 1].t)}</text>
+          <text x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
+          <text x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:8px;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
         </svg>
         <div class="spark-legend">${legendHtml}</div>
       </div>`;
 
-    this._sparklineCache = { dataRef: this._historyData, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, html: result };
+    this._sparklineCache = { dataRef: this._historyData, minTemp: this._config.min_temp, maxTemp: this._config.max_temp, cachedAt: Date.now(), html: result };
     return result;
   }
 
