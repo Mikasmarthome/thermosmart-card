@@ -630,7 +630,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     return `
-      <svg class="ring-svg" viewBox="0 0 280 250"
+      <svg class="ring-svg" viewBox="0 0 280 196"
         style="width:100%;max-width:360px;display:block;margin:0 auto;overflow:visible;touch-action:none">
         <defs>
           <radialGradient id="grd_${d.stateKey}" cx="50%" cy="50%" r="50%">
@@ -980,7 +980,7 @@ class ThermosmartCard extends HTMLElement {
       .ring-svg.dragging, .ring-svg.dragging .arc-interact { cursor: grabbing !important; }
       .arc-interact { cursor: grab; }
       .ring-overlay {
-        position: absolute; top: 46%; left: 50%;
+        position: absolute; top: 59%; left: 50%;
         transform: translate(-50%, -50%);
         display: flex; flex-direction: column; align-items: center;
         pointer-events: none; width: 220px;
