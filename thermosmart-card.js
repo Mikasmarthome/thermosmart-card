@@ -261,6 +261,15 @@ const STATE_COLORS = {
   off:     { main: '#555555', glow: 0.04, text: '#888888' },
 };
 
+const PRESET_COLORS = {
+  comfort:  { main: '#ff7043', glow: 0.16, text: '#ff8a65' },
+  eco:      { main: '#43a047', glow: 0.15, text: '#66bb6a' },
+  sleep:    { main: '#5c6bc0', glow: 0.14, text: '#7986cb' },
+  away:     { main: '#78909c', glow: 0.10, text: '#90a4ae' },
+  vacation: { main: '#7986cb', glow: 0.12, text: '#9fa8da' },
+  auto:     null,  // falls back to state color
+};
+
 // chart line colors
 const CHART_COL_TGT    = '#2196F3';  // blue    – Soll
 const CHART_COL_OUTDOOR= '#ef5350';  // red     – Außen
@@ -364,11 +373,13 @@ class ThermosmartCard extends HTMLElement {
     this._historyFetching  = false;
     this._lastHistoryFetch = 0;
     this._sparklineCache   = null;
-    this._minTemp           = 15;
-    this._maxTemp           = 30;
-    this._learnSwitch       = null;
-    this._activeSwitch      = null;
-    this._switchesDetected  = false;
+    this._minTemp             = 15;
+    this._maxTemp             = 30;
+    this._learnSwitch         = null;
+    this._activeSwitch        = null;
+    this._switchesDetected    = false;
+    this._optimisticPreset    = null;
+    this._optimisticPresetTimer = null;
   }
 
   static async getStubConfig(hass) {
@@ -380,11 +391,13 @@ class ThermosmartCard extends HTMLElement {
 
   setConfig(config) {
     if (!config.entity) throw new Error('ThermoSmart Card: "entity" fehlt.');
-    this._config          = config;
-    this._lastHistoryFetch = 0;
-    this._switchesDetected = false;
-    this._learnSwitch      = null;
-    this._activeSwitch     = null;
+    this._config             = config;
+    this._lastHistoryFetch   = 0;
+    this._switchesDetected   = false;
+    this._learnSwitch        = null;
+    this._activeSwitch       = null;
+    this._optimisticPreset   = null;
+    clearTimeout(this._optimisticPresetTimer);
     this._render();
   }
 
@@ -407,6 +420,15 @@ class ThermosmartCard extends HTMLElement {
       }
     }
     if (!this._switchesDetected) this._detectSwitches();
+    // Clear optimistic preset when HA confirms the new value
+    if (this._optimisticPreset !== null) {
+      const haPreset = hass.states[this._config?.entity]?.attributes?.preset_mode;
+      if (haPreset === this._optimisticPreset) {
+        clearTimeout(this._optimisticPresetTimer);
+        this._optimisticPreset = null;
+        this._optimisticPresetTimer = null;
+      }
+    }
     const entityChanged = !prev ||
       prev.states[this._config?.entity] !== hass.states[this._config?.entity];
     const learnChanged  = !!(this._learnSwitch  && prev?.states[this._learnSwitch]  !== hass.states[this._learnSwitch]);
@@ -512,6 +534,17 @@ class ThermosmartCard extends HTMLElement {
     const raw  = this._config.name || a.friendly_name || this._config.entity;
     const name = raw.replace(/^ThermoSmart\s*[–\-]\s*/i, '');
 
+    const activeOn = this._activeSwitch
+      ? (this._hass.states[this._activeSwitch]?.state === 'on')
+      : !isObs;
+    const learnOn = this._learnSwitch
+      ? (this._hass.states[this._learnSwitch]?.state === 'on')
+      : !isObs;
+
+    const preset = this._optimisticPreset ?? a.preset_mode ?? 'auto';
+    const presetCol = stateKey !== 'off' ? (PRESET_COLORS[preset] ?? null) : null;
+    const col = presetCol ?? STATE_COLORS[stateKey];
+
     return {
       entityId:    this._config.entity,
       name,
@@ -519,10 +552,12 @@ class ThermosmartCard extends HTMLElement {
       targetTemp:  this._dragTemp ?? this._optimisticTemp ?? (a.temperature ?? null),
       hvacMode:    st.state,
       hvacAction,
-      preset:      a.preset_mode || 'auto',
+      preset,
       isObs,
+      activeOn,
+      learnOn,
       stateKey,
-      col:         STATE_COLORS[stateKey],
+      col,
       outdoorTemp: num(a.outdoor_temperature),
       weatherOff:  num(a.weather_correction),
       confidence:  num(a.learning_confidence, 0),
@@ -557,7 +592,7 @@ class ThermosmartCard extends HTMLElement {
     const MAX_T = this._maxTemp;
     const frac  = t => Math.max(0, Math.min(1, (t - MIN_T) / (MAX_T - MIN_T)));
 
-    const arcInactive = d.isObs || d.hvacMode === 'off';
+    const arcInactive = !d.activeOn || d.hvacMode === 'off';
     const fillColor   = arcInactive ? 'var(--secondary-background-color,rgba(120,120,120,.25))' : d.col.main;
 
     let fillSvg = '';
@@ -609,8 +644,8 @@ class ThermosmartCard extends HTMLElement {
 
     const contextPill = d.windowOpen
       ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon></div>`
-      : d.isObs
-      ? `<div class="ov-pill ov-pill--obs"><ha-icon icon="mdi:eye" style="--mdc-icon-size:14px"></ha-icon></div>`
+      : !d.activeOn
+      ? `<div class="ov-pill ov-pill--obs${d.learnOn ? ' ov-pill--obs-learn' : ''}"><ha-icon icon="mdi:eye" style="--mdc-icon-size:14px"></ha-icon></div>`
       : d.summerMode
       ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
       : d.preset === 'vacation'
@@ -679,8 +714,7 @@ class ThermosmartCard extends HTMLElement {
       c.push(`<span class="chip info">🌤️ −${d.suppression.toFixed(0)}%</span>`);
     if (d.preheat > 0)
       c.push(`<span class="chip ${d.preheatActive ? 'pos' : 'warn'}">${d.preheatActive ? '🔥' : '⏱'} ${d.preheat.toFixed(0)} min</span>`);
-    if (d.overrideActive && d.overrideTemp != null)
-      c.push(`<span class="chip info">✋ ${d.overrideTemp.toFixed(1)}°</span>`);
+    // override chip intentionally removed
     return c.length ? `<div class="chips">${c.join('')}</div>` : '';
   }
 
@@ -810,46 +844,40 @@ class ThermosmartCard extends HTMLElement {
   _renderNormal(d) {
     return `
       <ha-card>
-        <div class="hdr">
-          <span class="hdr-name">${d.name}</span>
-          <span class="hdr-readouts">
-            ${d.outdoorTemp != null
-              ? `<span class="hdr-out"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:14px"></ha-icon>${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
-          </span>
+        <div class="card-body">
+          <div class="hdr">
+            <span class="hdr-name">${d.name}</span>
+            <span class="hdr-readouts">
+              ${d.outdoorTemp != null
+                ? `<span class="hdr-out"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:14px"></ha-icon>${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
+            </span>
+          </div>
+
+          <div class="ring-wrap">
+            ${this._buildRing(d)}
+            ${this._buildTempOverlay(d)}
+          </div>
+
+          ${this._buildBanners(d)}
+
+          <div class="ctrl-row">
+            <button class="ctrl-btn sm${d.learnOn ? ' learn-active' : ' learn-off'}" data-action="learn"
+              title="${d.learnOn ? tr(this._hass, 'learn_active') : tr(this._hass, 'learn_inactive')}">
+              <ha-icon icon="mdi:brain"></ha-icon>
+            </button>
+            <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
+            <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
+            <button class="ctrl-btn" data-action="inc"><ha-icon icon="mdi:plus"></ha-icon></button>
+            <button class="ctrl-btn sm${d.activeOn ? ' ctrl-active' : ' pwr-off'}" data-action="power">
+              <ha-icon icon="mdi:power"></ha-icon>
+            </button>
+          </div>
+
+          ${this._config.disable_modes ? '' : this._buildModes(d)}
+          ${this._config.disable_chips ? '' : this._buildChips(d)}
+          ${this._config.disable_chips ? '' : this._buildConf(d)}
         </div>
-
-        <div class="ring-wrap">
-          ${this._buildRing(d)}
-          ${this._buildTempOverlay(d)}
-        </div>
-
-        ${this._buildBanners(d)}
-
-        ${(() => {
-          const learnOn  = this._learnSwitch
-            ? this._hass.states[this._learnSwitch]?.state  === 'on'
-            : !d.isObs;
-          const activeOn = this._activeSwitch
-            ? this._hass.states[this._activeSwitch]?.state === 'on'
-            : !d.isObs;
-          return `<div class="ctrl-row">
-          <button class="ctrl-btn sm${learnOn ? ' learn-active' : ' learn-off'}" data-action="learn"
-            title="${learnOn ? tr(this._hass, 'learn_active') : tr(this._hass, 'learn_inactive')}">
-            <ha-icon icon="mdi:brain"></ha-icon>
-          </button>
-          <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
-          <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
-          <button class="ctrl-btn" data-action="inc"><ha-icon icon="mdi:plus"></ha-icon></button>
-          <button class="ctrl-btn sm${activeOn ? ' ctrl-active' : ' pwr-off'}" data-action="power">
-            <ha-icon icon="mdi:power"></ha-icon>
-          </button>
-        </div>`;
-        })()}
-
-        ${this._config.disable_modes ? '' : this._buildModes(d)}
-        ${this._config.disable_chips ? '' : this._buildChips(d)}
-        ${this._config.disable_chips ? '' : this._buildConf(d)}
-        ${this._config.disable_chart ? '' : this._buildSparkline(d)}
+        ${this._config.disable_chart ? '<div style="padding-bottom:12px"></div>' : this._buildSparkline(d)}
       </ha-card>`;
   }
 
@@ -897,7 +925,8 @@ class ThermosmartCard extends HTMLElement {
   _css() {
     return `<style>
       :host { display: block; }
-      ha-card { padding: 14px 14px 12px; box-sizing: border-box; }
+      ha-card { padding: 0; box-sizing: border-box; }
+      .card-body { padding: 14px 14px 0; }
 
       /* Header */
       .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px; }
@@ -923,10 +952,12 @@ class ThermosmartCard extends HTMLElement {
         padding: 4px 10px; border: 1px solid;
         letter-spacing: 0.02em;
       }
-      .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.3); }
-      .ov-pill--obs     { color: #90a4ae; background: rgba(144,164,174,.12); border-color: rgba(144,164,174,.3); }
-      .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);  }
-      .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
+      .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.35); box-shadow: 0 0 8px rgba(41,182,246,.2); }
+      .ov-pill--obs     { color: #90a4ae; background: rgba(144,164,174,.12); border-color: rgba(144,164,174,.3);  }
+      .ov-pill--obs.ov-pill--obs-learn { color: #43a047; background: rgba(67,160,71,.12); border-color: rgba(67,160,71,.4); box-shadow: 0 0 8px rgba(67,160,71,.25); animation: ts-pulse 2.5s ease-in-out infinite; }
+      @keyframes ts-pulse { 0%,100%{box-shadow:0 0 5px rgba(67,160,71,.2)} 50%{box-shadow:0 0 12px rgba(67,160,71,.45)} }
+      .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);   }
+      .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3); }
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
       .ov-int    { font-size: 4.8em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
@@ -960,11 +991,11 @@ class ThermosmartCard extends HTMLElement {
       .ctrl-btn:hover  { background: var(--secondary-background-color, rgba(120,120,120,.16)); transform: scale(1.06); }
       .ctrl-btn:active { transform: scale(0.95); }
       .ctrl-btn.sm     { width: 34px; height: 34px; --mdc-icon-size: 17px; }
-      .ctrl-btn.pwr-off    { color: #e8573f; background: rgba(232,87,63,.08); }
-      .ctrl-btn.ctrl-active{ color: #1e88e5; background: rgba(30,136,229,.1); }
-      .ctrl-btn.learn-active{ color: #43a047; background: rgba(67,160,71,.1); }
-      .ctrl-btn.learn-off  { color: var(--secondary-text-color); opacity: 0.6; }
-      .ctrl-val { font-size: 1.6em; font-weight: 300; color: var(--primary-text-color); min-width: 62px; text-align: center; }
+      .ctrl-btn.pwr-off    { color: #e8573f; background: rgba(232,87,63,.08); box-shadow: 0 0 8px rgba(232,87,63,.15); }
+      .ctrl-btn.ctrl-active{ color: #1e88e5; background: rgba(30,136,229,.1); box-shadow: 0 0 8px rgba(30,136,229,.2); }
+      .ctrl-btn.learn-active{ color: #43a047; background: rgba(67,160,71,.1); box-shadow: 0 0 8px rgba(67,160,71,.2); }
+      .ctrl-btn.learn-off  { color: var(--secondary-text-color); opacity: 0.55; }
+      .ctrl-val { font-size: 1.6em; font-weight: 500; color: var(--primary-text-color); min-width: 62px; text-align: center; letter-spacing: -0.01em; }
 
       /* Modes */
       .modes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
@@ -976,7 +1007,7 @@ class ThermosmartCard extends HTMLElement {
         transition: background 0.18s, color 0.18s, transform 0.12s; --mdc-icon-size: 18px;
         box-shadow: 0 1px 2px rgba(0,0,0,.06);
       }
-      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); box-shadow: 0 2px 6px color-mix(in srgb, var(--mc) 25%, transparent); }
+      .mode-btn.active  { background: color-mix(in srgb, var(--mc) 20%, transparent); color: var(--mt); box-shadow: 0 2px 10px color-mix(in srgb, var(--mc) 35%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--mc) 20%, transparent); }
       .mode-btn:hover:not(.active) { background: var(--secondary-background-color, rgba(120,120,120,.15)); transform: scale(1.04); }
       .mode-btn:active  { transform: scale(0.96); }
 
@@ -996,8 +1027,8 @@ class ThermosmartCard extends HTMLElement {
       .conf-pct { min-width: 26px; text-align: right; flex-shrink: 0; }
 
       /* Sparkline */
-      .spark-wrap { margin-top: 10px; margin-left: -14px; margin-right: -14px; padding: 8px 14px 0; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
-      .spark-legend { display: flex; justify-content: center; gap: 18px; margin-top: 6px; }
+      .spark-wrap { margin-top: 10px; padding: 8px 0 12px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
+      .spark-legend { display: flex; justify-content: center; gap: 18px; padding: 5px 14px 0; }
       .spark-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72em; color: var(--secondary-text-color,#888); }
       .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
       .spark-spinner {
@@ -1041,11 +1072,16 @@ class ThermosmartCard extends HTMLElement {
     const body = this._config.compact ? this._renderCompact(d) : this._renderNormal(d);
     this.shadowRoot.innerHTML = this._css() + body;
 
-    // Mode buttons
+    // Mode buttons – optimistic preset for instant visual feedback
     this.shadowRoot.querySelectorAll('.mode-btn').forEach(btn => {
-      const h = () => this._hass.callService('climate', 'set_preset_mode', {
-        entity_id: d.entityId, preset_mode: btn.dataset.preset,
-      });
+      const h = () => {
+        const preset = btn.dataset.preset;
+        this._optimisticPreset = preset;
+        clearTimeout(this._optimisticPresetTimer);
+        this._optimisticPresetTimer = setTimeout(() => { this._optimisticPreset = null; }, 10000);
+        this._hass.callService('climate', 'set_preset_mode', { entity_id: d.entityId, preset_mode: preset });
+        this._render();
+      };
       btn.addEventListener('click', h);
       this._listeners.push(() => btn.removeEventListener('click', h));
     });
