@@ -2,7 +2,7 @@
  * ThermoSmart Lovelace Card v1.0.1-beta.1
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.1';
+const CARD_VERSION = '1.0.1-beta.2';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -496,7 +496,6 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _statusLabel(d) {
-    if (d.isObs)                    return tr(this._hass, 'obs');
     if (d.hvacAction === 'heating') return tr(this._hass, 'heating');
     if (d.hvacAction === 'idle')    return tr(this._hass, 'idle');
     return tr(this._hass, 'off');
@@ -560,7 +559,9 @@ class ThermosmartCard extends HTMLElement {
     const decPart = curr != null ? Math.round(Math.abs(curr - Math.trunc(curr)) * 10) : null;
 
     const contextPill = d.windowOpen
-      ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'window_open')}</div>`
+      ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon></div>`
+      : d.isObs
+      ? `<div class="ov-pill ov-pill--obs"><ha-icon icon="mdi:eye" style="--mdc-icon-size:14px"></ha-icon></div>`
       : d.summerMode
       ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
       : d.preset === 'vacation'
@@ -569,7 +570,7 @@ class ThermosmartCard extends HTMLElement {
 
     return `
       <div class="ring-overlay">
-        ${contextPill}
+        <div class="ov-pill-slot">${contextPill}</div>
         <div class="ov-status" style="color:${d.col.text}">${this._statusLabel(d)}</div>
         <div class="ov-temp">
           ${intPart != null
@@ -578,7 +579,10 @@ class ThermosmartCard extends HTMLElement {
           }
         </div>
         ${d.targetTemp != null
-          ? `<div class="ov-target">→ ${d.targetTemp.toFixed(1)}° ${tr(this._hass, 'target')}</div>`
+          ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:13px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>`
+          : ''}
+        ${d.humidity != null && !this._config.disable_humidity
+          ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:13px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
       </div>`;
   }
@@ -758,10 +762,8 @@ class ThermosmartCard extends HTMLElement {
         <div class="hdr">
           <span class="hdr-name">${d.name}</span>
           <span class="hdr-readouts">
-            ${d.humidity != null && !this._config.disable_humidity
-              ? `<span class="hdr-out">💧 ${d.humidity.toFixed(0)}%</span>` : ''}
             ${d.outdoorTemp != null
-              ? `<span class="hdr-out">🌡️ ${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
+              ? `<span class="hdr-out"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:14px"></ha-icon>${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
           </span>
         </div>
 
@@ -773,12 +775,12 @@ class ThermosmartCard extends HTMLElement {
         ${this._buildBanners(d)}
 
         <div class="ctrl-row">
+          <button class="ctrl-btn sm" data-action="schedule" title="Details">
+            <ha-icon icon="mdi:dots-vertical"></ha-icon>
+          </button>
           <button class="ctrl-btn" data-action="dec"><ha-icon icon="mdi:minus"></ha-icon></button>
           <span class="ctrl-val">${d.targetTemp != null ? d.targetTemp.toFixed(1) : '--'}</span>
           <button class="ctrl-btn" data-action="inc"><ha-icon icon="mdi:plus"></ha-icon></button>
-          <button class="ctrl-btn sm" data-action="schedule" title="Details">
-            <ha-icon icon="mdi:calendar-clock"></ha-icon>
-          </button>
           <button class="ctrl-btn sm${d.isObs ? ' pwr-off' : ''}" data-action="power">
             <ha-icon icon="mdi:power"></ha-icon>
           </button>
@@ -786,7 +788,7 @@ class ThermosmartCard extends HTMLElement {
 
         ${this._config.disable_modes ? '' : this._buildModes(d)}
         ${this._config.disable_chips ? '' : this._buildChips(d)}
-        ${this._buildConf(d)}
+        ${this._config.disable_chips ? '' : this._buildConf(d)}
         ${this._config.disable_chart ? '' : this._buildSparkline(d)}
       </ha-card>`;
   }
@@ -841,7 +843,7 @@ class ThermosmartCard extends HTMLElement {
       .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px; }
       .hdr-name { font-size: 1em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .hdr-readouts { display: flex; gap: 6px; flex-shrink: 0; }
-      .hdr-out { font-size: 0.75em; color: var(--secondary-text-color); background: var(--secondary-background-color, rgba(120,120,120,.1)); padding: 2px 9px; border-radius: 10px; white-space: nowrap; }
+      .hdr-out { display: inline-flex; align-items: center; gap: 2px; font-size: 0.75em; color: var(--secondary-text-color); background: var(--secondary-background-color, rgba(120,120,120,.1)); padding: 2px 9px; border-radius: 10px; white-space: nowrap; --mdc-icon-size: 14px; }
 
       /* Ring + Overlay */
       .ring-wrap { position: relative; display: flex; justify-content: center; margin-bottom: 2px; }
@@ -853,20 +855,23 @@ class ThermosmartCard extends HTMLElement {
         transform: translate(-50%, -50%);
         text-align: center; pointer-events: none; width: 210px;
       }
+      .ov-pill-slot { min-height: 26px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
       .ov-pill {
         display: inline-flex; align-items: center; gap: 4px;
         font-size: 0.72em; font-weight: 500; border-radius: 10px;
-        padding: 2px 9px; margin-bottom: 4px; border: 1px solid;
+        padding: 3px 8px; border: 1px solid;
       }
       .ov-pill--window  { color: #29b6f6; background: rgba(41,182,246,.12);  border-color: rgba(41,182,246,.3); }
+      .ov-pill--obs     { color: #90a4ae; background: rgba(144,164,174,.12); border-color: rgba(144,164,174,.3); }
       .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);  }
       .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3);}
       .ov-status { font-size: 0.86em; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
       .ov-temp   { line-height: 1; white-space: nowrap; }
-      .ov-int    { font-size: 3.8em; font-weight: 200; color: var(--primary-text-color); letter-spacing: -0.03em; }
-      .ov-frac   { font-size: 1.45em; font-weight: 300; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.44em; opacity: .8; }
+      .ov-int    { font-size: 3.8em; font-weight: 300; color: var(--primary-text-color); letter-spacing: -0.03em; }
+      .ov-frac   { font-size: 1.45em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.44em; opacity: .8; }
       .ov-unit   { font-size: 0.7em; }
-      .ov-target { font-size: 0.78em; color: var(--secondary-text-color); margin-top: 4px; }
+      .ov-target  { display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 0.78em; color: var(--secondary-text-color); margin-top: 4px; }
+      .ov-humidity{ display: flex; align-items: center; justify-content: center; gap: 3px; font-size: 0.78em; color: #6fa3d6; margin-top: 3px; }
 
       /* Banners */
       .banner {
