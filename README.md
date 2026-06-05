@@ -1,35 +1,49 @@
-# ThermoSmart Card
+<h1 align="center">ThermoSmart Card</h1>
+<p align="center">Lovelace card for the <a href="https://github.com/Mikasmarthome/ThermoSmart">ThermoSmart</a> Home Assistant integration</p>
 
-Custom Lovelace card for the [ThermoSmart](https://github.com/Mikasmarthome/ThermoSmart) Home Assistant integration.
+<p align="center">
+  <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
+  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.1--beta.2-orange.svg" alt="Version"/></a>
+  <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/HA-2024.1%2B-brightgreen.svg" alt="HA min"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Mikasmarthome/thermosmart-card" alt="License"/></a>
+</p>
+
+---
+
+## Requirements
+
+- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.2 or later
+- Home Assistant 2024.1+
+- No build step — pure vanilla JS, no Node.js required
+
+---
+
+<!-- Add a screenshot here: place preview.png in the repo root -->
 
 ## Features
 
-- **Temperature history chart** – inline SVG sparkline of the last 3 hours (current vs. target, no external dependencies, auto-refreshed every 5 min)
-- **Drag-to-set temperature** – drag directly on the arc ring to set the target temperature (mouse & touch)
-- **Temperature ring** – current vs. target temperature with visual arc
-- **6 heating modes** – Auto / Komfort / Eco / Nacht / Abwesend / Urlaub switchable in one tap
-- **Status indicator** – Heizt / Hält Temp / Aus / Beobachtung
-- **Window banner** – prominent warning bar when heating is paused due to open window
-- **Humidity readout** – shows `current_humidity` in the header and as a chip (if available)
-- **Low-battery banner** – warning when the TRV battery drops below a configurable threshold
-- **Info chips** – weather correction, TRV boost, forecast suppression, preheat timer
-- **Learning confidence bar** – shows how well ThermoSmart knows your home
-- **Display toggles** – hide humidity, history chart, mode buttons or info chips per card
-- **Compact layout** – optional 2-line version for dashboards with many zones
-- **8 languages** – DE, EN, FR, NL, ES, IT, PL, SV (auto-detected from HA user language)
-- **HACS compatible**
+- **Temperature ring** — current vs. target with arc visualisation, drag to set (mouse & touch)
+- **3-hour history sparkline** — current vs. target, no external dependencies, auto-refreshed every 5 min
+- **Mode buttons** — Auto / Comfort / Eco / Night / Away / Vacation
+- **Status indicator** — Heating / Maintaining / Off / Observation mode
+- **Window banner** — prominent warning when heating is paused due to open window
+- **Info chips** — weather offset, TRV boost, forecast suppression, preheat timer
+- **Learning confidence bar** — shows how well ThermoSmart knows your home
+- **Humidity readout** — shown in header and as chip (if available)
+- **Low-battery banner** — configurable threshold
+- **Compact layout** — optional 2-line version for dashboards with many zones
+- **8 languages** — auto-detected from HA user language (DE, EN, FR, NL, ES, IT, PL, SV)
+
+---
 
 ## Installation
 
 ### HACS (recommended)
-
-1. Open HACS → Frontend
-2. Add custom repository: `https://github.com/Mikasmarthome/thermosmart-card`
-3. Install **ThermoSmart Card**
-4. Reload browser
+1. HACS → Frontend → ⋮ → **Custom Repositories**
+2. URL: `https://github.com/Mikasmarthome/thermosmart-card` → Lovelace → Add
+3. Download **ThermoSmart Card** and reload the browser
 
 ### Manual
-
 Copy `thermosmart-card.js` to `config/www/` and add to your Lovelace resources:
 
 ```yaml
@@ -38,64 +52,61 @@ resources:
     type: module
 ```
 
-## Usage
+---
 
-### Minimal config
+## Configuration
 
+### Minimal
 ```yaml
 type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
 ```
 
 ### All options
-
 ```yaml
 type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
-name: Wohnzimmer              # optional – overrides entity friendly name
+name: Living Room            # optional — overrides entity friendly name
 compact: false               # true = compact 2-line layout
 min_temp: 15                 # temperature ring scale minimum (default: 15)
 max_temp: 30                 # temperature ring scale maximum (default: 30)
-disable_humidity: false      # hide the humidity readout
-disable_chart: false         # hide the 3-hour history sparkline
-disable_modes: false         # hide the preset/mode buttons
-disable_chips: false         # hide the diagnostic info chips
-low_battery_threshold: 15    # show a low-battery banner at/below this % (default: 15)
+disable_humidity: false      # hide humidity readout
+disable_chart: false         # hide 3-hour history sparkline
+disable_modes: false         # hide mode buttons
+disable_chips: false         # hide diagnostic info chips
+low_battery_threshold: 15    # low-battery banner threshold in % (default: 15)
 ```
 
 ### Compact layout
-
 ```yaml
 type: custom:thermosmart-card
 entity: climate.thermosmart_bedroom
 compact: true
 ```
 
+---
+
 ## What the card reads
 
-All data is taken directly from the ThermoSmart climate entity — **no additional sensor configuration needed**.
+All data comes directly from the ThermoSmart climate entity — **no additional sensor configuration needed**.
 
 | Attribute | Shown as |
 |---|---|
-| `current_temperature` | Current temp (large, center) |
-| `current_humidity` | Humidity readout (header + chip) |
-| `battery_level` / `battery` | Low-battery banner (below threshold) |
-| `temperature` | Target temp (dot on ring + arrow text) |
-| `hvac_action` | Status color & pill (Heizt / Hält / Aus) |
+| `current_temperature` | Current temperature (large, center) |
+| `current_humidity` | Humidity chip |
+| `temperature` | Target temperature (ring dot + drag handle) |
+| `hvac_action` | Status pill (Heating / Idle / Off) |
 | `preset_mode` | Active mode button highlighted |
-| `außentemperatur` | Outdoor chip |
-| `wetterkorrektur` | Weather offset chip |
+| `outdoor_temperature` | Outdoor chip |
+| `weather_correction` | Weather offset chip |
 | `trv_setpoint` + `boost_delta` | TRV boost chip |
-| `vorhersage_unterdrückung` | Forecast suppression chip |
-| `vorhersage_konfidenz` | Confidence bar + label |
-| `vorheizzeit` | Preheat timer (orange, below ring) |
-| `beobachtungsmodus` | Observation mode banner |
+| `forecast_suppression` | Forecast suppression chip |
+| `learning_confidence` | Confidence bar |
+| `preheat_time` | Preheat timer (below ring) |
+| `observation_mode` | Observation mode banner |
+| `battery_level` / `battery` | Low-battery banner |
 
-## Compatibility
-
-- Requires **ThermoSmart ≥ v0.2.6**
-- Home Assistant 2024.1+
-- No build step – pure vanilla JS, works without Node.js
+---
 
 ## License
 
