@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.1-beta.3
+ * ThermoSmart Lovelace Card v1.0.1-beta.4
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.1-beta.3';
+const CARD_VERSION = '1.0.1-beta.4';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -16,6 +16,7 @@ const I18N = {
     not_found: 'Entity nicht gefunden',
     chart_ist: 'Ist', chart_soll: 'Soll', chart_aussen: 'Außen',
     learn_active: 'Lernmodus aktiv', learn_inactive: 'Beobachtungsmodus',
+    label_invert_temps: 'Temperaturen tauschen (Ziel groß)',
     label_entity:   'ThermoSmart Climate-Entity',
     label_name:     'Anzeigename (optional)',
     label_section_display:   'Anzeige',
@@ -45,6 +46,7 @@ const I18N = {
     not_found: 'Entity not found',
     chart_ist: 'Actual', chart_soll: 'Target', chart_aussen: 'Outdoor',
     learn_active: 'Learning active', learn_inactive: 'Observation mode',
+    label_invert_temps: 'Swap temperatures (target as primary)',
     label_entity:   'ThermoSmart Climate Entity',
     label_name:     'Display name (optional)',
     label_section_display:   'Display',
@@ -74,6 +76,7 @@ const I18N = {
     not_found: 'Entité introuvable',
     chart_ist: 'Réel', chart_soll: 'Cible', chart_aussen: 'Extérieur',
     learn_active: 'Apprentissage actif', learn_inactive: 'Mode observation',
+    label_invert_temps: 'Inverser températures (cible principale)',
     label_entity:   'Entité ThermoSmart',
     label_name:     "Nom d'affichage (optionnel)",
     label_section_display:   'Affichage',
@@ -103,6 +106,7 @@ const I18N = {
     not_found: 'Entiteit niet gevonden',
     chart_ist: 'Actueel', chart_soll: 'Doel', chart_aussen: 'Buiten',
     learn_active: 'Leermodus actief', learn_inactive: 'Observatiemodus',
+    label_invert_temps: 'Temperaturen wisselen (doel als primair)',
     label_entity:   'ThermoSmart klimaatentiteit',
     label_name:     'Weergavenaam (optioneel)',
     label_section_display:   'Weergave',
@@ -132,6 +136,7 @@ const I18N = {
     not_found: 'Entità non trovata',
     chart_ist: 'Reale', chart_soll: 'Obiettivo', chart_aussen: 'Esterno',
     learn_active: 'Apprendimento attivo', learn_inactive: 'Modalità osservazione',
+    label_invert_temps: 'Inverti temperature (obiettivo principale)',
     label_entity:   'Entità ThermoSmart',
     label_name:     'Nome (opzionale)',
     label_section_display:   'Visualizzazione',
@@ -161,6 +166,7 @@ const I18N = {
     not_found: 'Encja nie znaleziona',
     chart_ist: 'Rzeczywista', chart_soll: 'Cel', chart_aussen: 'Zewnętrzna',
     learn_active: 'Nauka aktywna', learn_inactive: 'Tryb obserwacji',
+    label_invert_temps: 'Zamień temperatury (cel jako główny)',
     label_entity:   'Encja ThermoSmart',
     label_name:     'Nazwa wyświetlania (opcjonalna)',
     label_section_display:   'Wyświetlanie',
@@ -190,6 +196,7 @@ const I18N = {
     not_found: 'Entitet hittades inte',
     chart_ist: 'Aktuell', chart_soll: 'Mål', chart_aussen: 'Utomhus',
     learn_active: 'Inlärning aktiv', learn_inactive: 'Observationsläge',
+    label_invert_temps: 'Byt temperaturer (mål som primär)',
     label_entity:   'ThermoSmart klimatenhet',
     label_name:     'Visningsnamn (valfritt)',
     label_section_display:   'Visning',
@@ -289,6 +296,7 @@ const EDITOR_SCHEMA = [
     schema: [
       { type: 'grid', name: '', schema: [
         { name: 'compact',           selector: { boolean: {} } },
+        { name: 'invert_temps',      selector: { boolean: {} } },
         { name: 'disable_humidity',  selector: { boolean: {} } },
         { name: 'disable_modes',     selector: { boolean: {} } },
         { name: 'disable_chips',     selector: { boolean: {} } },
@@ -395,10 +403,14 @@ class ThermosmartCard extends HTMLElement {
     this._config             = config;
     this._lastHistoryFetch   = 0;
     this._switchesDetected   = false;
+    this._switchDetectAttempts = 0;
     this._learnSwitch        = null;
     this._activeSwitch       = null;
     this._optimisticPreset   = null;
+    this._optimisticTemp     = null;
+    this._dragTemp           = null;
     clearTimeout(this._optimisticPresetTimer);
+    clearTimeout(this._optimisticTimer);
     this._render();
   }
 
@@ -448,7 +460,9 @@ class ThermosmartCard extends HTMLElement {
     const ids    = Object.keys(this._hass.states);
     this._learnSwitch  = ids.find(id => id.startsWith(prefix) && /learn|lern/i.test(id))  ?? null;
     this._activeSwitch = ids.find(id => id.startsWith(prefix) && /active|aktiv|steuer/i.test(id)) ?? null;
-    this._switchesDetected = true;
+    this._switchDetectAttempts = (this._switchDetectAttempts || 0) + 1;
+    // Mark done if switches found OR after 10 attempts (avoid endless retrying)
+    this._switchesDetected = !!(this._learnSwitch || this._activeSwitch) || this._switchDetectAttempts >= 10;
   }
 
   // Keep displayed target temp optimistically after a set call until HA confirms
@@ -639,9 +653,12 @@ class ThermosmartCard extends HTMLElement {
   // ── Overlays & widgets ───────────────────────────────────────────────────
 
   _buildTempOverlay(d) {
-    const curr    = d.currentTemp;
-    const intPart = curr != null ? Math.floor(Math.abs(curr)) * (curr < 0 ? -1 : 1) : null;
-    const decPart = curr != null ? Math.round(Math.abs(curr - Math.trunc(curr)) * 10) : null;
+    const invert  = !!this._config.invert_temps;
+    const bigTemp = invert ? d.targetTemp  : d.currentTemp;
+    const secTemp = invert ? d.currentTemp : null;
+
+    const intPart = bigTemp != null ? Math.floor(Math.abs(bigTemp)) * (bigTemp < 0 ? -1 : 1) : null;
+    const decPart = bigTemp != null ? Math.round(Math.abs(bigTemp - Math.trunc(bigTemp)) * 10) : null;
 
     const contextPill = d.windowOpen
       ? `<div class="ov-pill ov-pill--window"><ha-icon icon="mdi:window-open-variant" style="--mdc-icon-size:14px"></ha-icon></div>`
@@ -663,9 +680,9 @@ class ThermosmartCard extends HTMLElement {
             : `<span class="ov-int">--</span>`
           }
         </div>
-        ${d.targetTemp != null
-          ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>`
-          : ''}
+        ${invert
+          ? (secTemp != null ? `<div class="ov-target"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp.toFixed(1)}°</div>` : '')
+          : (d.targetTemp != null ? `<div class="ov-target"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp.toFixed(1)}°</div>` : '')}
         ${d.humidity != null && !this._config.disable_humidity
           ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
@@ -1234,8 +1251,17 @@ class ThermosmartCard extends HTMLElement {
       dot.setAttribute('cy', p.y.toFixed(1));
     }
 
-    const tgtEl = sh.querySelector('.ov-target');
-    if (tgtEl) tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
+    if (this._config.invert_temps) {
+      const intPart = Math.floor(Math.abs(temp)) * (temp < 0 ? -1 : 1);
+      const decPart = Math.round(Math.abs(temp - Math.trunc(temp)) * 10);
+      const intEl = sh.querySelector('.ov-int');
+      const fracEl = sh.querySelector('.ov-frac');
+      if (intEl) intEl.textContent = String(intPart);
+      if (fracEl) fracEl.innerHTML = `.${decPart}<span class="ov-unit">°C</span>`;
+    } else {
+      const tgtEl = sh.querySelector('.ov-target');
+      if (tgtEl) tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
+    }
   }
 }
 
