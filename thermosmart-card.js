@@ -667,7 +667,7 @@ class ThermosmartCard extends HTMLElement {
       : d.summerMode
       ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
       : d.preset === 'vacation'
-      ? `<div class="ov-pill ov-pill--vacation"><ha-icon icon="mdi:airplane" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_vacation')}</div>`
+      ? `<div class="ov-icon-badge ov-icon--vacation"><ha-icon icon="mdi:airplane" style="--mdc-icon-size:28px"></ha-icon></div>`
       : '';
 
     return `
@@ -770,7 +770,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     const W = 260, H = 72;
-    const PL = 24, PR = 2, PT = 6, PB = 16;
+    const PL = 24, PR = 24, PT = 6, PB = 16;
     const vW = W - PL - PR, vH = H - PT - PB;
 
     const step = Math.max(1, Math.ceil(data.length / 100));
@@ -993,10 +993,10 @@ class ThermosmartCard extends HTMLElement {
         letter-spacing: 0.02em;
       }
       .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);   }
-      .ov-pill--vacation{ color: #7986cb; background: rgba(121,134,203,.12); border-color: rgba(121,134,203,.3); }
       .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
-      .ov-icon--window { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
-      .ov-icon--obs    { color: #90a4ae; opacity: 0.7; }
+      .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
+      .ov-icon--obs      { color: #90a4ae; opacity: 0.7; }
+      .ov-icon--vacation { color: #7986cb; filter: drop-shadow(0 0 6px rgba(121,134,203,.5)); }
       .ov-icon--obs.ov-icon--obs-learn { color: #43a047; animation: ts-icon-pulse 2.5s ease-in-out infinite; }
       @keyframes ts-icon-pulse { 0%,100%{filter:drop-shadow(0 0 3px rgba(67,160,71,.2))} 50%{filter:drop-shadow(0 0 9px rgba(67,160,71,.55))} }
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
