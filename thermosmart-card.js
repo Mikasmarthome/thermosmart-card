@@ -261,6 +261,10 @@ function tr(hass, key) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function debounce(fn, delay) {
   let timer;
   return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
@@ -548,7 +552,7 @@ class ThermosmartCard extends HTMLElement {
 
     this._hass.callApi(
       'GET',
-      `history/period/${start}?filter_entity_id=${this._config.entity}&significant_changes_only=false&minimal_response=true`
+      `history/period/${start}?filter_entity_id=${encodeURIComponent(this._config.entity)}&significant_changes_only=false&minimal_response=true`
     ).then(data => {
       this._historyFetching  = false;
       this._lastHistoryFetch = Date.now();
@@ -758,7 +762,7 @@ class ThermosmartCard extends HTMLElement {
         || entityId.split('.').pop().replace(/_/g, ' ');
       html += `<div class="banner battery">
         <ha-icon icon="mdi:battery-alert-variant-outline" style="--mdc-icon-size:14px"></ha-icon>
-        ${tr(this._hass, 'battery_low')}: ${name} · ${pct}%
+        ${tr(this._hass, 'battery_low')}: ${esc(name)} · ${pct}%
       </div>`;
     }
     return html;
@@ -938,7 +942,7 @@ class ThermosmartCard extends HTMLElement {
       <ha-card>
         <div class="card-body">
           <div class="hdr">
-            <span class="hdr-name">${d.name}</span>
+            <span class="hdr-name">${esc(d.name)}</span>
             <span class="hdr-readouts">
               ${d.outdoorTemp != null
                 ? `<span class="hdr-out"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:14px"></ha-icon>${d.outdoorTemp.toFixed(1)}°C</span>` : ''}
@@ -991,7 +995,7 @@ class ThermosmartCard extends HTMLElement {
             <ha-icon icon="mdi:home-thermometer" style="color:${d.col.main};--mdc-icon-size:20px"></ha-icon>
           </div>
           <div class="cmp-info">
-            <div class="cmp-name">${d.name}</div>
+            <div class="cmp-name">${esc(d.name)}</div>
             <div class="cmp-sub">${this._statusLabel(d)}${
               d.humidity != null && !this._config.disable_humidity
                 ? ' · 💧' + d.humidity.toFixed(0) + '%' : ''}${
@@ -1154,7 +1158,7 @@ class ThermosmartCard extends HTMLElement {
     if (!d) {
       this.shadowRoot.innerHTML = `${this._css()}
         <ha-card style="padding:16px;color:#e8573f;font-size:.85em">
-          ${tr(this._hass, 'not_found')}: <b>${this._config?.entity || '?'}</b>
+          ${tr(this._hass, 'not_found')}: <b>${esc(this._config?.entity || '?')}</b>
         </ha-card>`;
       return;
     }
