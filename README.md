@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mikasmarthome/thermosmart-card/main/icon.png"
+       width="120" alt="ThermoSmart Card Logo"/>
+</p>
+
 <h1 align="center">ThermoSmart Card</h1>
 <p align="center">Lovelace card for the <a href="https://github.com/Mikasmarthome/ThermoSmart">ThermoSmart</a> Home Assistant integration</p>
 
@@ -12,7 +17,7 @@
 
 ## Requirements
 
-- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.1-beta.5 or later
+- **[ThermoSmart integration](https://github.com/Mikasmarthome/ThermoSmart)** v1.0.0-rc.1 or later
 - Home Assistant 2024.1+
 - No build step — pure vanilla JS, no Node.js required
 
@@ -71,7 +76,11 @@ max_temp: 35                 # temperature ring scale maximum (default: 35)
 disable_humidity: false      # hide humidity readout
 disable_chart: false         # hide 3-hour history sparkline
 disable_modes: false         # hide mode buttons
-disable_chips: false         # hide diagnostic info chips
+disable_chips: false         # hide all diagnostic info chips
+hide_chip_weather: false     # hide weather offset chip individually
+hide_chip_boost: false       # hide TRV boost chip individually
+hide_chip_suppression: false # hide forecast suppression chip individually
+hide_chip_preheat: false     # hide preheat timer chip individually
 chart_hours: 24              # history chart time window in hours (1–24, default: 24)
 invert_temps: false          # swap primary/secondary temp display (target = large)
 low_battery_threshold: 15    # low-battery banner threshold in % (default: 15)
