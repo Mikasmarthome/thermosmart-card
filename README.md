@@ -18,8 +18,6 @@
 
 ---
 
-<!-- Add a screenshot here: place preview.png in the repo root -->
-
 ## Features
 
 - **Temperature ring** — current vs. target with arc visualisation, drag to set (mouse & touch)

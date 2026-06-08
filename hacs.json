@@ -1,5 +1,6 @@
 {
   "name": "ThermoSmart Card",
   "render_readme": true,
-  "filename": "thermosmart-card.js"
+  "filename": "thermosmart-card.js",
+  "homeassistant": "2024.1.0"
 }
