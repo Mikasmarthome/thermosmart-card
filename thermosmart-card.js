@@ -532,6 +532,7 @@ class ThermosmartCard extends HTMLElement {
   _cleanup() {
     this._listeners.forEach(fn => { try { fn(); } catch (_) {} });
     this._listeners = [];
+    this._isDragging = false;
   }
 
   // ── History fetch ─────────────────────────────────────────────────────────
@@ -645,6 +646,7 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _statusLabel(d) {
+    if (d.isObs)                    return tr(this._hass, 'obs');
     if (d.hvacAction === 'heating') return tr(this._hass, 'heating');
     if (d.hvacAction === 'idle')    return tr(this._hass, 'idle');
     return tr(this._hass, 'off');
@@ -1225,7 +1227,7 @@ class ThermosmartCard extends HTMLElement {
     const getAngle = (clientX, clientY) => {
       const rect = svg.getBoundingClientRect();
       const svgX = (clientX - rect.left) * (280 / rect.width);
-      const svgY = (clientY - rect.top)  * (235 / rect.height);
+      const svgY = (clientY - rect.top)  * (196 / rect.height);
       let angle = Math.atan2(svgY - CY, svgX - CX) * 180 / Math.PI + 90;
       if (angle < 0) angle += 360;
       return angle;
@@ -1234,7 +1236,7 @@ class ThermosmartCard extends HTMLElement {
     const distFromRing = (clientX, clientY) => {
       const rect = svg.getBoundingClientRect();
       const svgX = (clientX - rect.left) * (280 / rect.width);
-      const svgY = (clientY - rect.top)  * (235 / rect.height);
+      const svgY = (clientY - rect.top)  * (196 / rect.height);
       return Math.abs(Math.hypot(svgX - CX, svgY - CY) - R);
     };
 
