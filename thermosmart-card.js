@@ -1932,10 +1932,12 @@ class ThermosmartCard extends HTMLElement {
     const onDown = (e) => {
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      if (distFromRing(clientX, clientY) > 32) return;
+      if (distFromRing(clientX, clientY) > 24) return;
+      const angle = getAngle(clientX, clientY);
+      if (angle > (AF + AS) % 360 && angle < AF) return; // reject open gap (120°–240°)
       dragging = true; this._isDragging = true;
       svg.classList.add('dragging');
-      const temp = angleToTemp(getAngle(clientX, clientY));
+      const temp = angleToTemp(angle);
       lastTemp = temp; this._dragTemp = temp;
       this._updateDragUI(temp);
       callSet(temp);
