@@ -1404,8 +1404,8 @@ class ThermosmartCard extends HTMLElement {
         ${invert
           ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
-        ${d.humidity != null && !this._config.disable_humidity
-          ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
+        ${d.humidity != null
+          ? `<div class="ov-humidity"${this._config.disable_humidity ? ' style="visibility:hidden"' : ''}><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
       </div>`;
   }
