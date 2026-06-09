@@ -35,7 +35,7 @@
 - **Humidity readout** — shown in header and as chip (if available)
 - **Low-battery banner** — configurable threshold
 - **Compact layout** — optional 2-line version for dashboards with many zones
-- **7 languages** — auto-detected from HA user language (DE, EN, FR, NL, IT, PL, SV)
+- **24 languages** — auto-detected from HA user language
 
 ---
 
