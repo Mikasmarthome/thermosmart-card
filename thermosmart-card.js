@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-rc.2
+ * ThermoSmart Lovelace Card v1.0.0-rc.3
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-rc.2';
+const CARD_VERSION = '1.0.0-rc.3';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -1002,7 +1002,7 @@ const EDITOR_SCHEMA = [
     iconPath: MDI_EYE,
     schema: [
       { type: 'grid', name: '', schema: [
-        { name: 'compact',           selector: { boolean: {} } },
+        // compact: hidden until RC.3 — feature not yet production-ready
         { name: 'invert_temps',      selector: { boolean: {} } },
         { name: 'disable_humidity',  selector: { boolean: {} } },
         { name: 'disable_modes',     selector: { boolean: {} } },
@@ -1523,11 +1523,16 @@ class ThermosmartCard extends HTMLElement {
     const tx = p  => (PL + Math.max(0, Math.min(1, (p.t - tStart) / tRange)) * vW).toFixed(1);
     const ty = tv => (PT + vH - ((tv - minT) / range) * vH).toFixed(1);
 
-    const makePath = (get) => pts.reduce((acc, p) => {
-      const v = get(p);
-      if (isNaN(v)) return acc;
-      return acc + (acc === '' ? `M${tx(p)} ${ty(v)}` : ` L${tx(p)} ${ty(v)}`);
-    }, '');
+    const makePath = (get, locf = false) => {
+      let last = NaN;
+      return pts.reduce((acc, p) => {
+        let v = get(p);
+        if (isNaN(v) && locf) v = last;
+        if (isNaN(v)) return acc;
+        last = v;
+        return acc + (acc === '' ? `M${tx(p)} ${ty(v)}` : ` L${tx(p)} ${ty(v)}`);
+      }, '');
+    };
 
     // Grid lines – Y-axis labels float inside chart (left-aligned, low opacity)
     let gridLines = '';
@@ -1540,7 +1545,7 @@ class ThermosmartCard extends HTMLElement {
     }
 
     const currPath    = makePath(p => p.curr);
-    const tgtPath     = makePath(p => p.tgt);
+    const tgtPath     = makePath(p => p.tgt, true);  // LOCF: hold last valid target during window_open
     const outdoorPath = makePath(p => p.outdoor);
 
     const fmt = ts => {
@@ -1932,10 +1937,12 @@ class ThermosmartCard extends HTMLElement {
     const onDown = (e) => {
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      if (distFromRing(clientX, clientY) > 32) return;
+      if (distFromRing(clientX, clientY) > 24) return;
+      const angle = getAngle(clientX, clientY);
+      if (angle > (AF + AS) % 360 && angle < AF) return; // reject open gap (120°–240°)
       dragging = true; this._isDragging = true;
       svg.classList.add('dragging');
-      const temp = angleToTemp(getAngle(clientX, clientY));
+      const temp = angleToTemp(angle);
       lastTemp = temp; this._dragTemp = temp;
       this._updateDragUI(temp);
       callSet(temp);

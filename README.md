@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
-  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.0--rc.2-blue.svg" alt="Version"/></a>
+  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.0--rc.3-blue.svg" alt="Version"/></a>
   <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/HA-2024.1%2B-brightgreen.svg" alt="HA min"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
 </p>
@@ -34,7 +34,6 @@
 - **Learning confidence bar** — shows how well ThermoSmart knows your home
 - **Humidity readout** — shown in header and as chip (if available)
 - **Low-battery banner** — configurable threshold
-- **Compact layout** — optional 2-line version for dashboards with many zones
 - **24 languages** — auto-detected from HA user language
 
 ---
@@ -70,7 +69,7 @@ entity: climate.thermosmart_living_room
 type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
 name: Living Room            # optional — overrides entity friendly name
-compact: false               # true = compact 2-line layout
+compact: false               # true = compact 2-line layout (YAML only)
 min_temp: 4                  # temperature ring scale minimum (default: 4)
 max_temp: 35                 # temperature ring scale maximum (default: 35)
 disable_humidity: false      # hide humidity readout
@@ -84,13 +83,6 @@ hide_chip_preheat: false     # hide preheat timer chip individually
 chart_hours: 24              # history chart time window in hours (1–24, default: 24)
 invert_temps: false          # swap primary/secondary temp display (target = large)
 low_battery_threshold: 15    # low-battery banner threshold in % (default: 15)
-```
-
-### Compact layout
-```yaml
-type: custom:thermosmart-card
-entity: climate.thermosmart_bedroom
-compact: true
 ```
 
 ---
