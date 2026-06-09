@@ -23,6 +23,10 @@
 
 ---
 
+<img width="690" height="324" alt="image" src="https://github.com/user-attachments/assets/9a3b13f3-2b3a-4698-aa18-4f43ff994ea3" />
+
+---
+
 ## Features
 
 - **Temperature ring** — current vs. target with arc visualisation, drag to set (mouse & touch)
