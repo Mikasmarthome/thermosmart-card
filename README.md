@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/Mikasmarthome/thermosmart-card/main/icon.png"
-       width="200" alt="ThermoSmart Card Logo"/>
+       width="256" alt="ThermoSmart Card Logo"/>
 </p>
 
 <h1 align="center">ThermoSmart Card</h1>
-<p align="center">Lovelace card for the <a href="https://github.com/Mikasmarthome/ThermoSmart">ThermoSmart</a> Home Assistant integration</p>
+<p align="center"><strong>Lovelace card for the <a href="https://github.com/Mikasmarthome/ThermoSmart">ThermoSmart</a> Home Assistant integration</strong></p>
 
 <p align="center">
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
