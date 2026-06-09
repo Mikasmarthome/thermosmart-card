@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0-rc.3
+ * ThermoSmart Lovelace Card v1.0.0
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0-rc.3';
+const CARD_VERSION = '1.0.0';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -1386,7 +1386,7 @@ class ThermosmartCard extends HTMLElement {
       : !d.activeOn
       ? `<div class="ov-icon-badge ov-icon--obs${d.learnOn ? ' ov-icon--obs-learn' : ''}"><ha-icon icon="mdi:eye" style="--mdc-icon-size:28px"></ha-icon></div>`
       : d.summerMode
-      ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
+      ? `<div class="ov-icon-badge ov-icon--summer"><ha-icon icon="mdi:white-balance-sunny" style="--mdc-icon-size:28px"></ha-icon></div>`
       : d.preset === 'vacation'
       ? `<div class="ov-icon-badge ov-icon--vacation"><ha-icon icon="mdi:airplane" style="--mdc-icon-size:28px"></ha-icon></div>`
       : '';
@@ -1404,8 +1404,8 @@ class ThermosmartCard extends HTMLElement {
         ${invert
           ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
-        ${d.humidity != null && !this._config.disable_humidity
-          ? `<div class="ov-humidity"><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
+        ${d.humidity != null
+          ? `<div class="ov-humidity"${this._config.disable_humidity ? ' style="visibility:hidden"' : ''}><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
           : ''}
       </div>`;
   }
@@ -1711,15 +1711,15 @@ class ThermosmartCard extends HTMLElement {
         display: flex; flex-direction: column; align-items: center;
         pointer-events: none; width: 220px;
       }
-      .ov-pill-slot { min-height: 26px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
+      .ov-pill-slot { min-height: 28px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
       .ov-pill {
         display: inline-flex; align-items: center; gap: 3px;
         font-size: 0.7em; font-weight: 500; border-radius: 20px;
         padding: 4px 10px; border: 1px solid;
         letter-spacing: 0.02em;
       }
-      .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);   }
       .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
+      .ov-icon--summer   { color: #f57c00; filter: drop-shadow(0 0 6px rgba(255,152,0,.55)); }
       .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
       .ov-icon--obs      { color: #90a4ae; opacity: 0.7; }
       .ov-icon--vacation { color: #7986cb; filter: drop-shadow(0 0 6px rgba(121,134,203,.5)); }
