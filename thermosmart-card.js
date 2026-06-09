@@ -1002,7 +1002,7 @@ const EDITOR_SCHEMA = [
     iconPath: MDI_EYE,
     schema: [
       { type: 'grid', name: '', schema: [
-        { name: 'compact',           selector: { boolean: {} } },
+        // compact: hidden until RC.3 — feature not yet production-ready
         { name: 'invert_temps',      selector: { boolean: {} } },
         { name: 'disable_humidity',  selector: { boolean: {} } },
         { name: 'disable_modes',     selector: { boolean: {} } },
