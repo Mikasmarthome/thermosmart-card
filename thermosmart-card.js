@@ -1711,7 +1711,7 @@ class ThermosmartCard extends HTMLElement {
         display: flex; flex-direction: column; align-items: center;
         pointer-events: none; width: 220px;
       }
-      .ov-pill-slot { min-height: 26px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
+      .ov-pill-slot { min-height: 28px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
       .ov-pill {
         display: inline-flex; align-items: center; gap: 3px;
         font-size: 0.7em; font-weight: 500; border-radius: 20px;
