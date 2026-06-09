@@ -1386,7 +1386,7 @@ class ThermosmartCard extends HTMLElement {
       : !d.activeOn
       ? `<div class="ov-icon-badge ov-icon--obs${d.learnOn ? ' ov-icon--obs-learn' : ''}"><ha-icon icon="mdi:eye" style="--mdc-icon-size:28px"></ha-icon></div>`
       : d.summerMode
-      ? `<div class="ov-pill ov-pill--summer"><ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:13px"></ha-icon>${tr(this._hass, 'mode_summer')}</div>`
+      ? `<div class="ov-icon-badge ov-icon--summer"><ha-icon icon="mdi:white-balance-sunny" style="--mdc-icon-size:28px"></ha-icon></div>`
       : d.preset === 'vacation'
       ? `<div class="ov-icon-badge ov-icon--vacation"><ha-icon icon="mdi:airplane" style="--mdc-icon-size:28px"></ha-icon></div>`
       : '';
@@ -1718,8 +1718,8 @@ class ThermosmartCard extends HTMLElement {
         padding: 4px 10px; border: 1px solid;
         letter-spacing: 0.02em;
       }
-      .ov-pill--summer  { color: #f57c00; background: rgba(255,152,0,.12);   border-color: rgba(255,152,0,.3);   }
       .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
+      .ov-icon--summer   { color: #f57c00; filter: drop-shadow(0 0 6px rgba(255,152,0,.55)); }
       .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
       .ov-icon--obs      { color: #90a4ae; opacity: 0.7; }
       .ov-icon--vacation { color: #7986cb; filter: drop-shadow(0 0 6px rgba(121,134,203,.5)); }
