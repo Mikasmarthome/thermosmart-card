@@ -1857,8 +1857,12 @@ class ThermosmartCard extends HTMLElement {
       const h = () => {
         const act = btn.dataset.action;
         if (act === 'inc' || act === 'dec') {
-          const t = Math.max(this._minTemp, Math.min(this._maxTemp, (d.targetTemp ?? 20) + (act === 'inc' ? 0.5 : -0.5)));
+          const base = this._optimisticTemp ?? d.targetTemp ?? 20;
+          const t = Math.max(this._minTemp, Math.min(this._maxTemp,
+            base + (act === 'inc' ? 0.5 : -0.5)
+          ));
           this._setOptimistic(t);
+          this._updateDragUI(t);
           setTempDebounced(t);
         } else if (act === 'learn') {
           if (this._learnSwitch) {
