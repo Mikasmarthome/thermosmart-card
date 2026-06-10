@@ -1080,7 +1080,7 @@ class ThermosmartCardEditor extends HTMLElement {
     }
 
     this._form.hass = this._hass;
-    this._form.data = this._config;
+    this._form.data = { chart_hours: 24, low_battery_threshold: 15, ...this._config };
   }
 }
 if (!customElements.get('thermosmart-card-editor'))
