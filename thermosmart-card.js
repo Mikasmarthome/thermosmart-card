@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.2
+ * ThermoSmart Lovelace Card v1.0.3
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.2';
+const CARD_VERSION = '1.0.3';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -13,7 +13,8 @@ const I18N = {
     confident: 'Zuverlässig', learning: 'Lernend', collecting: 'Sammle Daten',
     battery_low: 'Batterie schwach',
     not_found: 'Entity nicht gefunden',
-    chart_ist: 'Ist', chart_soll: 'Soll', chart_aussen: 'Außen',
+    no_entity: 'Keine ThermoSmart-Zone gefunden',
+    chart_actual: 'Ist', chart_target: 'Soll', chart_outdoor: 'Außen',
     learn_active: 'Lernmodus aktiv', learn_inactive: 'Beobachtungsmodus',
     label_invert_temps: 'Temperaturen tauschen (Ziel groß)',
     label_entity:   'ThermoSmart Climate-Entity',
@@ -52,7 +53,8 @@ const I18N = {
     confident: 'Reliable', learning: 'Learning', collecting: 'Collecting data',
     battery_low: 'Low battery',
     not_found: 'Entity not found',
-    chart_ist: 'Actual', chart_soll: 'Target', chart_aussen: 'Outdoor',
+    no_entity: 'No ThermoSmart zone found',
+    chart_actual: 'Actual', chart_target: 'Target', chart_outdoor: 'Outdoor',
     learn_active: 'Learning active', learn_inactive: 'Observation mode',
     label_invert_temps: 'Swap temperatures (target as primary)',
     label_entity:   'ThermoSmart Climate Entity',
@@ -91,7 +93,8 @@ const I18N = {
     confident: 'Fiable', learning: 'Apprentissage', collecting: 'Collecte de données',
     battery_low: 'Batterie faible',
     not_found: 'Entité introuvable',
-    chart_ist: 'Réel', chart_soll: 'Cible', chart_aussen: 'Extérieur',
+    no_entity: 'Aucune zone ThermoSmart trouvée',
+    chart_actual: 'Réel', chart_target: 'Cible', chart_outdoor: 'Extérieur',
     learn_active: 'Apprentissage actif', learn_inactive: 'Mode observation',
     label_invert_temps: 'Inverser températures (cible principale)',
     label_entity:   'Entité ThermoSmart',
@@ -130,7 +133,8 @@ const I18N = {
     confident: 'Betrouwbaar', learning: 'Lerend', collecting: 'Data verzamelen',
     battery_low: 'Batterij bijna leeg',
     not_found: 'Entiteit niet gevonden',
-    chart_ist: 'Actueel', chart_soll: 'Doel', chart_aussen: 'Buiten',
+    no_entity: 'Geen ThermoSmart-zone gevonden',
+    chart_actual: 'Actueel', chart_target: 'Doel', chart_outdoor: 'Buiten',
     learn_active: 'Leermodus actief', learn_inactive: 'Observatiemodus',
     label_invert_temps: 'Temperaturen wisselen (doel als primair)',
     label_entity:   'ThermoSmart klimaatentiteit',
@@ -169,7 +173,8 @@ const I18N = {
     confident: 'Affidabile', learning: 'Apprendimento', collecting: 'Raccolta dati',
     battery_low: 'Batteria scarica',
     not_found: 'Entità non trovata',
-    chart_ist: 'Reale', chart_soll: 'Obiettivo', chart_aussen: 'Esterno',
+    no_entity: 'Nessuna zona ThermoSmart trovata',
+    chart_actual: 'Reale', chart_target: 'Obiettivo', chart_outdoor: 'Esterno',
     learn_active: 'Apprendimento attivo', learn_inactive: 'Modalità osservazione',
     label_invert_temps: 'Inverti temperature (obiettivo principale)',
     label_entity:   'Entità ThermoSmart',
@@ -208,7 +213,8 @@ const I18N = {
     confident: 'Niezawodny', learning: 'Uczenie się', collecting: 'Zbieranie danych',
     battery_low: 'Niski poziom baterii',
     not_found: 'Encja nie znaleziona',
-    chart_ist: 'Rzeczywista', chart_soll: 'Cel', chart_aussen: 'Zewnętrzna',
+    no_entity: 'Nie znaleziono strefy ThermoSmart',
+    chart_actual: 'Rzeczywista', chart_target: 'Cel', chart_outdoor: 'Zewnętrzna',
     learn_active: 'Nauka aktywna', learn_inactive: 'Tryb obserwacji',
     label_invert_temps: 'Zamień temperatury (cel jako główny)',
     label_entity:   'Encja ThermoSmart',
@@ -247,7 +253,8 @@ const I18N = {
     confident: 'Tillförlitlig', learning: 'Lärande', collecting: 'Samlar data',
     battery_low: 'Lågt batteri',
     not_found: 'Entitet hittades inte',
-    chart_ist: 'Aktuell', chart_soll: 'Mål', chart_aussen: 'Utomhus',
+    no_entity: 'Ingen ThermoSmart-zon hittades',
+    chart_actual: 'Aktuell', chart_target: 'Mål', chart_outdoor: 'Utomhus',
     learn_active: 'Inlärning aktiv', learn_inactive: 'Observationsläge',
     label_invert_temps: 'Byt temperaturer (mål som primär)',
     label_entity:   'ThermoSmart klimatenhet',
@@ -286,7 +293,8 @@ const I18N = {
     confident: 'Fiable', learning: 'Aprendiendo', collecting: 'Recopilando datos',
     battery_low: 'Batería baja',
     not_found: 'Entidad no encontrada',
-    chart_ist: 'Real', chart_soll: 'Objetivo', chart_aussen: 'Exterior',
+    no_entity: 'No se encontró ninguna zona ThermoSmart',
+    chart_actual: 'Real', chart_target: 'Objetivo', chart_outdoor: 'Exterior',
     learn_active: 'Aprendizaje activo', learn_inactive: 'Modo observación',
     label_invert_temps: 'Intercambiar temperaturas (objetivo principal)',
     label_entity:   'Entidad ThermoSmart',
@@ -325,7 +333,8 @@ const I18N = {
     confident: 'Confiável', learning: 'Aprendendo', collecting: 'Coletando dados',
     battery_low: 'Bateria fraca',
     not_found: 'Entidade não encontrada',
-    chart_ist: 'Real', chart_soll: 'Alvo', chart_aussen: 'Exterior',
+    no_entity: 'Nenhuma zona ThermoSmart encontrada',
+    chart_actual: 'Real', chart_target: 'Alvo', chart_outdoor: 'Exterior',
     learn_active: 'Aprendizado ativo', learn_inactive: 'Modo observação',
     label_invert_temps: 'Trocar temperaturas (alvo principal)',
     label_entity:   'Entidade ThermoSmart',
@@ -364,7 +373,8 @@ const I18N = {
     confident: 'Spolehlivý', learning: 'Učení', collecting: 'Sběr dat',
     battery_low: 'Slabá baterie',
     not_found: 'Entita nenalezena',
-    chart_ist: 'Skutečná', chart_soll: 'Cíl', chart_aussen: 'Venku',
+    no_entity: 'Nebyla nalezena žádná zóna ThermoSmart',
+    chart_actual: 'Skutečná', chart_target: 'Cíl', chart_outdoor: 'Venku',
     learn_active: 'Učení aktivní', learn_inactive: 'Režim sledování',
     label_invert_temps: 'Vyměnit teploty (cíl jako hlavní)',
     label_entity:   'ThermoSmart klimatická entita',
@@ -403,7 +413,8 @@ const I18N = {
     confident: 'Pålidelig', learning: 'Lærer', collecting: 'Indsamler data',
     battery_low: 'Lavt batteri',
     not_found: 'Enhed ikke fundet',
-    chart_ist: 'Aktuel', chart_soll: 'Mål', chart_aussen: 'Udendørs',
+    no_entity: 'Ingen ThermoSmart-zone fundet',
+    chart_actual: 'Aktuel', chart_target: 'Mål', chart_outdoor: 'Udendørs',
     learn_active: 'Læring aktiv', learn_inactive: 'Observationstilstand',
     label_invert_temps: 'Byt temperaturer (mål som primær)',
     label_entity:   'ThermoSmart klimaenhed',
@@ -442,7 +453,8 @@ const I18N = {
     confident: 'Luotettava', learning: 'Oppii', collecting: 'Kerää tietoja',
     battery_low: 'Akku heikko',
     not_found: 'Entiteettiä ei löydy',
-    chart_ist: 'Todellinen', chart_soll: 'Tavoite', chart_aussen: 'Ulkona',
+    no_entity: 'ThermoSmart-vyöhykettä ei löydy',
+    chart_actual: 'Todellinen', chart_target: 'Tavoite', chart_outdoor: 'Ulkona',
     learn_active: 'Oppiminen aktiivinen', learn_inactive: 'Tarkkailutila',
     label_invert_temps: 'Vaihda lämpötilat (tavoite ensisijaisena)',
     label_entity:   'ThermoSmart ilmastoentiteetti',
@@ -481,7 +493,8 @@ const I18N = {
     confident: 'Pålitelig', learning: 'Lærer', collecting: 'Samler data',
     battery_low: 'Lavt batteri',
     not_found: 'Enhet ikke funnet',
-    chart_ist: 'Aktuell', chart_soll: 'Mål', chart_aussen: 'Utendørs',
+    no_entity: 'Ingen ThermoSmart-sone funnet',
+    chart_actual: 'Aktuell', chart_target: 'Mål', chart_outdoor: 'Utendørs',
     learn_active: 'Læring aktiv', learn_inactive: 'Observasjonsmodus',
     label_invert_temps: 'Bytt temperaturer (mål som primær)',
     label_entity:   'ThermoSmart klimaenhet',
@@ -520,7 +533,8 @@ const I18N = {
     confident: 'Надежден', learning: 'Учи', collecting: 'Събира данни',
     battery_low: 'Слаба батерия',
     not_found: 'Обектът не е намерен',
-    chart_ist: 'Реална', chart_soll: 'Целева', chart_aussen: 'Навън',
+    no_entity: 'Не е намерена ThermoSmart зона',
+    chart_actual: 'Реална', chart_target: 'Целева', chart_outdoor: 'Навън',
     learn_active: 'Обучението активно', learn_inactive: 'Режим наблюдение',
     label_invert_temps: 'Смени температурите (цел като основна)',
     label_entity:   'ThermoSmart климатичен обект',
@@ -559,7 +573,8 @@ const I18N = {
     confident: 'Fiable', learning: 'Aprenent', collecting: 'Recollint dades',
     battery_low: 'Bateria baixa',
     not_found: 'Entitat no trobada',
-    chart_ist: 'Real', chart_soll: 'Objectiu', chart_aussen: 'Exterior',
+    no_entity: 'No s\'ha trobat cap zona ThermoSmart',
+    chart_actual: 'Real', chart_target: 'Objectiu', chart_outdoor: 'Exterior',
     learn_active: 'Aprenentatge actiu', learn_inactive: 'Mode observació',
     label_invert_temps: 'Intercanviar temperatures (objectiu principal)',
     label_entity:   'Entitat ThermoSmart',
@@ -598,7 +613,8 @@ const I18N = {
     confident: 'Αξιόπιστο', learning: 'Μάθηση', collecting: 'Συλλογή δεδομένων',
     battery_low: 'Χαμηλή μπαταρία',
     not_found: 'Η οντότητα δεν βρέθηκε',
-    chart_ist: 'Πραγματική', chart_soll: 'Στόχος', chart_aussen: 'Εξωτερικό',
+    no_entity: 'Δεν βρέθηκε ζώνη ThermoSmart',
+    chart_actual: 'Πραγματική', chart_target: 'Στόχος', chart_outdoor: 'Εξωτερικό',
     learn_active: 'Μάθηση ενεργή', learn_inactive: 'Λειτουργία παρακολούθησης',
     label_invert_temps: 'Εναλλαγή θερμοκρασιών (στόχος κύριος)',
     label_entity:   'Οντότητα ThermoSmart',
@@ -637,7 +653,8 @@ const I18N = {
     confident: 'Megbízható', learning: 'Tanulás', collecting: 'Adatgyűjtés',
     battery_low: 'Gyenge akkumulátor',
     not_found: 'Az entitás nem található',
-    chart_ist: 'Tényleges', chart_soll: 'Célérték', chart_aussen: 'Kültéri',
+    no_entity: 'Nem található ThermoSmart zóna',
+    chart_actual: 'Tényleges', chart_target: 'Célérték', chart_outdoor: 'Kültéri',
     learn_active: 'Tanulás aktív', learn_inactive: 'Megfigyelési mód',
     label_invert_temps: 'Hőmérsékletek cseréje (célérték elsődleges)',
     label_entity:   'ThermoSmart klímaentitás',
@@ -676,7 +693,8 @@ const I18N = {
     confident: 'Fiabil', learning: 'Învățare', collecting: 'Colectare date',
     battery_low: 'Baterie slabă',
     not_found: 'Entitatea nu a fost găsită',
-    chart_ist: 'Reală', chart_soll: 'Țintă', chart_aussen: 'Exterior',
+    no_entity: 'Nu s-a găsit nicio zonă ThermoSmart',
+    chart_actual: 'Reală', chart_target: 'Țintă', chart_outdoor: 'Exterior',
     learn_active: 'Învățare activă', learn_inactive: 'Mod observare',
     label_invert_temps: 'Schimbă temperaturile (țintă principală)',
     label_entity:   'Entitate ThermoSmart',
@@ -715,7 +733,8 @@ const I18N = {
     confident: 'Надёжный', learning: 'Обучение', collecting: 'Сбор данных',
     battery_low: 'Слабая батарея',
     not_found: 'Объект не найден',
-    chart_ist: 'Фактическая', chart_soll: 'Целевая', chart_aussen: 'На улице',
+    no_entity: 'Зона ThermoSmart не найдена',
+    chart_actual: 'Фактическая', chart_target: 'Целевая', chart_outdoor: 'На улице',
     learn_active: 'Обучение активно', learn_inactive: 'Режим наблюдения',
     label_invert_temps: 'Поменять температуры (цель главная)',
     label_entity:   'Объект ThermoSmart',
@@ -754,7 +773,8 @@ const I18N = {
     confident: 'Spoľahlivý', learning: 'Učenie', collecting: 'Zber dát',
     battery_low: 'Slabá batéria',
     not_found: 'Entita nenájdená',
-    chart_ist: 'Skutočná', chart_soll: 'Cieľ', chart_aussen: 'Vonku',
+    no_entity: 'Nebola nájdená žiadna zóna ThermoSmart',
+    chart_actual: 'Skutočná', chart_target: 'Cieľ', chart_outdoor: 'Vonku',
     learn_active: 'Učenie aktívne', learn_inactive: 'Režim pozorovania',
     label_invert_temps: 'Vymeniť teploty (cieľ ako hlavná)',
     label_entity:   'ThermoSmart klimatická entita',
@@ -793,7 +813,8 @@ const I18N = {
     confident: 'Zanesljiv', learning: 'Učenje', collecting: 'Zbiranje podatkov',
     battery_low: 'Slaba baterija',
     not_found: 'Entiteta ni najdena',
-    chart_ist: 'Dejanska', chart_soll: 'Cilj', chart_aussen: 'Zunaj',
+    no_entity: 'Nobena cona ThermoSmart ni bila najdena',
+    chart_actual: 'Dejanska', chart_target: 'Cilj', chart_outdoor: 'Zunaj',
     learn_active: 'Učenje aktivno', learn_inactive: 'Način opazovanja',
     label_invert_temps: 'Zamenjaj temperature (cilj kot primarni)',
     label_entity:   'ThermoSmart podnebna entiteta',
@@ -832,7 +853,8 @@ const I18N = {
     confident: 'Güvenilir', learning: 'Öğreniyor', collecting: 'Veri toplanıyor',
     battery_low: 'Düşük pil',
     not_found: 'Varlık bulunamadı',
-    chart_ist: 'Gerçek', chart_soll: 'Hedef', chart_aussen: 'Dış mekan',
+    no_entity: 'ThermoSmart bölgesi bulunamadı',
+    chart_actual: 'Gerçek', chart_target: 'Hedef', chart_outdoor: 'Dış mekan',
     learn_active: 'Öğrenme aktif', learn_inactive: 'Gözlem modu',
     label_invert_temps: 'Sıcaklıkları değiştir (hedef birincil)',
     label_entity:   'ThermoSmart iklim varlığı',
@@ -871,7 +893,8 @@ const I18N = {
     confident: 'Надійний', learning: 'Навчання', collecting: 'Збір даних',
     battery_low: 'Слабка батарея',
     not_found: 'Об\'єкт не знайдено',
-    chart_ist: 'Фактична', chart_soll: 'Цільова', chart_aussen: 'На вулиці',
+    no_entity: 'Зону ThermoSmart не знайдено',
+    chart_actual: 'Фактична', chart_target: 'Цільова', chart_outdoor: 'На вулиці',
     learn_active: 'Навчання активне', learn_inactive: 'Режим спостереження',
     label_invert_temps: 'Змінити температури (ціль головна)',
     label_entity:   'Об\'єкт ThermoSmart',
@@ -910,7 +933,8 @@ const I18N = {
     confident: '可靠', learning: '学习中', collecting: '收集数据',
     battery_low: '电池电量低',
     not_found: '未找到实体',
-    chart_ist: '实际', chart_soll: '目标', chart_aussen: '室外',
+    no_entity: '未找到 ThermoSmart 区域',
+    chart_actual: '实际', chart_target: '目标', chart_outdoor: '室外',
     learn_active: '学习模式激活', learn_inactive: '观测模式',
     label_invert_temps: '交换温度显示（目标为主）',
     label_entity:   'ThermoSmart 气候实体',
@@ -1137,14 +1161,19 @@ class ThermosmartCard extends HTMLElement {
   }
 
   static async getStubConfig(hass) {
-    const found = Object.keys(hass?.states || {})
-      .find(eid => eid.startsWith('climate.thermosmart'));
-    return { entity: found || 'climate.thermosmart_zone' };
+    const found = Object.entries(hass?.states || {})
+      .find(([eid, st]) => {
+        if (!eid.startsWith('climate.')) return false;
+        const a = st?.attributes || {};
+        return eid.startsWith('climate.thermosmart') ||
+          ('learning_confidence' in a && 'observation_mode' in a);
+      })?.[0];
+    return { entity: found || '' };
   }
   static getConfigElement() { return document.createElement('thermosmart-card-editor'); }
 
   setConfig(config) {
-    if (!config.entity) throw new Error('ThermoSmart Card: "entity" fehlt.');
+    if (!('entity' in config)) throw new Error('ThermoSmart Card: required "entity" field is missing.');
     this._config             = config;
     this._lastHistoryFetch   = 0;
     this._switchesDetected   = false;
@@ -1345,7 +1374,10 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _statusLabel(d) {
+    if (d.heatingFailure)           return tr(this._hass, 'heating_failure');
     if (d.summerMode)               return tr(this._hass, 'summer_active');
+    if (d.windowOpen)               return tr(this._hass, 'window_open');
+    if (d.preset === 'vacation')    return tr(this._hass, 'mode_vacation');
     if (d.isObs)                    return tr(this._hass, 'obs');
     if (d.hvacAction === 'heating') return tr(this._hass, 'heating');
     if (d.hvacAction === 'idle')    return tr(this._hass, 'idle');
@@ -1589,11 +1621,11 @@ class ThermosmartCard extends HTMLElement {
 
     // Legend
     const legendItems = [
-      { col: CHART_COL_IST,    label: tr(this._hass, 'chart_ist')    },
-      { col: CHART_COL_TGT,    label: tr(this._hass, 'chart_soll')   },
+      { col: CHART_COL_IST,    label: tr(this._hass, 'chart_actual')  },
+      { col: CHART_COL_TGT,    label: tr(this._hass, 'chart_target')  },
     ];
     if (outdoorPath) {
-      legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_aussen') });
+      legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_outdoor') });
     }
     // Legend als HTML → echte Card-Zentrierung
     const legendHtml = legendItems.map(item => `
@@ -1852,16 +1884,44 @@ class ThermosmartCard extends HTMLElement {
 
   // ── Render ────────────────────────────────────────────────────────────────
 
+  _findThermosmartEntity() {
+    return Object.entries(this._hass?.states || {})
+      .find(([eid, st]) => {
+        if (!eid.startsWith('climate.')) return false;
+        const a = st?.attributes || {};
+        return eid.startsWith('climate.thermosmart') ||
+          ('learning_confidence' in a && 'observation_mode' in a);
+      })?.[0] ?? null;
+  }
+
   _render() {
     this._cleanup();
-    const d = this._getData();
+    let d = this._getData();
 
     if (!d) {
-      this.shadowRoot.innerHTML = `${this._css()}
-        <ha-card style="padding:16px;color:#e8573f;font-size:.85em">
-          ${tr(this._hass, 'not_found')}: <b>${esc(this._config?.entity || '?')}</b>
-        </ha-card>`;
-      return;
+      if (!this._config?.entity) {
+        const candidate = this._findThermosmartEntity();
+        if (candidate) {
+          this._config = { ...this._config, entity: candidate };
+          d = this._getData();
+        }
+      }
+      if (!d) {
+        const hasEntity = !!this._config?.entity;
+        this.shadowRoot.innerHTML = hasEntity
+          ? `${this._css()}
+            <ha-card style="padding:16px">
+              <div style="color:var(--error-color,#e8573f);font-size:.85em">
+                ${tr(this._hass, 'not_found')}: <b>${esc(this._config.entity)}</b>
+              </div>
+            </ha-card>`
+          : `${this._css()}
+            <ha-card style="padding:24px 16px;text-align:center">
+              <div style="font-size:.95em;font-weight:600;color:var(--primary-text-color,#333);margin-bottom:6px">ThermoSmart Card</div>
+              <div style="font-size:.82em;color:var(--secondary-text-color,#888);line-height:1.5">${tr(this._hass, 'no_entity')}</div>
+            </ha-card>`;
+        return;
+      }
     }
 
     this._minTemp = d.entityMinTemp;
