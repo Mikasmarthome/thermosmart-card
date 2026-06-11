@@ -1143,9 +1143,10 @@ class ThermosmartCard extends HTMLElement {
     this._config           = {};
     this._hass             = null;
     this._isDragging       = false;
-    this._dragTemp         = null;
-    this._optimisticTemp   = null;   // holds target after set until HA confirms
-    this._optimisticTimer  = null;
+    this._dragTemp              = null;
+    this._optimisticTemp        = null;   // holds target after set until HA confirms
+    this._optimisticTimer       = null;
+    this._lastKnownTargetTemp   = null;
     this._listeners        = [];
     this._historyData      = null;
     this._historyFetching  = false;
@@ -1330,11 +1331,17 @@ class ThermosmartCard extends HTMLElement {
     const presetCol = stateKey !== 'off' ? (PRESET_COLORS[preset] ?? null) : null;
     const col = presetCol ?? STATE_COLORS[stateKey];
 
+    const rawTarget  = a.temperature ?? null;
+    const windowOpen = a.window_open === true;
+    if (rawTarget != null) this._lastKnownTargetTemp = rawTarget;
+    const targetTemp = this._dragTemp ?? this._optimisticTemp ?? rawTarget
+                       ?? (windowOpen ? (this._lastKnownTargetTemp ?? null) : null);
+
     return {
       entityId:    this._config.entity,
       name,
       currentTemp: a.current_temperature ?? null,
-      targetTemp:  this._dragTemp ?? this._optimisticTemp ?? (a.temperature ?? null),
+      targetTemp,
       hvacMode:    st.state,
       hvacAction,
       preset,
@@ -1353,7 +1360,7 @@ class ThermosmartCard extends HTMLElement {
       suppression: num(a.forecast_suppression, 0),
       humidity:         num(a.current_humidity),
       deviceBatteries:  a.device_batteries || {},
-      windowOpen:     a.window_open === true,
+      windowOpen,
       heatingFailure: a.heating_failure === true,
       summerMode:     a.summer_mode === true,
       preheatActive:  a.preheat_active === true,
@@ -1452,7 +1459,7 @@ class ThermosmartCard extends HTMLElement {
         </div>
         ${invert
           ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
-          : d.summerMode
+          : (d.summerMode || d.windowOpen)
           ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
         ${d.humidity != null
@@ -1731,7 +1738,7 @@ class ThermosmartCard extends HTMLElement {
           </div>
           <div class="cmp-temps">
             <span class="cmp-curr">${d.currentTemp != null ? d.currentTemp.toFixed(1) + '°' : '--'}</span>
-            <span class="cmp-tgt">${d.summerMode && d.targetTemp != null ? '⏸ ' + d.targetTemp.toFixed(1) + '°' : d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
+            <span class="cmp-tgt">${(d.summerMode || d.windowOpen) && d.targetTemp != null ? '⏸ ' + d.targetTemp.toFixed(1) + '°' : d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
           </div>
         </div>
         ${alert ? `<div class="banner ${alert.cls} cmp-banner">
