@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.0
+ * ThermoSmart Lovelace Card v1.0.1
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.0';
+const CARD_VERSION = '1.0.1';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -43,6 +43,8 @@ const I18N = {
     mode_sleep:       'Nacht',
     mode_away:        'Abwesend',
     mode_summer:      'Sommer',
+    summer_active:    'Sommermodus',
+    summer_paused:    'Heizung pausiert',
     mode_vacation:    'Urlaub',
   },
   en: {
@@ -81,6 +83,8 @@ const I18N = {
     mode_sleep:       'Night',
     mode_away:        'Away',
     mode_summer:      'Summer',
+    summer_active:    'Summer mode',
+    summer_paused:    'Heating paused',
     mode_vacation:    'Vacation',
   },
   fr: {
@@ -119,6 +123,8 @@ const I18N = {
     mode_sleep:       'Nuit',
     mode_away:        'Absent',
     mode_summer:      'Été',
+    summer_active:    'Mode été',
+    summer_paused:    'Chauffage suspendu',
     mode_vacation:    'Vacances',
   },
   nl: {
@@ -157,6 +163,8 @@ const I18N = {
     mode_sleep:       'Nacht',
     mode_away:        'Afwezig',
     mode_summer:      'Zomer',
+    summer_active:    'Zomermodus',
+    summer_paused:    'Verwarming gepauzeerd',
     mode_vacation:    'Vakantie',
   },
   it: {
@@ -195,6 +203,8 @@ const I18N = {
     mode_sleep:       'Notte',
     mode_away:        'Assente',
     mode_summer:      'Estate',
+    summer_active:    'Modalità estate',
+    summer_paused:    'Riscaldamento in pausa',
     mode_vacation:    'Vacanza',
   },
   pl: {
@@ -233,6 +243,8 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Nieobecny',
     mode_summer:      'Lato',
+    summer_active:    'Tryb letni',
+    summer_paused:    'Ogrzewanie wstrzymane',
     mode_vacation:    'Urlop',
   },
   sv: {
@@ -271,6 +283,8 @@ const I18N = {
     mode_sleep:       'Natt',
     mode_away:        'Borta',
     mode_summer:      'Sommar',
+    summer_active:    'Sommarläge',
+    summer_paused:    'Uppvärmning pausad',
     mode_vacation:    'Semester',
   },
   es: {
@@ -309,6 +323,8 @@ const I18N = {
     mode_sleep:       'Noche',
     mode_away:        'Ausente',
     mode_summer:      'Verano',
+    summer_active:    'Modo verano',
+    summer_paused:    'Calefacción pausada',
     mode_vacation:    'Vacaciones',
   },
   pt: {
@@ -347,6 +363,8 @@ const I18N = {
     mode_sleep:       'Noite',
     mode_away:        'Ausente',
     mode_summer:      'Verão',
+    summer_active:    'Modo verão',
+    summer_paused:    'Aquecimento suspenso',
     mode_vacation:    'Férias',
   },
   cs: {
@@ -385,6 +403,8 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Pryč',
     mode_summer:      'Léto',
+    summer_active:    'Letní režim',
+    summer_paused:    'Topení pozastaveno',
     mode_vacation:    'Dovolená',
   },
   da: {
@@ -423,6 +443,8 @@ const I18N = {
     mode_sleep:       'Nat',
     mode_away:        'Væk',
     mode_summer:      'Sommer',
+    summer_active:    'Sommertilstand',
+    summer_paused:    'Varme sat på pause',
     mode_vacation:    'Ferie',
   },
   fi: {
@@ -461,6 +483,8 @@ const I18N = {
     mode_sleep:       'Yö',
     mode_away:        'Poissa',
     mode_summer:      'Kesä',
+    summer_active:    'Kesätila',
+    summer_paused:    'Lämmitys keskeytetty',
     mode_vacation:    'Loma',
   },
   nb: {
@@ -499,6 +523,8 @@ const I18N = {
     mode_sleep:       'Natt',
     mode_away:        'Borte',
     mode_summer:      'Sommer',
+    summer_active:    'Sommermodus',
+    summer_paused:    'Oppvarming satt på pause',
     mode_vacation:    'Ferie',
   },
   bg: {
@@ -537,6 +563,8 @@ const I18N = {
     mode_sleep:       'Нощ',
     mode_away:        'Отсъстващ',
     mode_summer:      'Лято',
+    summer_active:    'Летен режим',
+    summer_paused:    'Отоплението е спряно',
     mode_vacation:    'Ваканция',
   },
   ca: {
@@ -575,6 +603,8 @@ const I18N = {
     mode_sleep:       'Nit',
     mode_away:        'Absent',
     mode_summer:      'Estiu',
+    summer_active:    'Mode estiu',
+    summer_paused:    'Calefacció en pausa',
     mode_vacation:    'Vacances',
   },
   el: {
@@ -613,6 +643,8 @@ const I18N = {
     mode_sleep:       'Νύχτα',
     mode_away:        'Απουσία',
     mode_summer:      'Καλοκαίρι',
+    summer_active:    'Καλοκαιρινή λειτουργία',
+    summer_paused:    'Θέρμανση σε παύση',
     mode_vacation:    'Διακοπές',
   },
   hu: {
@@ -651,6 +683,8 @@ const I18N = {
     mode_sleep:       'Éjszaka',
     mode_away:        'Távol',
     mode_summer:      'Nyár',
+    summer_active:    'Nyári mód',
+    summer_paused:    'Fűtés szüneteltetve',
     mode_vacation:    'Vakáció',
   },
   ro: {
@@ -689,6 +723,8 @@ const I18N = {
     mode_sleep:       'Noapte',
     mode_away:        'Absent',
     mode_summer:      'Vară',
+    summer_active:    'Mod vară',
+    summer_paused:    'Încălzire oprită temporar',
     mode_vacation:    'Vacanță',
   },
   ru: {
@@ -727,6 +763,8 @@ const I18N = {
     mode_sleep:       'Ночь',
     mode_away:        'Отсутствие',
     mode_summer:      'Лето',
+    summer_active:    'Летний режим',
+    summer_paused:    'Отопление приостановлено',
     mode_vacation:    'Отпуск',
   },
   sk: {
@@ -765,6 +803,8 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Preč',
     mode_summer:      'Leto',
+    summer_active:    'Letný režim',
+    summer_paused:    'Kúrenie pozastavené',
     mode_vacation:    'Dovolenka',
   },
   sl: {
@@ -803,6 +843,8 @@ const I18N = {
     mode_sleep:       'Noč',
     mode_away:        'Odsoten',
     mode_summer:      'Poletje',
+    summer_active:    'Poletni način',
+    summer_paused:    'Ogrevanje je zaustavljeno',
     mode_vacation:    'Dopust',
   },
   tr: {
@@ -841,6 +883,8 @@ const I18N = {
     mode_sleep:       'Gece',
     mode_away:        'Uzakta',
     mode_summer:      'Yaz',
+    summer_active:    'Yaz modu',
+    summer_paused:    'Isıtma duraklatıldı',
     mode_vacation:    'Tatil',
   },
   uk: {
@@ -879,6 +923,8 @@ const I18N = {
     mode_sleep:       'Ніч',
     mode_away:        'Відсутність',
     mode_summer:      'Літо',
+    summer_active:    'Літній режим',
+    summer_paused:    'Опалення призупинено',
     mode_vacation:    'Відпустка',
   },
   zh: {
@@ -917,6 +963,8 @@ const I18N = {
     mode_sleep:       '睡眠',
     mode_away:        '离家',
     mode_summer:      '夏季',
+    summer_active:    '夏季模式',
+    summer_paused:    '暖气已暂停',
     mode_vacation:    '假期',
   },
 };
@@ -1315,6 +1363,7 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _statusLabel(d) {
+    if (d.summerMode)               return tr(this._hass, 'summer_active');
     if (d.isObs)                    return tr(this._hass, 'obs');
     if (d.hvacAction === 'heating') return tr(this._hass, 'heating');
     if (d.hvacAction === 'idle')    return tr(this._hass, 'idle');
@@ -1403,6 +1452,8 @@ class ThermosmartCard extends HTMLElement {
         </div>
         ${invert
           ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+          : d.summerMode
+          ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
         ${d.humidity != null
           ? `<div class="ov-humidity"${this._config.disable_humidity ? ' style="visibility:hidden"' : ''}><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
@@ -1412,6 +1463,12 @@ class ThermosmartCard extends HTMLElement {
 
   _buildBanners(d) {
     let html = '';
+    if (d.summerMode) {
+      html += `<div class="banner summer">
+        <ha-icon icon="mdi:weather-sunny" style="--mdc-icon-size:14px"></ha-icon>
+        ${tr(this._hass, 'summer_active')} · ${tr(this._hass, 'summer_paused')}
+      </div>`;
+    }
     if (d.heatingFailure) {
       html += `<div class="banner failure">
         <ha-icon icon="mdi:alert" style="--mdc-icon-size:14px"></ha-icon>
@@ -1444,6 +1501,7 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _buildChips(d) {
+    if (d.summerMode) return '';
     const cfg = this._config;
     const c = [];
     if (!cfg.hide_chip_weather && d.weatherOff != null && Math.abs(d.weatherOff) >= 0.1)
@@ -1673,7 +1731,7 @@ class ThermosmartCard extends HTMLElement {
           </div>
           <div class="cmp-temps">
             <span class="cmp-curr">${d.currentTemp != null ? d.currentTemp.toFixed(1) + '°' : '--'}</span>
-            <span class="cmp-tgt">${d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
+            <span class="cmp-tgt">${d.summerMode && d.targetTemp != null ? '⏸ ' + d.targetTemp.toFixed(1) + '°' : d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
           </div>
         </div>
         ${alert ? `<div class="banner ${alert.cls} cmp-banner">
