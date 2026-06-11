@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
-  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.1-blue.svg" alt="Version"/></a>
+  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/version-v1.0.2-blue.svg" alt="Version"/></a>
   <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/HA-2024.1%2B-brightgreen.svg" alt="HA min"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
 </p>
@@ -45,16 +45,38 @@
 ## Installation
 
 ### HACS (recommended)
-1. HACS → Frontend → ⋮ → **Custom Repositories**
-2. URL: `https://github.com/Mikasmarthome/thermosmart-card` → Lovelace → Add
-3. Download **ThermoSmart Card** and reload the browser
+1. Open HACS → ⋮ → **Custom repositories**
+2. Enter `https://github.com/Mikasmarthome/thermosmart-card`, type **Lovelace** → Add
+3. Search for **ThermoSmart Card**, download it, and reload the browser
 
 ### Manual
-Copy `thermosmart-card.js` to `config/www/` and add to your Lovelace resources:
 
+#### What file do I need?
+Download only `thermosmart-card.js` from the [latest release assets](https://github.com/Mikasmarthome/thermosmart-card/releases/latest).
+You do **not** need the source code ZIP, the full repository, or any other files.
+
+#### Installation
+
+Choose one layout and use the matching resource URL:
+
+**Option A — simple**
+1. Create `/config/www/` if it doesn't exist yet  
+   (Docker/Container users: `<your-config-volume>/www/`)
+2. Copy `thermosmart-card.js` into `/config/www/`
+3. Add resource (Settings → Dashboards → Resources):
 ```yaml
 resources:
   - url: /local/thermosmart-card.js
+    type: module
+```
+
+**Option B — community-style subfolder**
+1. Create `/config/www/community/thermosmart-card/` if it doesn't exist yet
+2. Copy `thermosmart-card.js` into that folder
+3. Add resource (Settings → Dashboards → Resources):
+```yaml
+resources:
+  - url: /local/community/thermosmart-card/thermosmart-card.js
     type: module
 ```
 
