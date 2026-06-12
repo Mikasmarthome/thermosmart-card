@@ -1262,7 +1262,7 @@ class ThermosmartCard extends HTMLElement {
   // ── History fetch ─────────────────────────────────────────────────────────
 
   _fetchHistory() {
-    if (this._config.disable_chart || this._config.compact) return;
+    if (this._config.disable_chart) return;
     if (!this._hass?.callApi || this._historyFetching) return;
     if (Date.now() - this._lastHistoryFetch < 5 * 60 * 1000) return;
 
@@ -1290,6 +1290,15 @@ class ThermosmartCard extends HTMLElement {
           outdoor: parseFloat(a.outdoor_temperature),
         };
       }).filter(p => !isNaN(p.curr));
+
+      if (this._lastKnownTargetTemp == null) {
+        for (let i = this._historyData.length - 1; i >= 0; i--) {
+          if (!isNaN(this._historyData[i].tgt)) {
+            this._lastKnownTargetTemp = this._historyData[i].tgt;
+            break;
+          }
+        }
+      }
 
       if (!this._isDragging) this._render();
     }).catch(() => {
