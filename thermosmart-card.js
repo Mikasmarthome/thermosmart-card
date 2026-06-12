@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.4
+ * ThermoSmart Lovelace Card v1.0.5
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.4';
+const CARD_VERSION = '1.0.5';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -22,7 +22,6 @@ const I18N = {
     label_section_display:   'Anzeige',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Warnungen',
-    label_compact:  'Kompaktes 2-Zeilen Layout',
     label_disable_humidity: 'Luftfeuchtigkeit ausblenden',
     label_disable_chart:    'Verlaufsdiagramm ausblenden',
     label_disable_modes:    'Modus-Buttons ausblenden',
@@ -43,7 +42,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nacht',
     mode_away:        'Abwesend',
-    mode_summer:      'Sommer',
     summer_active:    'Sommermodus',
     mode_vacation:    'Urlaub',
   },
@@ -62,7 +60,6 @@ const I18N = {
     label_section_display:   'Display',
     label_section_scale:     'Temperature scale',
     label_section_warnings:  'Warnings',
-    label_compact:  'Compact 2-line layout',
     label_disable_humidity: 'Hide humidity',
     label_disable_chart:    'Hide history chart',
     label_disable_modes:    'Hide mode buttons',
@@ -83,7 +80,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Night',
     mode_away:        'Away',
-    mode_summer:      'Summer',
     summer_active:    'Summer mode',
     mode_vacation:    'Vacation',
   },
@@ -102,7 +98,6 @@ const I18N = {
     label_section_display:   'Affichage',
     label_section_scale:     "Échelle de température",
     label_section_warnings:  'Avertissements',
-    label_compact:  'Disposition compacte',
     label_disable_humidity: "Masquer l'humidité",
     label_disable_chart:    "Masquer le graphique",
     label_disable_modes:    'Masquer les boutons de mode',
@@ -123,7 +118,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nuit',
     mode_away:        'Absent',
-    mode_summer:      'Été',
     summer_active:    'Mode été',
     mode_vacation:    'Vacances',
   },
@@ -142,7 +136,6 @@ const I18N = {
     label_section_display:   'Weergave',
     label_section_scale:     'Temperatuurschaal',
     label_section_warnings:  'Waarschuwingen',
-    label_compact:  'Compacte 2-regelweergave',
     label_disable_humidity: 'Luchtvochtigheid verbergen',
     label_disable_chart:    'Grafiek verbergen',
     label_disable_modes:    'Modusknoppen verbergen',
@@ -163,7 +156,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nacht',
     mode_away:        'Afwezig',
-    mode_summer:      'Zomer',
     summer_active:    'Zomermodus',
     mode_vacation:    'Vakantie',
   },
@@ -182,7 +174,6 @@ const I18N = {
     label_section_display:   'Visualizzazione',
     label_section_scale:     'Scala di temperatura',
     label_section_warnings:  'Avvisi',
-    label_compact:  'Layout compatto',
     label_disable_humidity: "Nascondi umidità",
     label_disable_chart:    'Nascondi grafico',
     label_disable_modes:    'Nascondi pulsanti modalità',
@@ -203,7 +194,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Notte',
     mode_away:        'Assente',
-    mode_summer:      'Estate',
     summer_active:    'Modalità estate',
     mode_vacation:    'Vacanza',
   },
@@ -222,7 +212,6 @@ const I18N = {
     label_section_display:   'Wyświetlanie',
     label_section_scale:     'Skala temperatury',
     label_section_warnings:  'Ostrzeżenia',
-    label_compact:  'Układ kompaktowy',
     label_disable_humidity: 'Ukryj wilgotność',
     label_disable_chart:    'Ukryj wykres',
     label_disable_modes:    'Ukryj przyciski trybu',
@@ -243,7 +232,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Nieobecny',
-    mode_summer:      'Lato',
     summer_active:    'Tryb letni',
     mode_vacation:    'Urlop',
   },
@@ -262,7 +250,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Varningar',
-    label_compact:  'Kompakt 2-radsvy',
     label_disable_humidity: 'Dölj luftfuktighet',
     label_disable_chart:    'Dölj historikdiagram',
     label_disable_modes:    'Dölj lägesknappar',
@@ -283,7 +270,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Natt',
     mode_away:        'Borta',
-    mode_summer:      'Sommar',
     summer_active:    'Sommarläge',
     mode_vacation:    'Semester',
   },
@@ -302,7 +288,6 @@ const I18N = {
     label_section_display:   'Visualización',
     label_section_scale:     'Escala de temperatura',
     label_section_warnings:  'Avisos',
-    label_compact:  'Diseño compacto',
     label_disable_humidity: 'Ocultar humedad',
     label_disable_chart:    'Ocultar gráfico',
     label_disable_modes:    'Ocultar botones de modo',
@@ -323,7 +308,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noche',
     mode_away:        'Ausente',
-    mode_summer:      'Verano',
     summer_active:    'Modo verano',
     mode_vacation:    'Vacaciones',
   },
@@ -342,7 +326,6 @@ const I18N = {
     label_section_display:   'Exibição',
     label_section_scale:     'Escala de temperatura',
     label_section_warnings:  'Avisos',
-    label_compact:  'Layout compacto',
     label_disable_humidity: 'Ocultar humidade',
     label_disable_chart:    'Ocultar gráfico',
     label_disable_modes:    'Ocultar botões de modo',
@@ -363,7 +346,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noite',
     mode_away:        'Ausente',
-    mode_summer:      'Verão',
     summer_active:    'Modo verão',
     mode_vacation:    'Férias',
   },
@@ -382,7 +364,6 @@ const I18N = {
     label_section_display:   'Zobrazení',
     label_section_scale:     'Teplotní stupnice',
     label_section_warnings:  'Varování',
-    label_compact:  'Kompaktní 2-řádkový layout',
     label_disable_humidity: 'Skrýt vlhkost',
     label_disable_chart:    'Skrýt graf',
     label_disable_modes:    'Skrýt tlačítka režimů',
@@ -403,7 +384,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Pryč',
-    mode_summer:      'Léto',
     summer_active:    'Letní režim',
     mode_vacation:    'Dovolená',
   },
@@ -422,7 +402,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Advarsler',
-    label_compact:  'Kompakt 2-linje layout',
     label_disable_humidity: 'Skjul luftfugtighed',
     label_disable_chart:    'Skjul historikdiagram',
     label_disable_modes:    'Skjul tilstandsknapper',
@@ -443,7 +422,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nat',
     mode_away:        'Væk',
-    mode_summer:      'Sommer',
     summer_active:    'Sommertilstand',
     mode_vacation:    'Ferie',
   },
@@ -462,7 +440,6 @@ const I18N = {
     label_section_display:   'Näyttö',
     label_section_scale:     'Lämpötila-asteikko',
     label_section_warnings:  'Varoitukset',
-    label_compact:  'Kompakti 2-rivinen asettelu',
     label_disable_humidity: 'Piilota kosteus',
     label_disable_chart:    'Piilota historiakaavio',
     label_disable_modes:    'Piilota tilapainikkeet',
@@ -483,7 +460,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Yö',
     mode_away:        'Poissa',
-    mode_summer:      'Kesä',
     summer_active:    'Kesätila',
     mode_vacation:    'Loma',
   },
@@ -502,7 +478,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Advarsler',
-    label_compact:  'Kompakt 2-linje layout',
     label_disable_humidity: 'Skjul luftfuktighet',
     label_disable_chart:    'Skjul historikk-diagram',
     label_disable_modes:    'Skjul modus-knapper',
@@ -523,7 +498,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Natt',
     mode_away:        'Borte',
-    mode_summer:      'Sommer',
     summer_active:    'Sommermodus',
     mode_vacation:    'Ferie',
   },
@@ -542,7 +516,6 @@ const I18N = {
     label_section_display:   'Дисплей',
     label_section_scale:     'Температурна скала',
     label_section_warnings:  'Предупреждения',
-    label_compact:  'Компактно 2-редово оформление',
     label_disable_humidity: 'Скрий влажността',
     label_disable_chart:    'Скрий графиката',
     label_disable_modes:    'Скрий бутоните за режим',
@@ -563,7 +536,6 @@ const I18N = {
     mode_eco:         'Еко',
     mode_sleep:       'Нощ',
     mode_away:        'Отсъстващ',
-    mode_summer:      'Лято',
     summer_active:    'Летен режим',
     mode_vacation:    'Ваканция',
   },
@@ -582,7 +554,6 @@ const I18N = {
     label_section_display:   'Visualització',
     label_section_scale:     "Escala de temperatura",
     label_section_warnings:  'Avisos',
-    label_compact:  'Disseny compacte',
     label_disable_humidity: "Amagar humitat",
     label_disable_chart:    'Amagar gràfic',
     label_disable_modes:    'Amagar botons de mode',
@@ -603,7 +574,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nit',
     mode_away:        'Absent',
-    mode_summer:      'Estiu',
     summer_active:    'Mode estiu',
     mode_vacation:    'Vacances',
   },
@@ -622,7 +592,6 @@ const I18N = {
     label_section_display:   'Εμφάνιση',
     label_section_scale:     'Κλίμακα θερμοκρασίας',
     label_section_warnings:  'Προειδοποιήσεις',
-    label_compact:  'Συμπαγής διάταξη 2 γραμμών',
     label_disable_humidity: 'Απόκρυψη υγρασίας',
     label_disable_chart:    'Απόκρυψη γραφήματος',
     label_disable_modes:    'Απόκρυψη κουμπιών λειτουργίας',
@@ -643,7 +612,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Νύχτα',
     mode_away:        'Απουσία',
-    mode_summer:      'Καλοκαίρι',
     summer_active:    'Καλοκαιρινή λειτουργία',
     mode_vacation:    'Διακοπές',
   },
@@ -662,7 +630,6 @@ const I18N = {
     label_section_display:   'Megjelenítés',
     label_section_scale:     'Hőmérsékleti skála',
     label_section_warnings:  'Figyelmeztetések',
-    label_compact:  'Kompakt 2 soros elrendezés',
     label_disable_humidity: 'Páratartalom elrejtése',
     label_disable_chart:    'Grafikon elrejtése',
     label_disable_modes:    'Mód gombok elrejtése',
@@ -683,7 +650,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Éjszaka',
     mode_away:        'Távol',
-    mode_summer:      'Nyár',
     summer_active:    'Nyári mód',
     mode_vacation:    'Vakáció',
   },
@@ -702,7 +668,6 @@ const I18N = {
     label_section_display:   'Afișaj',
     label_section_scale:     'Scală temperatură',
     label_section_warnings:  'Avertizări',
-    label_compact:  'Layout compact 2 linii',
     label_disable_humidity: 'Ascunde umiditatea',
     label_disable_chart:    'Ascunde graficul',
     label_disable_modes:    'Ascunde butoanele de mod',
@@ -723,7 +688,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noapte',
     mode_away:        'Absent',
-    mode_summer:      'Vară',
     summer_active:    'Mod vară',
     mode_vacation:    'Vacanță',
   },
@@ -742,7 +706,6 @@ const I18N = {
     label_section_display:   'Отображение',
     label_section_scale:     'Шкала температуры',
     label_section_warnings:  'Предупреждения',
-    label_compact:  'Компактный 2-строчный вид',
     label_disable_humidity: 'Скрыть влажность',
     label_disable_chart:    'Скрыть график',
     label_disable_modes:    'Скрыть кнопки режимов',
@@ -763,7 +726,6 @@ const I18N = {
     mode_eco:         'Эко',
     mode_sleep:       'Ночь',
     mode_away:        'Отсутствие',
-    mode_summer:      'Лето',
     summer_active:    'Летний режим',
     mode_vacation:    'Отпуск',
   },
@@ -782,7 +744,6 @@ const I18N = {
     label_section_display:   'Zobrazenie',
     label_section_scale:     'Teplotná stupnica',
     label_section_warnings:  'Varovania',
-    label_compact:  'Kompaktné 2-riadkové rozloženie',
     label_disable_humidity: 'Skryť vlhkosť',
     label_disable_chart:    'Skryť graf',
     label_disable_modes:    'Skryť tlačidlá režimov',
@@ -803,7 +764,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Preč',
-    mode_summer:      'Leto',
     summer_active:    'Letný režim',
     mode_vacation:    'Dovolenka',
   },
@@ -822,7 +782,6 @@ const I18N = {
     label_section_display:   'Prikaz',
     label_section_scale:     'Temperaturna lestvica',
     label_section_warnings:  'Opozorila',
-    label_compact:  'Kompaktna 2-vrstična postavitev',
     label_disable_humidity: 'Skrij vlažnost',
     label_disable_chart:    'Skrij grafikon',
     label_disable_modes:    'Skrij gumbe načina',
@@ -843,7 +802,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noč',
     mode_away:        'Odsoten',
-    mode_summer:      'Poletje',
     summer_active:    'Poletni način',
     mode_vacation:    'Dopust',
   },
@@ -862,7 +820,6 @@ const I18N = {
     label_section_display:   'Görünüm',
     label_section_scale:     'Sıcaklık ölçeği',
     label_section_warnings:  'Uyarılar',
-    label_compact:  'Kompakt 2 satırlı düzen',
     label_disable_humidity: 'Nemi gizle',
     label_disable_chart:    'Grafiği gizle',
     label_disable_modes:    'Mod düğmelerini gizle',
@@ -883,7 +840,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Gece',
     mode_away:        'Uzakta',
-    mode_summer:      'Yaz',
     summer_active:    'Yaz modu',
     mode_vacation:    'Tatil',
   },
@@ -902,7 +858,6 @@ const I18N = {
     label_section_display:   'Відображення',
     label_section_scale:     'Шкала температури',
     label_section_warnings:  'Попередження',
-    label_compact:  'Компактний 2-рядковий вигляд',
     label_disable_humidity: 'Сховати вологість',
     label_disable_chart:    'Сховати графік',
     label_disable_modes:    'Сховати кнопки режимів',
@@ -923,7 +878,6 @@ const I18N = {
     mode_eco:         'Еко',
     mode_sleep:       'Ніч',
     mode_away:        'Відсутність',
-    mode_summer:      'Літо',
     summer_active:    'Літній режим',
     mode_vacation:    'Відпустка',
   },
@@ -942,7 +896,6 @@ const I18N = {
     label_section_display:   '显示',
     label_section_scale:     '温度刻度',
     label_section_warnings:  '警告',
-    label_compact:  '紧凑型两行布局',
     label_disable_humidity: '隐藏湿度',
     label_disable_chart:    '隐藏历史图表',
     label_disable_modes:    '隐藏模式按钮',
@@ -963,7 +916,6 @@ const I18N = {
     mode_eco:         '节能',
     mode_sleep:       '睡眠',
     mode_away:        '离家',
-    mode_summer:      '夏季',
     summer_active:    '夏季模式',
     mode_vacation:    '假期',
   },
@@ -1008,12 +960,12 @@ const MDI_FILTER= 'M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z';
 
 // ── Preset modes (must match ThermoSmart integration const.py) ─────────────────
 const MODES = [
-  { preset: 'auto',     label: 'Auto',     icon: 'mdi:home-thermometer-outline' },
-  { preset: 'comfort',  label: 'Komfort',  icon: 'mdi:sun-thermometer-outline'  },
-  { preset: 'eco',      label: 'Eco',      icon: 'mdi:leaf'                     },
-  { preset: 'sleep',    label: 'Nacht',    icon: 'mdi:weather-night'            },
-  { preset: 'away',     label: 'Abwesend', icon: 'mdi:walk'                     },
-  { preset: 'vacation', label: 'Urlaub',   icon: 'mdi:airplane'                 },
+  { preset: 'auto',     icon: 'mdi:home-thermometer-outline' },
+  { preset: 'comfort',  icon: 'mdi:sun-thermometer-outline'  },
+  { preset: 'eco',      icon: 'mdi:leaf'                     },
+  { preset: 'sleep',    icon: 'mdi:weather-night'            },
+  { preset: 'away',     icon: 'mdi:walk'                     },
+  { preset: 'vacation', icon: 'mdi:airplane'                 },
 ];
 
 const STATE_COLORS = {
@@ -1033,9 +985,9 @@ const PRESET_COLORS = {
 };
 
 // chart line colors (fixed, independent of preset)
-const CHART_COL_IST    = '#2196F3';  // blue    – Ist
-const CHART_COL_TGT    = '#ff9800';  // orange  – Soll
-const CHART_COL_OUTDOOR= '#ef5350';  // red     – Außen
+const CHART_COL_IST    = '#2196F3';  // blue   – actual
+const CHART_COL_TGT    = '#ff9800';  // orange – target
+const CHART_COL_OUTDOOR= '#ef5350';  // red    – outdoor
 
 // ── Config-Editor ─────────────────────────────────────────────────────────────
 
@@ -1249,9 +1201,11 @@ class ThermosmartCard extends HTMLElement {
     }, 30000);
   }
 
-  getCardSize() { return this._config.compact ? 2 : 8; }
+  getCardSize() { return 8; }
 
   // ── Cleanup ──────────────────────────────────────────────────────────────
+
+  disconnectedCallback() { this._cleanup(); }
 
   _cleanup() {
     this._listeners.forEach(fn => { try { fn(); } catch (_) {} });
@@ -1474,7 +1428,9 @@ class ThermosmartCard extends HTMLElement {
           }
         </div>
         ${invert
-          ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+          ? (d.summerMode || d.windowOpen)
+            ? `<div class="ov-target" style="opacity:0.45${secTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+            : `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
           : (d.summerMode || d.windowOpen)
           ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
@@ -1663,7 +1619,7 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _startChartTimer() {
-    if (this._config.disable_chart || this._config.compact) return;
+    if (this._config.disable_chart) return;
     const hours = this._config.chart_hours ?? 24;
     const fmt = ts => {
       const d = new Date(ts);
@@ -1722,42 +1678,6 @@ class ThermosmartCard extends HTMLElement {
       </ha-card>`;
   }
 
-  _renderCompact(d) {
-    const pct = Math.min(100, Math.max(0, d.confidence)).toFixed(0);
-    const alert = d.heatingFailure
-      ? { cls: 'failure',  icon: 'mdi:alert',               key: 'heating_failure' }
-      : d.windowOpen
-      ? { cls: 'window',   icon: 'mdi:window-open-variant', key: 'window_open'     }
-      : d.preset === 'vacation'
-      ? { cls: 'vacation', icon: 'mdi:airplane',            key: 'mode_vacation'   }
-      : null;
-    return `
-      <ha-card>
-        <div class="cmp-row">
-          <div class="cmp-icon" style="background:${d.col.main}22;border-color:${d.col.main}66">
-            <ha-icon icon="mdi:home-thermometer" style="color:${d.col.main};--mdc-icon-size:20px"></ha-icon>
-          </div>
-          <div class="cmp-info">
-            <div class="cmp-name">${esc(d.name)}</div>
-            <div class="cmp-sub">${this._statusLabel(d)}${
-              d.humidity != null && !this._config.disable_humidity
-                ? ' · 💧' + d.humidity.toFixed(0) + '%' : ''}${
-              d.outdoorTemp != null ? ' · 🌡️' + d.outdoorTemp.toFixed(1) + '°C' : ''}</div>
-          </div>
-          <div class="cmp-temps">
-            <span class="cmp-curr">${d.currentTemp != null ? d.currentTemp.toFixed(1) + '°' : '--'}</span>
-            <span class="cmp-tgt">${(d.summerMode || d.windowOpen) && d.targetTemp != null ? '⏸ ' + d.targetTemp.toFixed(1) + '°' : d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
-          </div>
-        </div>
-        ${alert ? `<div class="banner ${alert.cls} cmp-banner">
-          <ha-icon icon="${alert.icon}" style="--mdc-icon-size:12px"></ha-icon>
-          ${tr(this._hass, alert.key)}
-        </div>` : ''}
-        <div class="conf-bg" style="height:3px">
-          <div class="conf-fill" style="width:${pct}%;background:${d.col.main}"></div>
-        </div>
-      </ha-card>`;
-  }
 
   // ── CSS ───────────────────────────────────────────────────────────────────
 
@@ -1785,12 +1705,6 @@ class ThermosmartCard extends HTMLElement {
         pointer-events: none; width: 220px;
       }
       .ov-pill-slot { min-height: 28px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
-      .ov-pill {
-        display: inline-flex; align-items: center; gap: 3px;
-        font-size: 0.7em; font-weight: 500; border-radius: 20px;
-        padding: 4px 10px; border: 1px solid;
-        letter-spacing: 0.02em;
-      }
       .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
       .ov-icon--summer   { color: #f57c00; filter: drop-shadow(0 0 6px rgba(255,152,0,.55)); }
       .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
@@ -1878,16 +1792,6 @@ class ThermosmartCard extends HTMLElement {
       }
       @keyframes ts-spin { to { transform: rotate(360deg); } }
 
-      /* Compact */
-      .cmp-row  { display: flex; align-items: center; gap: 10px; padding: 12px 14px 7px; }
-      .cmp-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
-      .cmp-info { flex: 1; min-width: 0; }
-      .cmp-name { font-size: 0.9em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .cmp-sub  { font-size: 0.72em; color: var(--secondary-text-color); }
-      .cmp-temps { flex-shrink: 0; text-align: right; }
-      .cmp-curr { font-size: 1.1em; font-weight: 300; color: var(--primary-text-color); }
-      .cmp-tgt  { font-size: 0.74em; color: var(--secondary-text-color); margin-left: 4px; }
-      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 14px 5px; border-radius: 6px; }
     </style>`;
   }
 
@@ -1936,7 +1840,7 @@ class ThermosmartCard extends HTMLElement {
     this._minTemp = d.entityMinTemp;
     this._maxTemp = d.entityMaxTemp;
 
-    const body = this._config.compact ? this._renderCompact(d) : this._renderNormal(d);
+    const body = this._renderNormal(d);
     this.shadowRoot.innerHTML = this._css() + body;
 
     // Mode buttons – optimistic preset for instant visual feedback
@@ -1989,7 +1893,7 @@ class ThermosmartCard extends HTMLElement {
       this._listeners.push(() => btn.removeEventListener('click', h));
     });
 
-    if (!this._config.compact) this._setupDrag(d);
+    this._setupDrag(d);
     this._startChartTimer();
   }
 
