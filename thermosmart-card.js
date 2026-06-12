@@ -1592,7 +1592,7 @@ class ThermosmartCard extends HTMLElement {
     if (outdoorPath) {
       legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_outdoor') });
     }
-    // Legend als HTML → echte Card-Zentrierung
+    // Legend rendered as HTML for proper flex-centering inside the card
     const legendHtml = legendItems.map(item => `
       <span class="spark-legend-item">
         <svg width="14" height="8" style="display:inline-block;vertical-align:middle;overflow:visible">
