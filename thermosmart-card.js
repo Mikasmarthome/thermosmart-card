@@ -22,7 +22,6 @@ const I18N = {
     label_section_display:   'Anzeige',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Warnungen',
-    label_compact:  'Kompaktes 2-Zeilen Layout',
     label_disable_humidity: 'Luftfeuchtigkeit ausblenden',
     label_disable_chart:    'Verlaufsdiagramm ausblenden',
     label_disable_modes:    'Modus-Buttons ausblenden',
@@ -62,7 +61,6 @@ const I18N = {
     label_section_display:   'Display',
     label_section_scale:     'Temperature scale',
     label_section_warnings:  'Warnings',
-    label_compact:  'Compact 2-line layout',
     label_disable_humidity: 'Hide humidity',
     label_disable_chart:    'Hide history chart',
     label_disable_modes:    'Hide mode buttons',
@@ -102,7 +100,6 @@ const I18N = {
     label_section_display:   'Affichage',
     label_section_scale:     "Échelle de température",
     label_section_warnings:  'Avertissements',
-    label_compact:  'Disposition compacte',
     label_disable_humidity: "Masquer l'humidité",
     label_disable_chart:    "Masquer le graphique",
     label_disable_modes:    'Masquer les boutons de mode',
@@ -142,7 +139,6 @@ const I18N = {
     label_section_display:   'Weergave',
     label_section_scale:     'Temperatuurschaal',
     label_section_warnings:  'Waarschuwingen',
-    label_compact:  'Compacte 2-regelweergave',
     label_disable_humidity: 'Luchtvochtigheid verbergen',
     label_disable_chart:    'Grafiek verbergen',
     label_disable_modes:    'Modusknoppen verbergen',
@@ -182,7 +178,6 @@ const I18N = {
     label_section_display:   'Visualizzazione',
     label_section_scale:     'Scala di temperatura',
     label_section_warnings:  'Avvisi',
-    label_compact:  'Layout compatto',
     label_disable_humidity: "Nascondi umidità",
     label_disable_chart:    'Nascondi grafico',
     label_disable_modes:    'Nascondi pulsanti modalità',
@@ -222,7 +217,6 @@ const I18N = {
     label_section_display:   'Wyświetlanie',
     label_section_scale:     'Skala temperatury',
     label_section_warnings:  'Ostrzeżenia',
-    label_compact:  'Układ kompaktowy',
     label_disable_humidity: 'Ukryj wilgotność',
     label_disable_chart:    'Ukryj wykres',
     label_disable_modes:    'Ukryj przyciski trybu',
@@ -262,7 +256,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Varningar',
-    label_compact:  'Kompakt 2-radsvy',
     label_disable_humidity: 'Dölj luftfuktighet',
     label_disable_chart:    'Dölj historikdiagram',
     label_disable_modes:    'Dölj lägesknappar',
@@ -302,7 +295,6 @@ const I18N = {
     label_section_display:   'Visualización',
     label_section_scale:     'Escala de temperatura',
     label_section_warnings:  'Avisos',
-    label_compact:  'Diseño compacto',
     label_disable_humidity: 'Ocultar humedad',
     label_disable_chart:    'Ocultar gráfico',
     label_disable_modes:    'Ocultar botones de modo',
@@ -342,7 +334,6 @@ const I18N = {
     label_section_display:   'Exibição',
     label_section_scale:     'Escala de temperatura',
     label_section_warnings:  'Avisos',
-    label_compact:  'Layout compacto',
     label_disable_humidity: 'Ocultar humidade',
     label_disable_chart:    'Ocultar gráfico',
     label_disable_modes:    'Ocultar botões de modo',
@@ -382,7 +373,6 @@ const I18N = {
     label_section_display:   'Zobrazení',
     label_section_scale:     'Teplotní stupnice',
     label_section_warnings:  'Varování',
-    label_compact:  'Kompaktní 2-řádkový layout',
     label_disable_humidity: 'Skrýt vlhkost',
     label_disable_chart:    'Skrýt graf',
     label_disable_modes:    'Skrýt tlačítka režimů',
@@ -422,7 +412,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Advarsler',
-    label_compact:  'Kompakt 2-linje layout',
     label_disable_humidity: 'Skjul luftfugtighed',
     label_disable_chart:    'Skjul historikdiagram',
     label_disable_modes:    'Skjul tilstandsknapper',
@@ -462,7 +451,6 @@ const I18N = {
     label_section_display:   'Näyttö',
     label_section_scale:     'Lämpötila-asteikko',
     label_section_warnings:  'Varoitukset',
-    label_compact:  'Kompakti 2-rivinen asettelu',
     label_disable_humidity: 'Piilota kosteus',
     label_disable_chart:    'Piilota historiakaavio',
     label_disable_modes:    'Piilota tilapainikkeet',
@@ -502,7 +490,6 @@ const I18N = {
     label_section_display:   'Visning',
     label_section_scale:     'Temperaturskala',
     label_section_warnings:  'Advarsler',
-    label_compact:  'Kompakt 2-linje layout',
     label_disable_humidity: 'Skjul luftfuktighet',
     label_disable_chart:    'Skjul historikk-diagram',
     label_disable_modes:    'Skjul modus-knapper',
@@ -542,7 +529,6 @@ const I18N = {
     label_section_display:   'Дисплей',
     label_section_scale:     'Температурна скала',
     label_section_warnings:  'Предупреждения',
-    label_compact:  'Компактно 2-редово оформление',
     label_disable_humidity: 'Скрий влажността',
     label_disable_chart:    'Скрий графиката',
     label_disable_modes:    'Скрий бутоните за режим',
@@ -582,7 +568,6 @@ const I18N = {
     label_section_display:   'Visualització',
     label_section_scale:     "Escala de temperatura",
     label_section_warnings:  'Avisos',
-    label_compact:  'Disseny compacte',
     label_disable_humidity: "Amagar humitat",
     label_disable_chart:    'Amagar gràfic',
     label_disable_modes:    'Amagar botons de mode',
@@ -622,7 +607,6 @@ const I18N = {
     label_section_display:   'Εμφάνιση',
     label_section_scale:     'Κλίμακα θερμοκρασίας',
     label_section_warnings:  'Προειδοποιήσεις',
-    label_compact:  'Συμπαγής διάταξη 2 γραμμών',
     label_disable_humidity: 'Απόκρυψη υγρασίας',
     label_disable_chart:    'Απόκρυψη γραφήματος',
     label_disable_modes:    'Απόκρυψη κουμπιών λειτουργίας',
@@ -662,7 +646,6 @@ const I18N = {
     label_section_display:   'Megjelenítés',
     label_section_scale:     'Hőmérsékleti skála',
     label_section_warnings:  'Figyelmeztetések',
-    label_compact:  'Kompakt 2 soros elrendezés',
     label_disable_humidity: 'Páratartalom elrejtése',
     label_disable_chart:    'Grafikon elrejtése',
     label_disable_modes:    'Mód gombok elrejtése',
@@ -702,7 +685,6 @@ const I18N = {
     label_section_display:   'Afișaj',
     label_section_scale:     'Scală temperatură',
     label_section_warnings:  'Avertizări',
-    label_compact:  'Layout compact 2 linii',
     label_disable_humidity: 'Ascunde umiditatea',
     label_disable_chart:    'Ascunde graficul',
     label_disable_modes:    'Ascunde butoanele de mod',
@@ -742,7 +724,6 @@ const I18N = {
     label_section_display:   'Отображение',
     label_section_scale:     'Шкала температуры',
     label_section_warnings:  'Предупреждения',
-    label_compact:  'Компактный 2-строчный вид',
     label_disable_humidity: 'Скрыть влажность',
     label_disable_chart:    'Скрыть график',
     label_disable_modes:    'Скрыть кнопки режимов',
@@ -782,7 +763,6 @@ const I18N = {
     label_section_display:   'Zobrazenie',
     label_section_scale:     'Teplotná stupnica',
     label_section_warnings:  'Varovania',
-    label_compact:  'Kompaktné 2-riadkové rozloženie',
     label_disable_humidity: 'Skryť vlhkosť',
     label_disable_chart:    'Skryť graf',
     label_disable_modes:    'Skryť tlačidlá režimov',
@@ -822,7 +802,6 @@ const I18N = {
     label_section_display:   'Prikaz',
     label_section_scale:     'Temperaturna lestvica',
     label_section_warnings:  'Opozorila',
-    label_compact:  'Kompaktna 2-vrstična postavitev',
     label_disable_humidity: 'Skrij vlažnost',
     label_disable_chart:    'Skrij grafikon',
     label_disable_modes:    'Skrij gumbe načina',
@@ -862,7 +841,6 @@ const I18N = {
     label_section_display:   'Görünüm',
     label_section_scale:     'Sıcaklık ölçeği',
     label_section_warnings:  'Uyarılar',
-    label_compact:  'Kompakt 2 satırlı düzen',
     label_disable_humidity: 'Nemi gizle',
     label_disable_chart:    'Grafiği gizle',
     label_disable_modes:    'Mod düğmelerini gizle',
@@ -902,7 +880,6 @@ const I18N = {
     label_section_display:   'Відображення',
     label_section_scale:     'Шкала температури',
     label_section_warnings:  'Попередження',
-    label_compact:  'Компактний 2-рядковий вигляд',
     label_disable_humidity: 'Сховати вологість',
     label_disable_chart:    'Сховати графік',
     label_disable_modes:    'Сховати кнопки режимів',
@@ -942,7 +919,6 @@ const I18N = {
     label_section_display:   '显示',
     label_section_scale:     '温度刻度',
     label_section_warnings:  '警告',
-    label_compact:  '紧凑型两行布局',
     label_disable_humidity: '隐藏湿度',
     label_disable_chart:    '隐藏历史图表',
     label_disable_modes:    '隐藏模式按钮',
@@ -1249,7 +1225,7 @@ class ThermosmartCard extends HTMLElement {
     }, 30000);
   }
 
-  getCardSize() { return this._config.compact ? 2 : 8; }
+  getCardSize() { return 8; }
 
   // ── Cleanup ──────────────────────────────────────────────────────────────
 
@@ -1663,7 +1639,7 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _startChartTimer() {
-    if (this._config.disable_chart || this._config.compact) return;
+    if (this._config.disable_chart) return;
     const hours = this._config.chart_hours ?? 24;
     const fmt = ts => {
       const d = new Date(ts);
@@ -1722,42 +1698,6 @@ class ThermosmartCard extends HTMLElement {
       </ha-card>`;
   }
 
-  _renderCompact(d) {
-    const pct = Math.min(100, Math.max(0, d.confidence)).toFixed(0);
-    const alert = d.heatingFailure
-      ? { cls: 'failure',  icon: 'mdi:alert',               key: 'heating_failure' }
-      : d.windowOpen
-      ? { cls: 'window',   icon: 'mdi:window-open-variant', key: 'window_open'     }
-      : d.preset === 'vacation'
-      ? { cls: 'vacation', icon: 'mdi:airplane',            key: 'mode_vacation'   }
-      : null;
-    return `
-      <ha-card>
-        <div class="cmp-row">
-          <div class="cmp-icon" style="background:${d.col.main}22;border-color:${d.col.main}66">
-            <ha-icon icon="mdi:home-thermometer" style="color:${d.col.main};--mdc-icon-size:20px"></ha-icon>
-          </div>
-          <div class="cmp-info">
-            <div class="cmp-name">${esc(d.name)}</div>
-            <div class="cmp-sub">${this._statusLabel(d)}${
-              d.humidity != null && !this._config.disable_humidity
-                ? ' · 💧' + d.humidity.toFixed(0) + '%' : ''}${
-              d.outdoorTemp != null ? ' · 🌡️' + d.outdoorTemp.toFixed(1) + '°C' : ''}</div>
-          </div>
-          <div class="cmp-temps">
-            <span class="cmp-curr">${d.currentTemp != null ? d.currentTemp.toFixed(1) + '°' : '--'}</span>
-            <span class="cmp-tgt">${(d.summerMode || d.windowOpen) && d.targetTemp != null ? '⏸ ' + d.targetTemp.toFixed(1) + '°' : d.targetTemp != null ? '→ ' + d.targetTemp.toFixed(1) + '°' : ''}</span>
-          </div>
-        </div>
-        ${alert ? `<div class="banner ${alert.cls} cmp-banner">
-          <ha-icon icon="${alert.icon}" style="--mdc-icon-size:12px"></ha-icon>
-          ${tr(this._hass, alert.key)}
-        </div>` : ''}
-        <div class="conf-bg" style="height:3px">
-          <div class="conf-fill" style="width:${pct}%;background:${d.col.main}"></div>
-        </div>
-      </ha-card>`;
-  }
 
   // ── CSS ───────────────────────────────────────────────────────────────────
 
@@ -1878,16 +1818,6 @@ class ThermosmartCard extends HTMLElement {
       }
       @keyframes ts-spin { to { transform: rotate(360deg); } }
 
-      /* Compact */
-      .cmp-row  { display: flex; align-items: center; gap: 10px; padding: 12px 14px 7px; }
-      .cmp-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
-      .cmp-info { flex: 1; min-width: 0; }
-      .cmp-name { font-size: 0.9em; font-weight: 600; color: var(--primary-text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .cmp-sub  { font-size: 0.72em; color: var(--secondary-text-color); }
-      .cmp-temps { flex-shrink: 0; text-align: right; }
-      .cmp-curr { font-size: 1.1em; font-weight: 300; color: var(--primary-text-color); }
-      .cmp-tgt  { font-size: 0.74em; color: var(--secondary-text-color); margin-left: 4px; }
-      .cmp-banner { font-size: 0.72em; padding: 3px 8px; margin: 0 14px 5px; border-radius: 6px; }
     </style>`;
   }
 
@@ -1936,7 +1866,7 @@ class ThermosmartCard extends HTMLElement {
     this._minTemp = d.entityMinTemp;
     this._maxTemp = d.entityMaxTemp;
 
-    const body = this._config.compact ? this._renderCompact(d) : this._renderNormal(d);
+    const body = this._renderNormal(d);
     this.shadowRoot.innerHTML = this._css() + body;
 
     // Mode buttons – optimistic preset for instant visual feedback
@@ -1989,7 +1919,7 @@ class ThermosmartCard extends HTMLElement {
       this._listeners.push(() => btn.removeEventListener('click', h));
     });
 
-    if (!this._config.compact) this._setupDrag(d);
+    this._setupDrag(d);
     this._startChartTimer();
   }
 

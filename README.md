@@ -91,7 +91,6 @@ entity: climate.thermosmart_living_room
 type: custom:thermosmart-card
 entity: climate.thermosmart_living_room
 name: Living Room            # optional — overrides entity friendly name
-compact: false               # true = compact 2-line layout (YAML only)
 min_temp: 4                  # temperature ring scale minimum (default: 4)
 max_temp: 35                 # temperature ring scale maximum (default: 35)
 disable_humidity: false      # hide humidity readout
