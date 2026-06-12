@@ -42,7 +42,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nacht',
     mode_away:        'Abwesend',
-    mode_summer:      'Sommer',
     summer_active:    'Sommermodus',
     mode_vacation:    'Urlaub',
   },
@@ -81,7 +80,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Night',
     mode_away:        'Away',
-    mode_summer:      'Summer',
     summer_active:    'Summer mode',
     mode_vacation:    'Vacation',
   },
@@ -120,7 +118,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nuit',
     mode_away:        'Absent',
-    mode_summer:      'Été',
     summer_active:    'Mode été',
     mode_vacation:    'Vacances',
   },
@@ -159,7 +156,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nacht',
     mode_away:        'Afwezig',
-    mode_summer:      'Zomer',
     summer_active:    'Zomermodus',
     mode_vacation:    'Vakantie',
   },
@@ -198,7 +194,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Notte',
     mode_away:        'Assente',
-    mode_summer:      'Estate',
     summer_active:    'Modalità estate',
     mode_vacation:    'Vacanza',
   },
@@ -237,7 +232,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Nieobecny',
-    mode_summer:      'Lato',
     summer_active:    'Tryb letni',
     mode_vacation:    'Urlop',
   },
@@ -276,7 +270,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Natt',
     mode_away:        'Borta',
-    mode_summer:      'Sommar',
     summer_active:    'Sommarläge',
     mode_vacation:    'Semester',
   },
@@ -315,7 +308,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noche',
     mode_away:        'Ausente',
-    mode_summer:      'Verano',
     summer_active:    'Modo verano',
     mode_vacation:    'Vacaciones',
   },
@@ -354,7 +346,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noite',
     mode_away:        'Ausente',
-    mode_summer:      'Verão',
     summer_active:    'Modo verão',
     mode_vacation:    'Férias',
   },
@@ -393,7 +384,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Pryč',
-    mode_summer:      'Léto',
     summer_active:    'Letní režim',
     mode_vacation:    'Dovolená',
   },
@@ -432,7 +422,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nat',
     mode_away:        'Væk',
-    mode_summer:      'Sommer',
     summer_active:    'Sommertilstand',
     mode_vacation:    'Ferie',
   },
@@ -471,7 +460,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Yö',
     mode_away:        'Poissa',
-    mode_summer:      'Kesä',
     summer_active:    'Kesätila',
     mode_vacation:    'Loma',
   },
@@ -510,7 +498,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Natt',
     mode_away:        'Borte',
-    mode_summer:      'Sommer',
     summer_active:    'Sommermodus',
     mode_vacation:    'Ferie',
   },
@@ -549,7 +536,6 @@ const I18N = {
     mode_eco:         'Еко',
     mode_sleep:       'Нощ',
     mode_away:        'Отсъстващ',
-    mode_summer:      'Лято',
     summer_active:    'Летен режим',
     mode_vacation:    'Ваканция',
   },
@@ -588,7 +574,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Nit',
     mode_away:        'Absent',
-    mode_summer:      'Estiu',
     summer_active:    'Mode estiu',
     mode_vacation:    'Vacances',
   },
@@ -627,7 +612,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Νύχτα',
     mode_away:        'Απουσία',
-    mode_summer:      'Καλοκαίρι',
     summer_active:    'Καλοκαιρινή λειτουργία',
     mode_vacation:    'Διακοπές',
   },
@@ -666,7 +650,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Éjszaka',
     mode_away:        'Távol',
-    mode_summer:      'Nyár',
     summer_active:    'Nyári mód',
     mode_vacation:    'Vakáció',
   },
@@ -705,7 +688,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noapte',
     mode_away:        'Absent',
-    mode_summer:      'Vară',
     summer_active:    'Mod vară',
     mode_vacation:    'Vacanță',
   },
@@ -744,7 +726,6 @@ const I18N = {
     mode_eco:         'Эко',
     mode_sleep:       'Ночь',
     mode_away:        'Отсутствие',
-    mode_summer:      'Лето',
     summer_active:    'Летний режим',
     mode_vacation:    'Отпуск',
   },
@@ -783,7 +764,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noc',
     mode_away:        'Preč',
-    mode_summer:      'Leto',
     summer_active:    'Letný režim',
     mode_vacation:    'Dovolenka',
   },
@@ -822,7 +802,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Noč',
     mode_away:        'Odsoten',
-    mode_summer:      'Poletje',
     summer_active:    'Poletni način',
     mode_vacation:    'Dopust',
   },
@@ -861,7 +840,6 @@ const I18N = {
     mode_eco:         'Eco',
     mode_sleep:       'Gece',
     mode_away:        'Uzakta',
-    mode_summer:      'Yaz',
     summer_active:    'Yaz modu',
     mode_vacation:    'Tatil',
   },
@@ -900,7 +878,6 @@ const I18N = {
     mode_eco:         'Еко',
     mode_sleep:       'Ніч',
     mode_away:        'Відсутність',
-    mode_summer:      'Літо',
     summer_active:    'Літній режим',
     mode_vacation:    'Відпустка',
   },
@@ -939,7 +916,6 @@ const I18N = {
     mode_eco:         '节能',
     mode_sleep:       '睡眠',
     mode_away:        '离家',
-    mode_summer:      '夏季',
     summer_active:    '夏季模式',
     mode_vacation:    '假期',
   },
@@ -984,12 +960,12 @@ const MDI_FILTER= 'M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z';
 
 // ── Preset modes (must match ThermoSmart integration const.py) ─────────────────
 const MODES = [
-  { preset: 'auto',     label: 'Auto',     icon: 'mdi:home-thermometer-outline' },
-  { preset: 'comfort',  label: 'Komfort',  icon: 'mdi:sun-thermometer-outline'  },
-  { preset: 'eco',      label: 'Eco',      icon: 'mdi:leaf'                     },
-  { preset: 'sleep',    label: 'Nacht',    icon: 'mdi:weather-night'            },
-  { preset: 'away',     label: 'Abwesend', icon: 'mdi:walk'                     },
-  { preset: 'vacation', label: 'Urlaub',   icon: 'mdi:airplane'                 },
+  { preset: 'auto',     icon: 'mdi:home-thermometer-outline' },
+  { preset: 'comfort',  icon: 'mdi:sun-thermometer-outline'  },
+  { preset: 'eco',      icon: 'mdi:leaf'                     },
+  { preset: 'sleep',    icon: 'mdi:weather-night'            },
+  { preset: 'away',     icon: 'mdi:walk'                     },
+  { preset: 'vacation', icon: 'mdi:airplane'                 },
 ];
 
 const STATE_COLORS = {
@@ -1009,9 +985,9 @@ const PRESET_COLORS = {
 };
 
 // chart line colors (fixed, independent of preset)
-const CHART_COL_IST    = '#2196F3';  // blue    – Ist
-const CHART_COL_TGT    = '#ff9800';  // orange  – Soll
-const CHART_COL_OUTDOOR= '#ef5350';  // red     – Außen
+const CHART_COL_IST    = '#2196F3';  // blue   – actual
+const CHART_COL_TGT    = '#ff9800';  // orange – target
+const CHART_COL_OUTDOOR= '#ef5350';  // red    – outdoor
 
 // ── Config-Editor ─────────────────────────────────────────────────────────────
 
@@ -1228,6 +1204,8 @@ class ThermosmartCard extends HTMLElement {
   getCardSize() { return 8; }
 
   // ── Cleanup ──────────────────────────────────────────────────────────────
+
+  disconnectedCallback() { this._cleanup(); }
 
   _cleanup() {
     this._listeners.forEach(fn => { try { fn(); } catch (_) {} });
@@ -1450,7 +1428,9 @@ class ThermosmartCard extends HTMLElement {
           }
         </div>
         ${invert
-          ? `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+          ? (d.summerMode || d.windowOpen)
+            ? `<div class="ov-target" style="opacity:0.45${secTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
+            : `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
           : (d.summerMode || d.windowOpen)
           ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
@@ -1725,12 +1705,6 @@ class ThermosmartCard extends HTMLElement {
         pointer-events: none; width: 220px;
       }
       .ov-pill-slot { min-height: 28px; display: flex; justify-content: center; align-items: center; margin-bottom: 2px; }
-      .ov-pill {
-        display: inline-flex; align-items: center; gap: 3px;
-        font-size: 0.7em; font-weight: 500; border-radius: 20px;
-        padding: 4px 10px; border: 1px solid;
-        letter-spacing: 0.02em;
-      }
       .ov-icon-badge { display: inline-flex; align-items: center; justify-content: center; }
       .ov-icon--summer   { color: #f57c00; filter: drop-shadow(0 0 6px rgba(255,152,0,.55)); }
       .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
