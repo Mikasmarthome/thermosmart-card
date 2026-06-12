@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.4
+ * ThermoSmart Lovelace Card v1.0.5
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.4';
+const CARD_VERSION = '1.0.5';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
