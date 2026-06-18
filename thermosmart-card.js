@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.5
+ * ThermoSmart Lovelace Card v1.0.6
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.5';
+const CARD_VERSION = '1.0.6';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -17,6 +17,8 @@ const I18N = {
     chart_actual: 'Ist', chart_target: 'Soll', chart_outdoor: 'Außen',
     learn_active: 'Lernmodus aktiv', learn_inactive: 'Beobachtungsmodus',
     label_invert_temps: 'Temperaturen tauschen (Ziel groß)',
+    label_show_trv_setpoint: 'TRV-Sollwert anzeigen',
+    label_show_learning_progress: 'Lernfortschritt anzeigen',
     label_entity:   'ThermoSmart Climate-Entity',
     label_name:     'Anzeigename (optional)',
     label_section_display:   'Anzeige',
@@ -43,6 +45,7 @@ const I18N = {
     mode_sleep:       'Nacht',
     mode_away:        'Abwesend',
     summer_active:    'Sommermodus',
+    preheat_active:   'Vorheizen',
     mode_vacation:    'Urlaub',
   },
   en: {
@@ -55,6 +58,8 @@ const I18N = {
     chart_actual: 'Actual', chart_target: 'Target', chart_outdoor: 'Outdoor',
     learn_active: 'Learning active', learn_inactive: 'Observation mode',
     label_invert_temps: 'Swap temperatures (target as primary)',
+    label_show_trv_setpoint: 'Show TRV setpoint',
+    label_show_learning_progress: 'Show learning progress',
     label_entity:   'ThermoSmart Climate Entity',
     label_name:     'Display name (optional)',
     label_section_display:   'Display',
@@ -81,6 +86,7 @@ const I18N = {
     mode_sleep:       'Night',
     mode_away:        'Away',
     summer_active:    'Summer mode',
+    preheat_active:   'Preheating',
     mode_vacation:    'Vacation',
   },
   fr: {
@@ -93,6 +99,8 @@ const I18N = {
     chart_actual: 'Réel', chart_target: 'Cible', chart_outdoor: 'Extérieur',
     learn_active: 'Apprentissage actif', learn_inactive: 'Mode observation',
     label_invert_temps: 'Inverser températures (cible principale)',
+    label_show_trv_setpoint: 'Afficher la consigne TRV',
+    label_show_learning_progress: 'Afficher la progression d\'apprentissage',
     label_entity:   'Entité ThermoSmart',
     label_name:     "Nom d'affichage (optionnel)",
     label_section_display:   'Affichage',
@@ -119,6 +127,7 @@ const I18N = {
     mode_sleep:       'Nuit',
     mode_away:        'Absent',
     summer_active:    'Mode été',
+    preheat_active:   'Préchauffage',
     mode_vacation:    'Vacances',
   },
   nl: {
@@ -131,6 +140,8 @@ const I18N = {
     chart_actual: 'Actueel', chart_target: 'Doel', chart_outdoor: 'Buiten',
     learn_active: 'Leermodus actief', learn_inactive: 'Observatiemodus',
     label_invert_temps: 'Temperaturen wisselen (doel als primair)',
+    label_show_trv_setpoint: 'TRV-instelpunt weergeven',
+    label_show_learning_progress: 'Leervoortgang weergeven',
     label_entity:   'ThermoSmart klimaatentiteit',
     label_name:     'Weergavenaam (optioneel)',
     label_section_display:   'Weergave',
@@ -157,6 +168,7 @@ const I18N = {
     mode_sleep:       'Nacht',
     mode_away:        'Afwezig',
     summer_active:    'Zomermodus',
+    preheat_active:   'Voorverwarmen',
     mode_vacation:    'Vakantie',
   },
   it: {
@@ -169,6 +181,8 @@ const I18N = {
     chart_actual: 'Reale', chart_target: 'Obiettivo', chart_outdoor: 'Esterno',
     learn_active: 'Apprendimento attivo', learn_inactive: 'Modalità osservazione',
     label_invert_temps: 'Inverti temperature (obiettivo principale)',
+    label_show_trv_setpoint: 'Mostra setpoint TRV',
+    label_show_learning_progress: 'Mostra avanzamento apprendimento',
     label_entity:   'Entità ThermoSmart',
     label_name:     'Nome (opzionale)',
     label_section_display:   'Visualizzazione',
@@ -195,6 +209,7 @@ const I18N = {
     mode_sleep:       'Notte',
     mode_away:        'Assente',
     summer_active:    'Modalità estate',
+    preheat_active:   'Preriscaldamento',
     mode_vacation:    'Vacanza',
   },
   pl: {
@@ -207,6 +222,8 @@ const I18N = {
     chart_actual: 'Rzeczywista', chart_target: 'Cel', chart_outdoor: 'Zewnętrzna',
     learn_active: 'Nauka aktywna', learn_inactive: 'Tryb obserwacji',
     label_invert_temps: 'Zamień temperatury (cel jako główny)',
+    label_show_trv_setpoint: 'Pokaż setpoint TRV',
+    label_show_learning_progress: 'Pokaż postęp uczenia',
     label_entity:   'Encja ThermoSmart',
     label_name:     'Nazwa wyświetlania (opcjonalna)',
     label_section_display:   'Wyświetlanie',
@@ -233,6 +250,7 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Nieobecny',
     summer_active:    'Tryb letni',
+    preheat_active:   'Podgrzewanie',
     mode_vacation:    'Urlop',
   },
   sv: {
@@ -245,6 +263,8 @@ const I18N = {
     chart_actual: 'Aktuell', chart_target: 'Mål', chart_outdoor: 'Utomhus',
     learn_active: 'Inlärning aktiv', learn_inactive: 'Observationsläge',
     label_invert_temps: 'Byt temperaturer (mål som primär)',
+    label_show_trv_setpoint: 'Visa TRV-börvärde',
+    label_show_learning_progress: 'Visa inlärningsförlopp',
     label_entity:   'ThermoSmart klimatenhet',
     label_name:     'Visningsnamn (valfritt)',
     label_section_display:   'Visning',
@@ -271,6 +291,7 @@ const I18N = {
     mode_sleep:       'Natt',
     mode_away:        'Borta',
     summer_active:    'Sommarläge',
+    preheat_active:   'Förvärmning',
     mode_vacation:    'Semester',
   },
   es: {
@@ -283,6 +304,8 @@ const I18N = {
     chart_actual: 'Real', chart_target: 'Objetivo', chart_outdoor: 'Exterior',
     learn_active: 'Aprendizaje activo', learn_inactive: 'Modo observación',
     label_invert_temps: 'Intercambiar temperaturas (objetivo principal)',
+    label_show_trv_setpoint: 'Mostrar setpoint TRV',
+    label_show_learning_progress: 'Mostrar progreso de aprendizaje',
     label_entity:   'Entidad ThermoSmart',
     label_name:     'Nombre de visualización (opcional)',
     label_section_display:   'Visualización',
@@ -309,6 +332,7 @@ const I18N = {
     mode_sleep:       'Noche',
     mode_away:        'Ausente',
     summer_active:    'Modo verano',
+    preheat_active:   'Precalentamiento',
     mode_vacation:    'Vacaciones',
   },
   pt: {
@@ -321,6 +345,8 @@ const I18N = {
     chart_actual: 'Real', chart_target: 'Alvo', chart_outdoor: 'Exterior',
     learn_active: 'Aprendizado ativo', learn_inactive: 'Modo observação',
     label_invert_temps: 'Trocar temperaturas (alvo principal)',
+    label_show_trv_setpoint: 'Mostrar setpoint TRV',
+    label_show_learning_progress: 'Mostrar progresso de aprendizagem',
     label_entity:   'Entidade ThermoSmart',
     label_name:     'Nome de exibição (opcional)',
     label_section_display:   'Exibição',
@@ -347,6 +373,7 @@ const I18N = {
     mode_sleep:       'Noite',
     mode_away:        'Ausente',
     summer_active:    'Modo verão',
+    preheat_active:   'Pré-aquecimento',
     mode_vacation:    'Férias',
   },
   cs: {
@@ -359,6 +386,8 @@ const I18N = {
     chart_actual: 'Skutečná', chart_target: 'Cíl', chart_outdoor: 'Venku',
     learn_active: 'Učení aktivní', learn_inactive: 'Režim sledování',
     label_invert_temps: 'Vyměnit teploty (cíl jako hlavní)',
+    label_show_trv_setpoint: 'Zobrazit setpoint TRV',
+    label_show_learning_progress: 'Zobrazit průběh učení',
     label_entity:   'ThermoSmart klimatická entita',
     label_name:     'Zobrazovaný název (volitelné)',
     label_section_display:   'Zobrazení',
@@ -385,6 +414,7 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Pryč',
     summer_active:    'Letní režim',
+    preheat_active:   'Předehřev',
     mode_vacation:    'Dovolená',
   },
   da: {
@@ -397,6 +427,8 @@ const I18N = {
     chart_actual: 'Aktuel', chart_target: 'Mål', chart_outdoor: 'Udendørs',
     learn_active: 'Læring aktiv', learn_inactive: 'Observationstilstand',
     label_invert_temps: 'Byt temperaturer (mål som primær)',
+    label_show_trv_setpoint: 'Vis TRV-sætpunkt',
+    label_show_learning_progress: 'Vis læringsforløb',
     label_entity:   'ThermoSmart klimaenhed',
     label_name:     'Vist navn (valgfrit)',
     label_section_display:   'Visning',
@@ -423,6 +455,7 @@ const I18N = {
     mode_sleep:       'Nat',
     mode_away:        'Væk',
     summer_active:    'Sommertilstand',
+    preheat_active:   'Forvarming',
     mode_vacation:    'Ferie',
   },
   fi: {
@@ -435,6 +468,8 @@ const I18N = {
     chart_actual: 'Todellinen', chart_target: 'Tavoite', chart_outdoor: 'Ulkona',
     learn_active: 'Oppiminen aktiivinen', learn_inactive: 'Tarkkailutila',
     label_invert_temps: 'Vaihda lämpötilat (tavoite ensisijaisena)',
+    label_show_trv_setpoint: 'Näytä TRV-asetusarvo',
+    label_show_learning_progress: 'Näytä oppimisedistyminen',
     label_entity:   'ThermoSmart ilmastoentiteetti',
     label_name:     'Näyttönimi (valinnainen)',
     label_section_display:   'Näyttö',
@@ -461,6 +496,7 @@ const I18N = {
     mode_sleep:       'Yö',
     mode_away:        'Poissa',
     summer_active:    'Kesätila',
+    preheat_active:   'Esilämmitys',
     mode_vacation:    'Loma',
   },
   nb: {
@@ -473,6 +509,8 @@ const I18N = {
     chart_actual: 'Aktuell', chart_target: 'Mål', chart_outdoor: 'Utendørs',
     learn_active: 'Læring aktiv', learn_inactive: 'Observasjonsmodus',
     label_invert_temps: 'Bytt temperaturer (mål som primær)',
+    label_show_trv_setpoint: 'Vis TRV-settpunkt',
+    label_show_learning_progress: 'Vis læringsfremdrift',
     label_entity:   'ThermoSmart klimaenhet',
     label_name:     'Visningsnavn (valgfritt)',
     label_section_display:   'Visning',
@@ -499,6 +537,7 @@ const I18N = {
     mode_sleep:       'Natt',
     mode_away:        'Borte',
     summer_active:    'Sommermodus',
+    preheat_active:   'Forvarmning',
     mode_vacation:    'Ferie',
   },
   bg: {
@@ -511,6 +550,8 @@ const I18N = {
     chart_actual: 'Реална', chart_target: 'Целева', chart_outdoor: 'Навън',
     learn_active: 'Обучението активно', learn_inactive: 'Режим наблюдение',
     label_invert_temps: 'Смени температурите (цел като основна)',
+    label_show_trv_setpoint: 'Покажи TRV уставка',
+    label_show_learning_progress: 'Покажи напредъка на обучението',
     label_entity:   'ThermoSmart климатичен обект',
     label_name:     'Показвано име (незадължително)',
     label_section_display:   'Дисплей',
@@ -537,6 +578,7 @@ const I18N = {
     mode_sleep:       'Нощ',
     mode_away:        'Отсъстващ',
     summer_active:    'Летен режим',
+    preheat_active:   'Предогряване',
     mode_vacation:    'Ваканция',
   },
   ca: {
@@ -549,6 +591,8 @@ const I18N = {
     chart_actual: 'Real', chart_target: 'Objectiu', chart_outdoor: 'Exterior',
     learn_active: 'Aprenentatge actiu', learn_inactive: 'Mode observació',
     label_invert_temps: 'Intercanviar temperatures (objectiu principal)',
+    label_show_trv_setpoint: 'Mostra setpoint TRV',
+    label_show_learning_progress: 'Mostra el progrés d\'aprenentatge',
     label_entity:   'Entitat ThermoSmart',
     label_name:     "Nom de visualització (opcional)",
     label_section_display:   'Visualització',
@@ -575,6 +619,7 @@ const I18N = {
     mode_sleep:       'Nit',
     mode_away:        'Absent',
     summer_active:    'Mode estiu',
+    preheat_active:   'Preescalfament',
     mode_vacation:    'Vacances',
   },
   el: {
@@ -587,6 +632,8 @@ const I18N = {
     chart_actual: 'Πραγματική', chart_target: 'Στόχος', chart_outdoor: 'Εξωτερικό',
     learn_active: 'Μάθηση ενεργή', learn_inactive: 'Λειτουργία παρακολούθησης',
     label_invert_temps: 'Εναλλαγή θερμοκρασιών (στόχος κύριος)',
+    label_show_trv_setpoint: 'Εμφάνιση τιμής TRV',
+    label_show_learning_progress: 'Εμφάνιση προόδου εκμάθησης',
     label_entity:   'Οντότητα ThermoSmart',
     label_name:     'Εμφανιζόμενο όνομα (προαιρετικό)',
     label_section_display:   'Εμφάνιση',
@@ -613,6 +660,7 @@ const I18N = {
     mode_sleep:       'Νύχτα',
     mode_away:        'Απουσία',
     summer_active:    'Καλοκαιρινή λειτουργία',
+    preheat_active:   'Προθέρμανση',
     mode_vacation:    'Διακοπές',
   },
   hu: {
@@ -625,6 +673,8 @@ const I18N = {
     chart_actual: 'Tényleges', chart_target: 'Célérték', chart_outdoor: 'Kültéri',
     learn_active: 'Tanulás aktív', learn_inactive: 'Megfigyelési mód',
     label_invert_temps: 'Hőmérsékletek cseréje (célérték elsődleges)',
+    label_show_trv_setpoint: 'TRV beállítási érték mutatása',
+    label_show_learning_progress: 'Tanulási folyamat mutatása',
     label_entity:   'ThermoSmart klímaentitás',
     label_name:     'Megjelenített név (opcionális)',
     label_section_display:   'Megjelenítés',
@@ -651,6 +701,7 @@ const I18N = {
     mode_sleep:       'Éjszaka',
     mode_away:        'Távol',
     summer_active:    'Nyári mód',
+    preheat_active:   'Előmelegítés',
     mode_vacation:    'Vakáció',
   },
   ro: {
@@ -663,6 +714,8 @@ const I18N = {
     chart_actual: 'Reală', chart_target: 'Țintă', chart_outdoor: 'Exterior',
     learn_active: 'Învățare activă', learn_inactive: 'Mod observare',
     label_invert_temps: 'Schimbă temperaturile (țintă principală)',
+    label_show_trv_setpoint: 'Afișează setpoint TRV',
+    label_show_learning_progress: 'Afișează progresul de învățare',
     label_entity:   'Entitate ThermoSmart',
     label_name:     'Nume afișat (opțional)',
     label_section_display:   'Afișaj',
@@ -689,6 +742,7 @@ const I18N = {
     mode_sleep:       'Noapte',
     mode_away:        'Absent',
     summer_active:    'Mod vară',
+    preheat_active:   'Preîncălzire',
     mode_vacation:    'Vacanță',
   },
   ru: {
@@ -701,6 +755,8 @@ const I18N = {
     chart_actual: 'Фактическая', chart_target: 'Целевая', chart_outdoor: 'На улице',
     learn_active: 'Обучение активно', learn_inactive: 'Режим наблюдения',
     label_invert_temps: 'Поменять температуры (цель главная)',
+    label_show_trv_setpoint: 'Показать уставку TRV',
+    label_show_learning_progress: 'Показать прогресс обучения',
     label_entity:   'Объект ThermoSmart',
     label_name:     'Отображаемое имя (необязательно)',
     label_section_display:   'Отображение',
@@ -727,6 +783,7 @@ const I18N = {
     mode_sleep:       'Ночь',
     mode_away:        'Отсутствие',
     summer_active:    'Летний режим',
+    preheat_active:   'Предогрев',
     mode_vacation:    'Отпуск',
   },
   sk: {
@@ -739,6 +796,8 @@ const I18N = {
     chart_actual: 'Skutočná', chart_target: 'Cieľ', chart_outdoor: 'Vonku',
     learn_active: 'Učenie aktívne', learn_inactive: 'Režim pozorovania',
     label_invert_temps: 'Vymeniť teploty (cieľ ako hlavná)',
+    label_show_trv_setpoint: 'Zobraziť setpoint TRV',
+    label_show_learning_progress: 'Zobraziť priebeh učenia',
     label_entity:   'ThermoSmart klimatická entita',
     label_name:     'Zobrazovaný názov (voliteľné)',
     label_section_display:   'Zobrazenie',
@@ -765,6 +824,7 @@ const I18N = {
     mode_sleep:       'Noc',
     mode_away:        'Preč',
     summer_active:    'Letný režim',
+    preheat_active:   'Predohrev',
     mode_vacation:    'Dovolenka',
   },
   sl: {
@@ -777,6 +837,8 @@ const I18N = {
     chart_actual: 'Dejanska', chart_target: 'Cilj', chart_outdoor: 'Zunaj',
     learn_active: 'Učenje aktivno', learn_inactive: 'Način opazovanja',
     label_invert_temps: 'Zamenjaj temperature (cilj kot primarni)',
+    label_show_trv_setpoint: 'Prikaži setpoint TRV',
+    label_show_learning_progress: 'Prikaži napredek učenja',
     label_entity:   'ThermoSmart podnebna entiteta',
     label_name:     'Prikazano ime (neobvezno)',
     label_section_display:   'Prikaz',
@@ -803,6 +865,7 @@ const I18N = {
     mode_sleep:       'Noč',
     mode_away:        'Odsoten',
     summer_active:    'Poletni način',
+    preheat_active:   'Predogrevanje',
     mode_vacation:    'Dopust',
   },
   tr: {
@@ -815,6 +878,8 @@ const I18N = {
     chart_actual: 'Gerçek', chart_target: 'Hedef', chart_outdoor: 'Dış mekan',
     learn_active: 'Öğrenme aktif', learn_inactive: 'Gözlem modu',
     label_invert_temps: 'Sıcaklıkları değiştir (hedef birincil)',
+    label_show_trv_setpoint: 'TRV ayar değerini göster',
+    label_show_learning_progress: 'Öğrenme ilerlemesini göster',
     label_entity:   'ThermoSmart iklim varlığı',
     label_name:     'Görünen ad (isteğe bağlı)',
     label_section_display:   'Görünüm',
@@ -841,6 +906,7 @@ const I18N = {
     mode_sleep:       'Gece',
     mode_away:        'Uzakta',
     summer_active:    'Yaz modu',
+    preheat_active:   'Ön ısıtma',
     mode_vacation:    'Tatil',
   },
   uk: {
@@ -853,6 +919,8 @@ const I18N = {
     chart_actual: 'Фактична', chart_target: 'Цільова', chart_outdoor: 'На вулиці',
     learn_active: 'Навчання активне', learn_inactive: 'Режим спостереження',
     label_invert_temps: 'Змінити температури (ціль головна)',
+    label_show_trv_setpoint: 'Показати уставку TRV',
+    label_show_learning_progress: 'Показати прогрес навчання',
     label_entity:   'Об\'єкт ThermoSmart',
     label_name:     'Відображувана назва (необов\'язково)',
     label_section_display:   'Відображення',
@@ -879,6 +947,7 @@ const I18N = {
     mode_sleep:       'Ніч',
     mode_away:        'Відсутність',
     summer_active:    'Літній режим',
+    preheat_active:   'Попередній нагрів',
     mode_vacation:    'Відпустка',
   },
   zh: {
@@ -891,6 +960,8 @@ const I18N = {
     chart_actual: '实际', chart_target: '目标', chart_outdoor: '室外',
     learn_active: '学习模式激活', learn_inactive: '观测模式',
     label_invert_temps: '交换温度显示（目标为主）',
+    label_show_trv_setpoint: '显示 TRV 设定值',
+    label_show_learning_progress: '显示学习进度',
     label_entity:   'ThermoSmart 气候实体',
     label_name:     '显示名称（可选）',
     label_section_display:   '显示',
@@ -917,6 +988,7 @@ const I18N = {
     mode_sleep:       '睡眠',
     mode_away:        '离家',
     summer_active:    '夏季模式',
+    preheat_active:   '预热',
     mode_vacation:    '假期',
   },
 };
@@ -1002,11 +1074,12 @@ const EDITOR_SCHEMA = [
     iconPath: MDI_EYE,
     schema: [
       { type: 'grid', name: '', schema: [
-        { name: 'invert_temps',      selector: { boolean: {} } },
-        { name: 'disable_humidity',  selector: { boolean: {} } },
-        { name: 'disable_modes',     selector: { boolean: {} } },
-        { name: 'disable_chips',     selector: { boolean: {} } },
-        { name: 'disable_chart',     selector: { boolean: {} } },
+        { name: 'invert_temps',             selector: { boolean: {} } },
+        { name: 'show_trv_setpoint',        selector: { boolean: {} } },
+        { name: 'show_learning_progress',   selector: { boolean: {} } },
+        { name: 'disable_humidity',         selector: { boolean: {} } },
+        { name: 'disable_modes',            selector: { boolean: {} } },
+        { name: 'disable_chart',            selector: { boolean: {} } },
       ]},
       { name: 'chart_hours', selector: { number: { min: 1, max: 24, step: 1, mode: 'box', unit_of_measurement: 'h' } } },
     ],
@@ -1030,20 +1103,6 @@ const EDITOR_SCHEMA = [
     iconPath: MDI_ALERT,
     schema: [
       { name: 'low_battery_threshold', selector: { number: { min: 0, max: 100, step: 1, mode: 'box', unit_of_measurement: '%' } } },
-    ],
-  },
-  {
-    name: 'section_chips',
-    type: 'expandable',
-    flatten: true,
-    iconPath: MDI_FILTER,
-    schema: [
-      { type: 'grid', name: '', schema: [
-        { name: 'hide_chip_weather',     selector: { boolean: {} } },
-        { name: 'hide_chip_boost',       selector: { boolean: {} } },
-        { name: 'hide_chip_suppression', selector: { boolean: {} } },
-        { name: 'hide_chip_preheat',     selector: { boolean: {} } },
-      ]},
     ],
   },
 ];
@@ -1079,7 +1138,7 @@ class ThermosmartCardEditor extends HTMLElement {
     }
 
     this._form.hass = this._hass;
-    this._form.data = { chart_hours: 24, low_battery_threshold: 15, ...this._config };
+    this._form.data = { chart_hours: 24, low_battery_threshold: 15, show_learning_progress: true, ...this._config };
   }
 }
 if (!customElements.get('thermosmart-card-editor'))
@@ -1337,13 +1396,13 @@ class ThermosmartCard extends HTMLElement {
   }
 
   _statusLabel(d) {
-    if (d.heatingFailure)           return tr(this._hass, 'heating_failure');
-    if (d.summerMode)               return tr(this._hass, 'summer_active');
-    if (d.windowOpen)               return tr(this._hass, 'window_open');
-    if (d.preset === 'vacation')    return tr(this._hass, 'mode_vacation');
-    if (d.isObs)                    return tr(this._hass, 'obs');
-    if (d.hvacAction === 'heating') return tr(this._hass, 'heating');
-    if (d.hvacAction === 'idle')    return tr(this._hass, 'idle');
+    if (d.heatingFailure)                 return tr(this._hass, 'heating_failure');
+    if (d.summerMode)                     return tr(this._hass, 'summer_active');
+    if (d.windowOpen)                     return tr(this._hass, 'window_open');
+    if (d.preset === 'vacation')          return tr(this._hass, 'mode_vacation');
+    if (d.isObs)                          return tr(this._hass, 'obs');
+    if (d.hvacAction === 'heating')       return tr(this._hass, 'heating');
+    if (d.hvacAction === 'idle')          return tr(this._hass, 'idle');
     return tr(this._hass, 'off');
   }
 
@@ -1432,7 +1491,9 @@ class ThermosmartCard extends HTMLElement {
             ? `<div class="ov-target" style="opacity:0.45${secTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
             : `<div class="ov-target" style="${secTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermometer" style="--mdc-icon-size:16px"></ha-icon>${secTemp != null ? secTemp.toFixed(1) + '°' : '--'}</div>`
           : (d.summerMode || d.windowOpen)
-          ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`
+          ? `<div class="ov-target" style="opacity:0.45${d.targetTemp == null ? ';visibility:hidden' : ''}"><ha-icon icon="mdi:pause-circle-outline" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}${this._config.show_trv_setpoint && d.trvSetpoint != null ? `<ha-icon icon="mdi:valve" style="--mdc-icon-size:16px;margin-left:10px"></ha-icon>${d.trvSetpoint.toFixed(1)}°` : ''}</div>`
+          : (this._config.show_trv_setpoint && d.trvSetpoint != null)
+          ? `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}<ha-icon icon="mdi:valve" style="--mdc-icon-size:16px;margin-left:10px"></ha-icon>${d.trvSetpoint.toFixed(1)}°</div>`
           : `<div class="ov-target" style="${d.targetTemp == null ? 'visibility:hidden' : ''}"><ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${d.targetTemp != null ? d.targetTemp.toFixed(1) + '°' : '--'}</div>`}
         ${d.humidity != null
           ? `<div class="ov-humidity"${this._config.disable_humidity ? ' style="visibility:hidden"' : ''}><ha-icon icon="mdi:water-percent" style="--mdc-icon-size:16px"></ha-icon>${d.humidity.toFixed(0)}%</div>`
@@ -1521,7 +1582,7 @@ class ThermosmartCard extends HTMLElement {
       return this._sparklineCache.html;
     }
 
-    const W = 260, H = 72;
+    const W = 260, H = 90;
     const PL = 24, PR = 24, PT = 6, PB = 16;
     const vW = W - PL - PR, vH = H - PT - PB;
 
@@ -1592,7 +1653,7 @@ class ThermosmartCard extends HTMLElement {
     if (outdoorPath) {
       legendItems.push({ col: CHART_COL_OUTDOOR, label: tr(this._hass, 'chart_outdoor') });
     }
-    // Legend als HTML → echte Card-Zentrierung
+    // Legend rendered as HTML for proper flex-centering inside the card
     const legendHtml = legendItems.map(item => `
       <span class="spark-legend-item">
         <svg width="14" height="8" style="display:inline-block;vertical-align:middle;overflow:visible">
@@ -1603,11 +1664,18 @@ class ThermosmartCard extends HTMLElement {
 
     const result = `
       <div class="spark-wrap">
-        <svg viewBox="0 0 ${W} ${H + 8}" style="width:100%;display:block;overflow:visible">
+        <svg viewBox="0 0 ${W} ${H + 4}" style="width:100%;display:block;overflow:visible">
+          <defs>
+            <clipPath id="ts-spark-clip">
+              <rect x="${PL}" y="${PT}" width="${vW}" height="${vH}"/>
+            </clipPath>
+          </defs>
           ${gridLines}
-          ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
-          ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          <g clip-path="url(#ts-spark-clip)">
+            ${tgtPath     ? `<path d="${tgtPath}"     fill="none" stroke="${CHART_COL_TGT}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+            ${outdoorPath ? `<path d="${outdoorPath}" fill="none" stroke="${CHART_COL_OUTDOOR}" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+            ${currPath    ? `<path d="${currPath}"    fill="none" stroke="${CHART_COL_IST}"     stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          </g>
           <text class="spark-t-start" x="${PL}"     y="${H + 1}" text-anchor="start" style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tStart)}</text>
           <text class="spark-t-end"   x="${W - PR}" y="${H + 1}" text-anchor="end"   style="font-size:9px;font-weight:500;fill:var(--secondary-text-color,#888)">${fmt(tNow)}</text>
         </svg>
@@ -1671,8 +1739,7 @@ class ThermosmartCard extends HTMLElement {
           </div>
 
           ${this._config.disable_modes ? '' : this._buildModes(d)}
-          ${this._config.disable_chips ? '' : this._buildChips(d)}
-          ${this._config.disable_chips ? '' : this._buildConf(d)}
+          ${this._config.show_learning_progress === false ? '' : this._buildConf(d)}
         </div>
         ${this._config.disable_chart ? '<div style="padding-bottom:12px"></div>' : this._buildSparkline(d)}
       </ha-card>`;
@@ -1710,6 +1777,7 @@ class ThermosmartCard extends HTMLElement {
       .ov-icon--window   { color: #29b6f6; filter: drop-shadow(0 0 6px rgba(41,182,246,.55)); }
       .ov-icon--obs      { color: #90a4ae; opacity: 0.7; }
       .ov-icon--vacation { color: #7986cb; filter: drop-shadow(0 0 6px rgba(121,134,203,.5)); }
+      .ov-icon--preheat  { color: #e65100; filter: drop-shadow(0 0 6px rgba(230,81,0,.6)); }
       .ov-icon--obs.ov-icon--obs-learn { color: #43a047; animation: ts-icon-pulse 2.5s ease-in-out infinite; }
       @keyframes ts-icon-pulse { 0%,100%{filter:drop-shadow(0 0 3px rgba(67,160,71,.2))} 50%{filter:drop-shadow(0 0 9px rgba(67,160,71,.55))} }
       .ov-status { font-size: 0.9em; font-weight: 700; margin-bottom: 1px; white-space: nowrap; letter-spacing: 0.01em; }
@@ -1717,8 +1785,9 @@ class ThermosmartCard extends HTMLElement {
       .ov-int    { font-size: 4.8em; font-weight: 400; color: var(--primary-text-color); letter-spacing: -0.03em; }
       .ov-frac   { font-size: 1.6em; font-weight: 400; color: var(--primary-text-color); vertical-align: top; display: inline-block; margin-top: 0.46em; opacity: .85; }
       .ov-unit   { font-size: 0.65em; font-weight: 300; }
-      .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 1.05em; font-weight: 500; color: var(--secondary-text-color); margin-top: 6px; --mdc-icon-size: 16px; }
-      .ov-humidity{ display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 1.05em; font-weight: 500; color: #6fa3d6; margin-top: 4px; --mdc-icon-size: 16px; }
+      .ov-target  { display: inline-flex; align-items: center; justify-content: center; gap: 4px; line-height: 1; font-size: 1.05em; font-weight: 500; color: var(--secondary-text-color); margin-top: 12px; --mdc-icon-size: 16px; }
+      .ov-humidity{ display: inline-flex; align-items: center; justify-content: center; gap: 4px; line-height: 1; font-size: 1.05em; font-weight: 500; color: #6fa3d6; margin-top: 8px; --mdc-icon-size: 16px; }
+      .ov-target ha-icon, .ov-humidity ha-icon { display: inline-flex; align-items: center; }
 
       /* Banners */
       .banner {
@@ -1781,7 +1850,7 @@ class ThermosmartCard extends HTMLElement {
 
       /* Sparkline */
       .spark-wrap { margin-top: 10px; padding: 8px 0 12px; border-top: 1px solid var(--divider-color, rgba(120,120,120,.2)); }
-      .spark-legend { display: flex; justify-content: center; gap: 18px; padding: 5px 14px 0; }
+      .spark-legend { display: flex; justify-content: center; gap: 18px; padding: 2px 14px 0; }
       .spark-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.82em; font-weight: 500; color: var(--secondary-text-color,#888); }
       .spark-loading { display: flex; align-items: center; justify-content: center; height: 56px; }
       .spark-spinner {
@@ -2017,8 +2086,11 @@ class ThermosmartCard extends HTMLElement {
     } else {
       const tgtEl = sh.querySelector('.ov-target');
       if (tgtEl) {
+        const rawTrv = this._hass?.states[this._config?.entity]?.attributes?.trv_setpoint;
+        const trvVal = (this._config.show_trv_setpoint && rawTrv != null) ? Number(rawTrv) : null;
         tgtEl.style.visibility = '';
-        tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`;
+        tgtEl.innerHTML = `<ha-icon icon="mdi:thermostat" style="--mdc-icon-size:16px"></ha-icon>${temp.toFixed(1)}°`
+          + (trvVal != null && !isNaN(trvVal) ? `<ha-icon icon="mdi:valve" style="--mdc-icon-size:16px;margin-left:10px"></ha-icon>${trvVal.toFixed(1)}°` : '');
       }
     }
   }
