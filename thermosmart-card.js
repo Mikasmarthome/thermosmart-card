@@ -1,8 +1,8 @@
 /**
- * ThermoSmart Lovelace Card v1.0.6
+ * ThermoSmart Lovelace Card v1.1.0
  * https://github.com/Mikasmarthome/thermosmart-card
  */
-const CARD_VERSION = '1.0.6';
+const CARD_VERSION = '1.1.0';
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
@@ -10,7 +10,7 @@ const I18N = {
   de: {
     heating: 'Heizt', idle: 'Hält Temp', off: 'Aus',
     obs: 'Beobachtung',
-    confident: 'Zuverlässig', learning: 'Lernend', collecting: 'Sammle Daten',
+    confident: 'Zuverlässig', learning: 'Lernend', collecting: 'Lernstatus',
     battery_low: 'Batterie schwach',
     not_found: 'Entity nicht gefunden',
     no_entity: 'Keine ThermoSmart-Zone gefunden',
@@ -51,7 +51,7 @@ const I18N = {
   en: {
     heating: 'Heating', idle: 'Idle', off: 'Off',
     obs: 'Observation',
-    confident: 'Reliable', learning: 'Learning', collecting: 'Collecting data',
+    confident: 'Reliable', learning: 'Learning', collecting: 'Learning status',
     battery_low: 'Low battery',
     not_found: 'Entity not found',
     no_entity: 'No ThermoSmart zone found',
@@ -92,7 +92,7 @@ const I18N = {
   fr: {
     heating: 'Chauffe', idle: 'Temp atteinte', off: 'Éteint',
     obs: 'Observation',
-    confident: 'Fiable', learning: 'Apprentissage', collecting: 'Collecte de données',
+    confident: 'Fiable', learning: 'Apprentissage', collecting: 'Statut d\'apprentissage',
     battery_low: 'Batterie faible',
     not_found: 'Entité introuvable',
     no_entity: 'Aucune zone ThermoSmart trouvée',
@@ -133,7 +133,7 @@ const I18N = {
   nl: {
     heating: 'Verwarmt', idle: 'Temp bereikt', off: 'Uit',
     obs: 'Observatie',
-    confident: 'Betrouwbaar', learning: 'Lerend', collecting: 'Data verzamelen',
+    confident: 'Betrouwbaar', learning: 'Lerend', collecting: 'Leerstatus',
     battery_low: 'Batterij bijna leeg',
     not_found: 'Entiteit niet gevonden',
     no_entity: 'Geen ThermoSmart-zone gevonden',
@@ -174,7 +174,7 @@ const I18N = {
   it: {
     heating: 'Riscaldamento', idle: 'Temp raggiunta', off: 'Spento',
     obs: 'Osservazione',
-    confident: 'Affidabile', learning: 'Apprendimento', collecting: 'Raccolta dati',
+    confident: 'Affidabile', learning: 'Apprendimento', collecting: 'Stato di apprendimento',
     battery_low: 'Batteria scarica',
     not_found: 'Entità non trovata',
     no_entity: 'Nessuna zona ThermoSmart trovata',
@@ -215,7 +215,7 @@ const I18N = {
   pl: {
     heating: 'Grzeje', idle: 'Temp osiągnięta', off: 'Wyłączony',
     obs: 'Obserwacja',
-    confident: 'Niezawodny', learning: 'Uczenie się', collecting: 'Zbieranie danych',
+    confident: 'Niezawodny', learning: 'Uczenie się', collecting: 'Status uczenia',
     battery_low: 'Niski poziom baterii',
     not_found: 'Encja nie znaleziona',
     no_entity: 'Nie znaleziono strefy ThermoSmart',
@@ -256,7 +256,7 @@ const I18N = {
   sv: {
     heating: 'Värmer', idle: 'Temp nådd', off: 'Av',
     obs: 'Observation',
-    confident: 'Tillförlitlig', learning: 'Lärande', collecting: 'Samlar data',
+    confident: 'Tillförlitlig', learning: 'Lärande', collecting: 'Inlärningsstatus',
     battery_low: 'Lågt batteri',
     not_found: 'Entitet hittades inte',
     no_entity: 'Ingen ThermoSmart-zon hittades',
@@ -297,7 +297,7 @@ const I18N = {
   es: {
     heating: 'Calentando', idle: 'Temp. alcanzada', off: 'Apagado',
     obs: 'Observación',
-    confident: 'Fiable', learning: 'Aprendiendo', collecting: 'Recopilando datos',
+    confident: 'Fiable', learning: 'Aprendiendo', collecting: 'Estado de aprendizaje',
     battery_low: 'Batería baja',
     not_found: 'Entidad no encontrada',
     no_entity: 'No se encontró ninguna zona ThermoSmart',
@@ -338,7 +338,7 @@ const I18N = {
   pt: {
     heating: 'Aquecendo', idle: 'Temp. atingida', off: 'Desligado',
     obs: 'Observação',
-    confident: 'Confiável', learning: 'Aprendendo', collecting: 'Coletando dados',
+    confident: 'Confiável', learning: 'Aprendendo', collecting: 'Estado de aprendizagem',
     battery_low: 'Bateria fraca',
     not_found: 'Entidade não encontrada',
     no_entity: 'Nenhuma zona ThermoSmart encontrada',
@@ -379,7 +379,7 @@ const I18N = {
   cs: {
     heating: 'Topí', idle: 'Teplota dosažena', off: 'Vypnuto',
     obs: 'Sledování',
-    confident: 'Spolehlivý', learning: 'Učení', collecting: 'Sběr dat',
+    confident: 'Spolehlivý', learning: 'Učení', collecting: 'Stav učení',
     battery_low: 'Slabá baterie',
     not_found: 'Entita nenalezena',
     no_entity: 'Nebyla nalezena žádná zóna ThermoSmart',
@@ -420,7 +420,7 @@ const I18N = {
   da: {
     heating: 'Varmer', idle: 'Temp. nået', off: 'Fra',
     obs: 'Observation',
-    confident: 'Pålidelig', learning: 'Lærer', collecting: 'Indsamler data',
+    confident: 'Pålidelig', learning: 'Lærer', collecting: 'Læringsstatus',
     battery_low: 'Lavt batteri',
     not_found: 'Enhed ikke fundet',
     no_entity: 'Ingen ThermoSmart-zone fundet',
@@ -461,7 +461,7 @@ const I18N = {
   fi: {
     heating: 'Lämmittää', idle: 'Lämpötila saavutettu', off: 'Pois päältä',
     obs: 'Tarkkailu',
-    confident: 'Luotettava', learning: 'Oppii', collecting: 'Kerää tietoja',
+    confident: 'Luotettava', learning: 'Oppii', collecting: 'Oppimisstatus',
     battery_low: 'Akku heikko',
     not_found: 'Entiteettiä ei löydy',
     no_entity: 'ThermoSmart-vyöhykettä ei löydy',
@@ -502,7 +502,7 @@ const I18N = {
   nb: {
     heating: 'Varmer', idle: 'Temp. nådd', off: 'Av',
     obs: 'Observasjon',
-    confident: 'Pålitelig', learning: 'Lærer', collecting: 'Samler data',
+    confident: 'Pålitelig', learning: 'Lærer', collecting: 'Læringsstatus',
     battery_low: 'Lavt batteri',
     not_found: 'Enhet ikke funnet',
     no_entity: 'Ingen ThermoSmart-sone funnet',
@@ -543,7 +543,7 @@ const I18N = {
   bg: {
     heating: 'Отоплява', idle: 'Темп. достигната', off: 'Изключено',
     obs: 'Наблюдение',
-    confident: 'Надежден', learning: 'Учи', collecting: 'Събира данни',
+    confident: 'Надежден', learning: 'Учи', collecting: 'Статус на обучение',
     battery_low: 'Слаба батерия',
     not_found: 'Обектът не е намерен',
     no_entity: 'Не е намерена ThermoSmart зона',
@@ -584,7 +584,7 @@ const I18N = {
   ca: {
     heating: 'Escalfant', idle: 'Temp. assolida', off: 'Apagat',
     obs: 'Observació',
-    confident: 'Fiable', learning: 'Aprenent', collecting: 'Recollint dades',
+    confident: 'Fiable', learning: 'Aprenent', collecting: 'Estat d\'aprenentatge',
     battery_low: 'Bateria baixa',
     not_found: 'Entitat no trobada',
     no_entity: 'No s\'ha trobat cap zona ThermoSmart',
@@ -625,7 +625,7 @@ const I18N = {
   el: {
     heating: 'Θερμαίνει', idle: 'Θερμ. επιτεύχθηκε', off: 'Απενεργ.',
     obs: 'Παρακολούθηση',
-    confident: 'Αξιόπιστο', learning: 'Μάθηση', collecting: 'Συλλογή δεδομένων',
+    confident: 'Αξιόπιστο', learning: 'Μάθηση', collecting: 'Κατάσταση μάθησης',
     battery_low: 'Χαμηλή μπαταρία',
     not_found: 'Η οντότητα δεν βρέθηκε',
     no_entity: 'Δεν βρέθηκε ζώνη ThermoSmart',
@@ -666,7 +666,7 @@ const I18N = {
   hu: {
     heating: 'Fűt', idle: 'Hőm. elérve', off: 'Kikapcsolt',
     obs: 'Megfigyelés',
-    confident: 'Megbízható', learning: 'Tanulás', collecting: 'Adatgyűjtés',
+    confident: 'Megbízható', learning: 'Tanulás', collecting: 'Tanulási állapot',
     battery_low: 'Gyenge akkumulátor',
     not_found: 'Az entitás nem található',
     no_entity: 'Nem található ThermoSmart zóna',
@@ -707,7 +707,7 @@ const I18N = {
   ro: {
     heating: 'Încălzește', idle: 'Temp. atinsă', off: 'Oprit',
     obs: 'Observare',
-    confident: 'Fiabil', learning: 'Învățare', collecting: 'Colectare date',
+    confident: 'Fiabil', learning: 'Învățare', collecting: 'Status de învățare',
     battery_low: 'Baterie slabă',
     not_found: 'Entitatea nu a fost găsită',
     no_entity: 'Nu s-a găsit nicio zonă ThermoSmart',
@@ -748,7 +748,7 @@ const I18N = {
   ru: {
     heating: 'Нагрев', idle: 'Темп. достигнута', off: 'Выключено',
     obs: 'Наблюдение',
-    confident: 'Надёжный', learning: 'Обучение', collecting: 'Сбор данных',
+    confident: 'Надёжный', learning: 'Обучение', collecting: 'Статус обучения',
     battery_low: 'Слабая батарея',
     not_found: 'Объект не найден',
     no_entity: 'Зона ThermoSmart не найдена',
@@ -789,7 +789,7 @@ const I18N = {
   sk: {
     heating: 'Kúri', idle: 'Teplota dosiahnutá', off: 'Vypnuté',
     obs: 'Pozorovanie',
-    confident: 'Spoľahlivý', learning: 'Učenie', collecting: 'Zber dát',
+    confident: 'Spoľahlivý', learning: 'Učenie', collecting: 'Stav učenia',
     battery_low: 'Slabá batéria',
     not_found: 'Entita nenájdená',
     no_entity: 'Nebola nájdená žiadna zóna ThermoSmart',
@@ -830,7 +830,7 @@ const I18N = {
   sl: {
     heating: 'Ogrevanje', idle: 'Temp. dosežena', off: 'Izklopljeno',
     obs: 'Opazovanje',
-    confident: 'Zanesljiv', learning: 'Učenje', collecting: 'Zbiranje podatkov',
+    confident: 'Zanesljiv', learning: 'Učenje', collecting: 'Status učenja',
     battery_low: 'Slaba baterija',
     not_found: 'Entiteta ni najdena',
     no_entity: 'Nobena cona ThermoSmart ni bila najdena',
@@ -871,7 +871,7 @@ const I18N = {
   tr: {
     heating: 'Isıtıyor', idle: 'Sıcaklık sağlandı', off: 'Kapalı',
     obs: 'Gözlem',
-    confident: 'Güvenilir', learning: 'Öğreniyor', collecting: 'Veri toplanıyor',
+    confident: 'Güvenilir', learning: 'Öğreniyor', collecting: 'Öğrenme durumu',
     battery_low: 'Düşük pil',
     not_found: 'Varlık bulunamadı',
     no_entity: 'ThermoSmart bölgesi bulunamadı',
@@ -912,7 +912,7 @@ const I18N = {
   uk: {
     heating: 'Нагріває', idle: 'Темп. досягнута', off: 'Вимкнено',
     obs: 'Спостереження',
-    confident: 'Надійний', learning: 'Навчання', collecting: 'Збір даних',
+    confident: 'Надійний', learning: 'Навчання', collecting: 'Статус навчання',
     battery_low: 'Слабка батарея',
     not_found: 'Об\'єкт не знайдено',
     no_entity: 'Зону ThermoSmart не знайдено',
@@ -953,7 +953,7 @@ const I18N = {
   zh: {
     heating: '加热中', idle: '已达温度', off: '关闭',
     obs: '观测',
-    confident: '可靠', learning: '学习中', collecting: '收集数据',
+    confident: '可靠', learning: '学习中', collecting: '学习状态',
     battery_low: '电池电量低',
     not_found: '未找到实体',
     no_entity: '未找到 ThermoSmart 区域',
