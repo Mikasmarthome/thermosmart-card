@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://hacs.xyz"><img src="https://img.shields.io/badge/HACS-Custom-orange.svg" alt="HACS Custom"/></a>
-  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/stable%20v1.1.0-green.svg" alt="Stable v1.1.0"/></a>
+  <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/stable-v1.1.0-brightgreen.svg" alt="Stable v1.1.0"/></a>
   <a href="https://github.com/Mikasmarthome/thermosmart-card/releases"><img src="https://img.shields.io/badge/status-stable-green.svg" alt="Status"/></a>
   <a href="https://www.home-assistant.io"><img src="https://img.shields.io/badge/HA-2024.1%2B-brightgreen.svg" alt="HA min"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
