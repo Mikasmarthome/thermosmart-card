@@ -1,3 +1,12 @@
+> [!IMPORTANT]
+> This repository is no longer maintained as a standalone HACS plugin.
+> Starting with ThermoSmart v1.3.0, the ThermoSmart Card is bundled directly with the ThermoSmart integration and loads automatically — no separate installation needed.
+>
+> Please use the main repository instead:
+> **https://github.com/Mikasmarthome/ThermoSmart** ([latest release](https://github.com/Mikasmarthome/ThermoSmart/releases/tag/v1.3.0))
+>
+> This repository is kept for historical reference only.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/Mikasmarthome/thermosmart-card/main/icon.png"
        width="256" alt="ThermoSmart Card Logo"/>
@@ -45,7 +54,14 @@
 
 ## Installation
 
-### HACS (recommended)
+The ThermoSmart Card is bundled with [ThermoSmart](https://github.com/Mikasmarthome/ThermoSmart) starting with v1.3.0. The integration serves the card and registers it automatically — no separate installation is required.
+
+<details>
+<summary>Historical / deprecated: standalone installation (pre-v1.3.0 only)</summary>
+
+These instructions applied when the card was distributed as a separate HACS plugin. They no longer apply to current ThermoSmart versions and are kept here for historical reference only.
+
+### HACS
 1. Open HACS → ⋮ → **Custom repositories**
 2. Enter `https://github.com/Mikasmarthome/thermosmart-card`, type **Lovelace** → Add
 3. Search for **ThermoSmart Card**, download it, and reload the browser
@@ -53,8 +69,8 @@
 ### Manual
 
 #### What file do I need?
-Download only `thermosmart-card.js` from the [latest release assets](https://github.com/Mikasmarthome/thermosmart-card/releases/latest).
-You do **not** need the source code ZIP, the full repository, or any other files.
+Only `thermosmart-card.js` was needed. Separate release assets are no longer provided for this repository.
+You did **not** need the source code ZIP, the full repository, or any other files.
 
 #### Installation
 
@@ -80,6 +96,8 @@ resources:
   - url: /local/community/thermosmart-card/thermosmart-card.js
     type: module
 ```
+
+</details>
 
 ---
 
